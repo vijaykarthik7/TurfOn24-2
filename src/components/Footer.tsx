@@ -1,5 +1,6 @@
 import { GREEN, LIME } from '../data/tf24'
-import logoTagline from '../assets/turfon24-logo-tagline.png'
+
+const logoTagline = '/turfon24-logo-tagline.png'
 
 const QUICK_LINKS = [
   { label: 'Home', href: '#home' },
