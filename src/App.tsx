@@ -1,4 +1,3 @@
-import stadiumBg from './assets/stadium-bg.png'
 import Admin from './components/admin/Admin'
 import Nav from './components/Nav'
 import Hero from './components/Hero'
@@ -10,7 +9,7 @@ import Contact from './components/Contact'
 import Footer from './components/Footer'
 import RadarBooking from './components/RadarBooking'
 
-const BG = stadiumBg
+const BG = '/hero-bg.png'
 
 export default function App() {
   if (window.location.pathname.startsWith('/admin')) {
