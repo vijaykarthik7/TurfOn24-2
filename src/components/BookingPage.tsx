@@ -5,7 +5,7 @@ import ExtendedBooking from './ExtendedBooking'
 import Footer from './Footer'
 import { GREEN } from '../data/tf24'
 
-const logoMark = '/turfon24-logo-mark.png'
+const logoMark = new URL('../assets/turfon24-logo-mark.png', import.meta.url).href
 
 export default function BookingPage() {
   const verification = useVerification()

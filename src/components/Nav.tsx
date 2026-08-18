@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { GREEN } from '../data/tf24'
 
-const logoTagline = '/turfon24-logo-tagline.png'
+const logoTagline = new URL('../assets/turfon24-logo-tagline.png', import.meta.url).href
 
 const LINKS = [
   { label: 'Home', id: 'home' },

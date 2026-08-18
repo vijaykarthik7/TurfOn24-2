@@ -1,6 +1,6 @@
 import { GREEN, LIME } from '../data/tf24'
 
-const logoTagline = '/turfon24-logo-tagline.png'
+const logoTagline = new URL('../assets/turfon24-logo-tagline.png', import.meta.url).href
 
 const QUICK_LINKS = [
   { label: 'Home', href: '#home' },

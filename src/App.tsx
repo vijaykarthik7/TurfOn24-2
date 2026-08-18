@@ -9,7 +9,7 @@ import Contact from './components/Contact'
 import Footer from './components/Footer'
 import RadarBooking from './components/RadarBooking'
 
-const BG = '/stadium-bg.png'
+const BG = new URL('./assets/stadium-bg.png', import.meta.url).href
 
 export default function App() {
   if (window.location.pathname.startsWith('/admin')) {
