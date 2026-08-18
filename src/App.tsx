@@ -1,3 +1,4 @@
+import stadiumBg from './assets/stadium-bg.png?url'
 import Admin from './components/admin/Admin'
 import Nav from './components/Nav'
 import Hero from './components/Hero'
@@ -9,7 +10,7 @@ import Contact from './components/Contact'
 import Footer from './components/Footer'
 import RadarBooking from './components/RadarBooking'
 
-const BG = new URL('./assets/stadium-bg.png', import.meta.url).href
+const BG = stadiumBg
 
 export default function App() {
   if (window.location.pathname.startsWith('/admin')) {
