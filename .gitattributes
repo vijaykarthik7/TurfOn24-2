@@ -17,6 +17,12 @@
 *.ai                 filter=lfs diff=lfs merge=lfs -text
 *.sketch             filter=lfs diff=lfs merge=lfs -text
 
+# EXCEPTIONS: Exclude website assets from LFS to ensure they deploy correctly
+public/hero-bg.png   -filter -diff -merge text
+src/assets/stadium-bg.png -filter -diff -merge text
+public/turfon24-logo-mark.png -filter -diff -merge text
+public/turfon24-logo-tagline.png -filter -diff -merge text
+
 # ---------------------------------------------------------------------------
 # Video
 # ---------------------------------------------------------------------------
