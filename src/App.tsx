@@ -1,4 +1,4 @@
-import stadiumBg from './assets/stadium-bg.png?url'
+import stadiumBg from './assets/stadium-bg.png'
 import Admin from './components/admin/Admin'
 import Nav from './components/Nav'
 import Hero from './components/Hero'

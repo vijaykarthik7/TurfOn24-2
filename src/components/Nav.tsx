@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { GREEN } from '../data/tf24'
-import logoTagline from '../assets/turfon24-logo-tagline.png?url'
+import logoTagline from '../assets/turfon24-logo-tagline.png'
 
 const LINKS = [
   { label: 'Home', id: 'home' },
