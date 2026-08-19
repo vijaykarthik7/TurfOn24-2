@@ -13,7 +13,7 @@ export default function About() {
 
         {/* Text side */}
         <div ref={textRef} className="reveal-left" style={{ minWidth: 0 }}>
-          <div style={{ fontFamily: 'Space Grotesk', fontSize: 13, fontWeight: 600, letterSpacing: '5px', textTransform: 'uppercase', color: '#18AAC0', textShadow: '0 0 14px rgba(24,170,192,0.5)', marginBottom: 30 }}>
+          <div style={{ fontFamily: 'Space Grotesk', fontSize: 13, fontWeight: 600, letterSpacing: '5px', textTransform: 'uppercase', color: '#39FF14', textShadow: '0 0 14px rgba(57,255,20,0.5)', marginBottom: 30 }}>
             About Turf on 24
           </div>
 
@@ -34,7 +34,7 @@ export default function About() {
 
           {/* Statement */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 20, marginBottom: 48 }}>
-            <div style={{ width: 2, height: 38, background: '#18AAC0', flexShrink: 0 }} />
+            <div style={{ width: 2, height: 38, background: '#39FF14', flexShrink: 0 }} />
             <span style={{ fontFamily: 'Bebas Neue', fontSize: 20, fontWeight: 800, letterSpacing: '0.5px', textTransform: 'uppercase', color: '#F3F3F3', lineHeight: 1.2, whiteSpace: 'nowrap' }}>
               Good games start with a great ground.
             </span>
@@ -70,11 +70,40 @@ export default function About() {
         </div>
 
         {/* Image side */}
-        <div ref={imgRef} className="reveal-right" style={{ minWidth: 0 }}>
+        <div ref={imgRef} className="reveal-right" style={{ minWidth: 0, position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          {/* Background decorative cubes */}
+          <div style={{ position: 'absolute', top: -30, left: -40, width: 110, height: 110, background: 'linear-gradient(135deg, rgba(57,255,20,0.2) 0%, rgba(57,255,20,0.05) 100%)', border: '1px solid rgba(57,255,20,0.3)', borderRadius: 10, transform: 'rotate(15deg)', boxShadow: '0 0 25px rgba(57,255,20,0.2)' }} />
+          <div style={{ position: 'absolute', top: -15, left: 15, width: 85, height: 85, background: 'linear-gradient(135deg, #0B1824 0%, #1a1a2e 100%)', border: '1px solid rgba(243,243,243,0.1)', borderRadius: 8, transform: 'rotate(-10deg)' }} />
+          <div style={{ position: 'absolute', bottom: -20, right: -35, width: 95, height: 95, background: 'linear-gradient(135deg, rgba(57,255,20,0.15) 0%, rgba(57,255,20,0.03) 100%)', border: '1px solid rgba(57,255,20,0.25)', borderRadius: 9, transform: 'rotate(20deg)', boxShadow: '0 0 22px rgba(57,255,20,0.15)' }} />
+          <div style={{ position: 'absolute', bottom: 10, right: 20, width: 70, height: 70, background: 'linear-gradient(135deg, #0B1824 0%, #1a1a2e 100%)', border: '1px solid rgba(243,243,243,0.08)', borderRadius: 7, transform: 'rotate(-15deg)' }} />
+          
+          {/* Neon frame behind image */}
+          <div style={{
+            position: 'absolute',
+            zIndex: 0,
+            width: '87%',
+            height: 490,
+            borderRadius: 22,
+            border: '2px solid rgba(57,255,20,0.6)',
+            boxShadow: '0 0 20px rgba(57,255,20,0.4), 0 0 40px rgba(57,255,20,0.2), inset 0 0 20px rgba(57,255,20,0.1)',
+            top: -5,
+            left: '50%',
+            transform: 'translateX(-50%)'
+          }} />
+
+          {/* Main image with curved edges */}
           <img
             src={IMG}
             alt="Players playing soccer on turf field"
-            style={{ width: '100%', height: 560, objectFit: 'cover', display: 'block' }}
+            style={{ 
+              width: '85%', 
+              height: 480, 
+              objectFit: 'cover', 
+              display: 'block',
+              borderRadius: 20,
+              position: 'relative',
+              zIndex: 1
+            }}
           />
         </div>
         </div>

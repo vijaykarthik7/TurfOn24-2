@@ -3,6 +3,7 @@ import { getExtendedEnquiries } from '../../services/enquiryStore'
 
 const ACCENT = '#39F72A'
 const ACCENT_RGB = '57,247,42'
+const logoTagline = '/turfon24-logo-tagline.png'
 
 type HourlyBooking = {
   id: string
@@ -187,7 +188,6 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [section, setSection] = useState<Section>('overview')
   const [showPasswordForm, setShowPasswordForm] = useState(false)
   const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' })
-  const [rejectedSlots, setRejectedSlots] = useState<string[]>([])
 
   const revenue = HOURLY.filter(b => b.status !== 'Cancelled').reduce((s, b) => s + b.amount, 0)
   const extendedRevenue = ALL_EXTENDED.filter(b => b.status === 'Confirmed').length * 12000
@@ -219,7 +219,14 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
     return (
       <span
         className="admin-chip"
-        style={{ color, background: `rgba(${ACCENT_RGB},0.06)`, borderColor: `${color}3D` }}
+        style={{ 
+          color, 
+          background: `rgba(${ACCENT_RGB},0.06)`, 
+          borderColor: `${color}3D`,
+          borderRadius: 50,
+          padding: '5px 14px',
+          animation: 'status-spin 8s linear infinite'
+        }}
       >
         <span className="admin-live-dot" style={{ background: color, boxShadow: `0 0 8px ${color}` }} />
         {status}
@@ -343,26 +350,11 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
       <header style={{ position: 'relative', zIndex: 20, background: 'rgba(3,21,37,0.9)', borderBottom: '1px solid rgba(160,168,184,0.12)', backdropFilter: 'blur(18px)' }}>
         <div style={{ maxWidth: 1320, margin: '0 auto', padding: '0 28px', height: 78, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <div
-              style={{
-                width: 44, height: 44, borderRadius: 13, flexShrink: 0,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                background: 'linear-gradient(135deg, #39F72A, #C7F42D)',
-                color: '#000000', fontSize: 20, fontWeight: 900,
-                fontFamily: 'var(--font-display)',
-                boxShadow: '0 10px 28px rgba(57,247,42,0.4)',
-              }}
-            >
-              24
-            </div>
-            <div>
-              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 24, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#F5F5F5', lineHeight: 1 }}>
-                Turf On <span style={{ color: ACCENT }}>24</span>
-              </div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9.5, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.45)', marginTop: 4 }}>
-                Admin Console
-              </div>
-            </div>
+            <img
+              src={logoTagline}
+              alt="TURFON24 — Premium Turfs 24/7"
+              style={{ height: 44, width: 'auto', maxWidth: 'none', display: 'block' }}
+            />
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
@@ -534,8 +526,8 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
           {section === 'hourly' ? (
             <>
               <SectionHeader eyebrow="Bookings · Hourly" title="Hourly bookings." />
-              <div className="admin-card admin-row-in" style={{ padding: 0, overflow: 'hidden' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 22px', borderBottom: '1px solid rgba(160,168,184,0.12)' }}>
+              <div className="admin-card admin-row-in" style={{ padding: 24 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)' }}>
                     All Hourly Bookings
                   </div>
@@ -543,42 +535,47 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                     {HOURLY.length} records
                   </span>
                 </div>
-                <div style={{ overflowX: 'auto' }}>
-                  <table style={tableStyles}>
-                    <thead>
-                      <tr>
-                        <th style={thStyle}>Booking ID</th>
-                        <th style={thStyle}>Customer</th>
-                        <th style={thStyle}>Phone</th>
-                        <th style={thStyle}>Date</th>
-                        <th style={thStyle}>Start</th>
-                        <th style={thStyle}>End</th>
-                        <th style={thStyle}>Duration</th>
-                        <th style={thStyle}>Amount</th>
-                        <th style={thStyle}>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {HOURLY.map(b => (
-                        <tr key={b.id} style={{ transition: 'background 0.2s ease' }} onMouseEnter={e => { e.currentTarget.style.background = 'rgba(57,247,42,0.05)' }} onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}>
-                          <td style={{ ...tdStyle, ...mono, color: ACCENT }}>{b.id}</td>
-                          <td style={tdStyle}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                              <Avatar name={b.customer} size={30} />
-                              {b.customer}
-                            </div>
-                          </td>
-                          <td style={{ ...tdStyle, ...mono, color: 'rgba(245,245,245,0.6)' }}>{b.phone}</td>
-                          <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>{b.date}</td>
-                          <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>{b.start}</td>
-                          <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>{b.end}</td>
-                          <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>{b.duration}H</td>
-                          <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>₹{b.amount.toLocaleString()}</td>
-                          <td style={{ ...tdStyle }}><StatusChip status={b.status} /></td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20, justifyContent: 'center' }}>
+                  {HOURLY.map((b, i) => (
+                    <div
+                      key={b.id}
+                      style={{
+                        width: 140,
+                        height: 140,
+                        borderRadius: '50%',
+                        background: 'linear-gradient(135deg, rgba(11,24,36,0.8), rgba(11,24,36,0.5))',
+                        border: '1px solid rgba(57,247,42,0.3)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 6,
+                        boxShadow: '0 0 20px rgba(57,247,42,0.1)',
+                        animation: `booking-orbit 12s linear infinite`,
+                        animationDelay: `${i * 0.5}s`,
+                        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                        cursor: 'pointer',
+                        flexShrink: 0,
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.transform = 'scale(1.08)'
+                        e.currentTarget.style.boxShadow = '0 0 30px rgba(57,247,42,0.3)'
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.transform = 'scale(1)'
+                        e.currentTarget.style.boxShadow = '0 0 20px rgba(57,247,42,0.1)'
+                      }}
+                    >
+                      <Avatar name={b.customer} size={36} />
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: ACCENT, textAlign: 'center', lineHeight: 1.3 }}>
+                        {b.date}
+                      </div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: 'rgba(245,245,245,0.5)', textAlign: 'center' }}>
+                        {b.start} - {b.end}
+                      </div>
+                      <StatusChip status={b.status} />
+                    </div>
+                  ))}
                 </div>
               </div>
             </>
@@ -588,64 +585,57 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
           {section === 'extended' ? (
             <>
               <SectionHeader eyebrow="Bookings · Extended" title="Extended bookings." />
-              <div className="admin-card admin-row-in" style={{ padding: 0, overflow: 'hidden' }}>
-<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 22px', borderBottom: '1px solid rgba(160,168,184,0.12)' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)' }}>
-                      Arena Reservation Requests
+              <div className="admin-card admin-row-in" style={{ padding: 24 }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)' }}>
+                    Arena Reservation Requests
+                  </div>
+                  <span className="admin-chip" style={{ color: ACCENT, background: 'rgba(57,247,42,0.08)', borderColor: 'rgba(57,247,42,0.3)' }}>
+                    {ALL_EXTENDED.length} records
+                  </span>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20, justifyContent: 'center' }}>
+                  {ALL_EXTENDED.map((b, i) => (
+                    <div
+                      key={b.id}
+                      style={{
+                        width: 150,
+                        height: 150,
+                        borderRadius: '50%',
+                        background: 'linear-gradient(135deg, rgba(11,24,36,0.8), rgba(11,24,36,0.5))',
+                        border: '1px solid rgba(59,130,246,0.3)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 6,
+                        boxShadow: '0 0 20px rgba(59,130,246,0.1)',
+                        animation: `booking-orbit 14s linear infinite`,
+                        animationDelay: `${i * 0.6}s`,
+                        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                        cursor: 'pointer',
+                        flexShrink: 0,
+                      }}
+                      onMouseEnter={e => {
+                        e.currentTarget.style.transform = 'scale(1.08)'
+                        e.currentTarget.style.boxShadow = '0 0 30px rgba(59,130,246,0.3)'
+                      }}
+                      onMouseLeave={e => {
+                        e.currentTarget.style.transform = 'scale(1)'
+                        e.currentTarget.style.boxShadow = '0 0 20px rgba(59,130,246,0.1)'
+                      }}
+                    >
+                      <Avatar name={b.customer} size={36} />
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#3B82F6', textAlign: 'center', lineHeight: 1.3 }}>
+                        {b.players} Players
+                      </div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: 'rgba(245,245,245,0.5)', textAlign: 'center' }}>
+                        {b.startDate}
+                      </div>
+                      <StatusChip status={b.status} />
                     </div>
-                    <span className="admin-chip" style={{ color: ACCENT, background: 'rgba(57,247,42,0.08)', borderColor: 'rgba(57,247,42,0.3)' }}>
-                      {ALL_EXTENDED.length} records
-                    </span>
-                  </div>
-                  <div style={{ overflowX: 'auto' }}>
-                    <table style={tableStyles}>
-                      <thead>
-                        <tr>
-                          <th style={thStyle}>Reference</th>
-                          <th style={thStyle}>Customer</th>
-                          <th style={thStyle}>Phone</th>
-                          <th style={thStyle}>Start</th>
-                          <th style={thStyle}>End</th>
-                          <th style={thStyle}>Players</th>
-                          <th style={thStyle}>Requirements</th>
-                          <th style={thStyle}>Phone Verified</th>
-                          <th style={thStyle}>Submitted</th>
-                          <th style={thStyle}>Status</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {ALL_EXTENDED.map(b => (
-                          <tr key={b.id} style={{ transition: 'background 0.2s ease' }} onMouseEnter={e => { e.currentTarget.style.background = 'rgba(57,247,42,0.05)' }} onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}>
-                            <td style={{ ...tdStyle, ...mono, color: ACCENT }}>{b.id}</td>
-                            <td style={tdStyle}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                                <Avatar name={b.customer} size={30} />
-                                {b.customer}
-                              </div>
-                            </td>
-                            <td style={{ ...tdStyle, ...mono, color: 'rgba(245,245,245,0.6)' }}>{b.phone}</td>
-                            <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>{b.startDate}<br /><span style={{ color: 'rgba(245,245,245,0.4)' }}>{b.startTime}</span></td>
-                            <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>{b.endDate}<br /><span style={{ color: 'rgba(245,245,245,0.4)' }}>{b.endTime}</span></td>
-                            <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>{b.players}</td>
-                            <td style={{ ...tdStyle, maxWidth: 260, whiteSpace: 'normal', color: 'rgba(245,245,245,0.7)', fontSize: 12, lineHeight: 1.55 }}>{b.requirements}</td>
-                            <td style={{ ...tdStyle }}>
-                              {b.phoneVerified ? (
-                                <span className="admin-chip" style={{ color: '#39F72A', background: 'rgba(57,247,42,0.08)', borderColor: 'rgba(57,247,42,0.35)' }}>
-                                  ✓ Verified
-                                </span>
-                              ) : (
-                                <span className="admin-chip" style={{ color: '#F5B84C', background: 'rgba(245,184,76,0.08)', borderColor: 'rgba(245,184,76,0.3)' }}>
-                                  Not Verified
-                                </span>
-                              )}
-                            </td>
-                            <td style={{ ...tdStyle, ...mono, fontSize: 10.5, color: 'rgba(245,245,245,0.5)' }}>{b.submittedAt}</td>
-                            <td style={{ ...tdStyle }}><StatusChip status={b.status} /></td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                  ))}
+                </div>
               </div>
             </>
           ) : null}
@@ -703,63 +693,68 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
             <>
               <SectionHeader eyebrow="Admin · Settings" title="Settings." />
               <div className="resp-two-col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-                {/* Reject Booked Slots */}
+                {/* Download Customers List */}
                 <div className="admin-card admin-row-in" style={{ padding: '28px 26px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
                     <div>
                       <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#F5F5F5', marginBottom: 6 }}>
-                        Reject Booked Slots
+                        Download Customers List
                       </div>
                       <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)' }}>
-                        Manage booked slot rejections
+                        Export all customer data as CSV
                       </div>
                     </div>
                   </div>
 
-                  {rejectedSlots.length === 0 ? (
-                    <div style={{ padding: '20px 16px', background: 'rgba(57,247,42,0.06)', borderRadius: 10, border: '1px solid rgba(57,247,42,0.2)' }}>
-                      <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)', textAlign: 'center' }}>
-                        No rejected slots
+                  <div style={{ padding: '20px 16px', background: 'rgba(59,130,246,0.06)', borderRadius: 10, border: '1px solid rgba(59,130,246,0.2)', marginBottom: 20 }}>
+                    <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)', textAlign: 'center' }}>
+                      {CUSTOMERS.length} customers available for export
+                    </div>
+                  </div>
+
+                  <button
+                    style={{
+                      width: '100%', padding: '12px 16px', background: 'linear-gradient(135deg, #3B82F6, #60A5FA)', border: 'none',
+                      borderRadius: 10, color: '#FFFFFF', fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em',
+                      textTransform: 'uppercase', cursor: 'pointer', boxShadow: '0 10px 26px rgba(59,130,246,0.35)', transition: 'all 0.25s ease'
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 14px 34px rgba(59,130,246,0.5)' }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 26px rgba(59,130,246,0.35)' }}
+                  >
+                    ↓ Download CSV
+                  </button>
+                </div>
+
+                {/* Block Online Bookings */}
+                <div className="admin-card admin-row-in" style={{ padding: '28px 26px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+                    <div>
+                      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#F5F5F5', marginBottom: 6 }}>
+                        Block Online Bookings
+                      </div>
+                      <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)' }}>
+                        Prevent customers from booking online
                       </div>
                     </div>
-                  ) : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                      {rejectedSlots.map((slot, idx) => (
-                        <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 14px', background: 'rgba(255,107,107,0.1)', borderRadius: 10, border: '1px solid rgba(255,107,107,0.3)' }}>
-                          <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#F5F5F5' }}>{slot}</span>
-                          <button
-                            onClick={() => setRejectedSlots(rejectedSlots.filter((_, i) => i !== idx))}
-                            style={{
-                              background: 'rgba(255,107,107,0.2)', border: 'none', borderRadius: 6, color: '#FF6B6B', padding: '4px 10px',
-                              fontSize: 11, fontFamily: 'var(--font-mono)', cursor: 'pointer', transition: 'background 0.2s ease'
-                            }}
-                            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,107,107,0.35)' }}
-                            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,107,107,0.2)' }}
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  <div style={{ marginTop: 20, paddingTop: 20, borderTop: '1px solid rgba(160,168,184,0.12)' }}>
-                    <button
-                      style={{
-                        width: '100%', padding: '12px 16px', background: 'linear-gradient(135deg, #39F72A, #C7F42D)', border: 'none',
-                        borderRadius: 10, color: '#000000', fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em',
-                        textTransform: 'uppercase', cursor: 'pointer', boxShadow: '0 10px 26px rgba(57,247,42,0.35)', transition: 'all 0.25s ease'
-                      }}
-                      onClick={() => {
-                        const newSlot = prompt('Enter slot to reject (e.g., 14 Aug 2026 · 6:00 PM - 7:00 PM):')
-                        if (newSlot) setRejectedSlots([...rejectedSlots, newSlot])
-                      }}
-                      onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 14px 34px rgba(57,247,42,0.5)' }}
-                      onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 26px rgba(57,247,42,0.35)' }}
-                    >
-                      + Add Rejected Slot
-                    </button>
                   </div>
+
+                  <div style={{ padding: '20px 16px', background: 'rgba(255,107,107,0.06)', borderRadius: 10, border: '1px solid rgba(255,107,107,0.2)', marginBottom: 20 }}>
+                    <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)', textAlign: 'center' }}>
+                      Online bookings are currently enabled
+                    </div>
+                  </div>
+
+                  <button
+                    style={{
+                      width: '100%', padding: '12px 16px', background: 'rgba(255,107,107,0.15)', border: '1px solid rgba(255,107,107,0.4)',
+                      borderRadius: 10, color: '#FF6B6B', fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em',
+                      textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.25s ease'
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,107,107,0.25)' }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,107,107,0.15)' }}
+                  >
+                    ✕ Block Bookings
+                  </button>
                 </div>
 
                 {/* Change ID Password */}

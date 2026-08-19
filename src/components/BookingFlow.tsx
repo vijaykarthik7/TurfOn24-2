@@ -1,10 +1,60 @@
-import { useEffect, useRef, useState, type ReactNode, type KeyboardEvent, type ClipboardEvent } from 'react'
+import { useEffect, useRef, useState, useCallback, type ReactNode, type KeyboardEvent, type ClipboardEvent } from 'react'
 import { GREEN, LIME, CHROME } from '../data/tf24'
 import { requestOtp, verifyOtp } from '../services/otpService'
 import Booking from './Booking'
 import ExtendedEnquiry from './ExtendedEnquiry'
 
 const iconProps = { width: 26, height: 26, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
+
+function TypewriterText({ words, className }: { words: string[]; className?: string }) {
+  const [activeIdx, setActiveIdx] = useState(0)
+  const [charIdx, setCharIdx] = useState(0)
+  const [done, setDone] = useState(false)
+
+  useEffect(() => {
+    if (done) {
+      const t = setTimeout(() => {
+        setDone(false)
+        setActiveIdx(0)
+        setCharIdx(0)
+      }, 2000)
+      return () => clearTimeout(t)
+    }
+
+    const word = words[activeIdx]
+
+    if (charIdx <= word.length) {
+      const t = setTimeout(() => setCharIdx(c => c + 1), 80)
+      return () => clearTimeout(t)
+    }
+
+    if (activeIdx < words.length - 1) {
+      const t = setTimeout(() => {
+        setActiveIdx(i => i + 1)
+        setCharIdx(0)
+      }, 400)
+      return () => clearTimeout(t)
+    }
+
+    const t = setTimeout(() => setDone(true), 600)
+    return () => clearTimeout(t)
+  }, [charIdx, activeIdx, words, done])
+
+  return (
+    <span className={className}>
+      {words.map((word, i) => {
+        if (i > activeIdx) return null
+        const visible = i === activeIdx ? word.slice(0, charIdx) : word
+        const showCursor = i === activeIdx && !done
+        return (
+          <span key={i} className="tf24-type-line">
+            {visible}{showCursor && <span className="tf24-type-cursor">|</span>}
+          </span>
+        )
+      })}
+    </span>
+  )
+}
 
 type View = 'select' | 'verify' | 'hourly' | 'extended'
 
@@ -26,6 +76,7 @@ function Panel({
   icon,
   onClick,
   delay,
+  typewriter,
 }: {
   num: string
   title: ReactNode
@@ -34,6 +85,7 @@ function Panel({
   icon: ReactNode
   onClick: () => void
   delay: string
+  typewriter?: string[]
 }) {
   return (
     <button className="tf24-bflow-panel" style={{ animationDelay: delay }} onClick={onClick}>
@@ -47,6 +99,7 @@ function Panel({
       <span className="tf24-bflow-title">{title}</span>
       <span className="tf24-bflow-desc">{desc}</span>
       <span className="tf24-bflow-meta">{meta}</span>
+      {typewriter && <span className="tf24-bflow-typewriter"><TypewriterText words={typewriter} /></span>}
       <span className="tf24-bflow-arrow">→</span>
     </button>
   )
@@ -503,10 +556,10 @@ export default function BookingFlow() {
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 56 }}>
           <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginBottom: 18 }}>
-            <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#18AAC0', textShadow: '0 0 14px rgba(24,170,192,0.5)', paddingLeft: '0.45em' }}>
+            <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#39FF14', textShadow: '0 0 14px rgba(57,255,20,0.5)', paddingLeft: '0.45em' }}>
               Book Your Play
             </span>
-            <span style={{ width: 64, height: 2, background: '#18AAC0' }} />
+            <span style={{ width: 64, height: 2, background: '#39FF14' }} />
           </div>
           <h2 style={{ fontFamily: 'Bebas Neue', fontWeight: 400, fontSize: 'clamp(52px, 8vw, 120px)', textTransform: 'uppercase', lineHeight: 0.88, margin: 0, color: CHROME }}>
             How do you want
@@ -526,6 +579,7 @@ export default function BookingFlow() {
             desc="Book a single playing slot"
             meta="₹700 / HOUR"
             delay="0.1s"
+            typewriter={['Book Now,', 'Play Now,', 'Score Big.']}
             icon={
               <svg {...iconProps} aria-hidden="true">
                 <circle cx="12" cy="12" r="9" />
@@ -541,6 +595,7 @@ export default function BookingFlow() {
             desc="Plan a longer session"
             meta="Send an enquiry"
             delay="0.22s"
+            typewriter={['Team Up,', 'Fix Date,', 'Reserve Slot.']}
             icon={
               <svg {...iconProps} aria-hidden="true">
                 <rect x="3" y="5" width="18" height="16" rx="2" />

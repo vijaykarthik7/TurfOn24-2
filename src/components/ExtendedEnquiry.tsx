@@ -197,7 +197,7 @@ export default function ExtendedEnquiry({ verifiedPhone = '', verifiedToken = ''
   }
 
   const labelStyle: React.CSSProperties = { fontFamily: 'Space Grotesk', fontSize: 9, fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(243,243,243,0.45)', marginBottom: 8, display: 'block' }
-  const sectionTitle: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: 12, fontFamily: 'Space Grotesk', fontSize: 10, fontWeight: 700, letterSpacing: '0.28em', textTransform: 'uppercase', color: '#18AAC0', textShadow: '0 0 14px rgba(24,170,192,0.5)', marginBottom: 20 }
+  const sectionTitle: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: 12, fontFamily: 'Space Grotesk', fontSize: 10, fontWeight: 700, letterSpacing: '0.28em', textTransform: 'uppercase', color: '#39FF14', textShadow: '0 0 14px rgba(57,255,20,0.5)', marginBottom: 20 }
   const fieldWrap: React.CSSProperties = { marginBottom: 20 }
   const errStyle: React.CSSProperties = { fontFamily: 'Space Grotesk', fontSize: 11, color: '#FF6B6B', marginTop: 6 }
 
@@ -213,10 +213,10 @@ export default function ExtendedEnquiry({ verifiedPhone = '', verifiedToken = ''
           {/* Left — pitch / intro */}
           <div style={{ position: 'sticky', top: 110 }}>
             <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', gap: 16, marginBottom: 18 }}>
-              <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#18AAC0', textShadow: '0 0 14px rgba(24,170,192,0.5)', paddingLeft: '0.45em' }}>
+              <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#39FF14', textShadow: '0 0 14px rgba(57,255,20,0.5)', paddingLeft: '0.45em' }}>
                 Extended Booking
               </span>
-              <span style={{ width: 64, height: 2, background: '#18AAC0' }} />
+              <span style={{ width: 64, height: 2, background: '#39FF14' }} />
             </div>
             <h2 style={{ fontFamily: 'Bebas Neue', fontWeight: 400, fontSize: 'clamp(52px, 5vw, 84px)', textTransform: 'uppercase', lineHeight: 0.9, margin: '0 0 24px', color: CHROME }}>
               Need more time

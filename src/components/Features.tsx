@@ -2,6 +2,9 @@ import { type ReactNode } from 'react'
 import { useReveal } from '../hooks/useReveal'
 import { GREEN, CHROME } from '../data/tf24'
 
+const BLUE = '#3B82F6'
+const BLUE_LIGHT = '#60A5FA'
+
 const iconProps = { width: 22, height: 22, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
 
 const FEATURES: { num: string; title: string; desc: string; icon: ReactNode }[] = [
@@ -11,9 +14,8 @@ const FEATURES: { num: string; title: string; desc: string; icon: ReactNode }[] 
     desc: 'Professional-quality playing surface designed for a better game.',
     icon: (
       <svg {...iconProps} aria-hidden="true">
-        <rect x="3" y="9" width="18" height="12" rx="1.5" />
-        <circle cx="12" cy="15" r="3.2" />
-        <path d="M12 2v3M9 2.6l6 1.2" />
+        <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z" />
+        <path d="M12 8v8M8 12h8" />
       </svg>
     ),
   },
@@ -23,10 +25,9 @@ const FEATURES: { num: string; title: string; desc: string; icon: ReactNode }[] 
     desc: 'Comfortable sidelines designed for players, coaches and supporters.',
     icon: (
       <svg {...iconProps} aria-hidden="true">
-        <path d="M5 12h14v3H5z" />
-        <path d="M3 15h18v3H3z" />
-        <path d="M6 18v3M18 18v3" />
-        <path d="M7 9h10v3H7z" />
+        <path d="M4 18v-6a2 2 0 012-2h12a2 2 0 012 2v6" />
+        <path d="M6 18h12" />
+        <path d="M6 10V6a2 2 0 012-2h8a2 2 0 012 2v4" />
       </svg>
     ),
   },
@@ -36,7 +37,8 @@ const FEATURES: { num: string; title: string; desc: string; icon: ReactNode }[] 
     desc: 'Lock your selected slot and receive immediate booking confirmation.',
     icon: (
       <svg {...iconProps} aria-hidden="true">
-        <path d="M13 2L4.5 13.5H11L10 22l8.5-11.5H12L13 2z" />
+        <path d="M22 11.08V12a10 10 0 11-5.93-9.14" />
+        <path d="M22 4L12 14.01l-3-3" />
       </svg>
     ),
   },
@@ -46,10 +48,8 @@ const FEATURES: { num: string; title: string; desc: string; icon: ReactNode }[] 
     desc: 'Choose the time that works best for your team.',
     icon: (
       <svg {...iconProps} aria-hidden="true">
-        <rect x="3" y="4.5" width="18" height="17" rx="2" />
-        <path d="M8 2v4.5M16 2v4.5M3 9.5h18" />
-        <circle cx="12" cy="15.5" r="3.4" />
-        <path d="M12 13.5v2l1.4 1.3" />
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 6v6l4 2" />
       </svg>
     ),
   },
@@ -72,10 +72,10 @@ export default function Features() {
         {/* Header */}
         <div ref={headRef} className="reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
           <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginBottom: 18 }}>
-            <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#18AAC0', textShadow: '0 0 14px rgba(24,170,192,0.5)', paddingLeft: '0.45em' }}>
+            <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#39FF14', textShadow: '0 0 14px rgba(57,255,20,0.5)', paddingLeft: '0.45em' }}>
               Why Turf on 24
             </span>
-            <span style={{ width: 64, height: 2, background: '#18AAC0' }} />
+            <span style={{ width: 64, height: 2, background: '#39FF14' }} />
           </div>
           <h2 style={{ fontFamily: 'Bebas Neue', fontWeight: 400, fontSize: 'clamp(56px, 8vw, 128px)', textTransform: 'uppercase', lineHeight: 0.88, margin: 0, color: CHROME }}>
             Built for the
@@ -98,7 +98,11 @@ export default function Features() {
                 <p>{f.desc}</p>
               </div>
               <span className="tf24-feat-line" />
-              <span className="tf24-feat-arrow">→</span>
+              <span className="tf24-feat-arrow">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </span>
             </div>
           ))}
         </div>

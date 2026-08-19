@@ -222,10 +222,10 @@ export default function Booking() {
         {/* Header */}
         <div ref={headRef} className="reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
           <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginBottom: 18 }}>
-            <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#18AAC0', textShadow: '0 0 14px rgba(24,170,192,0.5)', paddingLeft: '0.45em' }}>
+            <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#39FF14', textShadow: '0 0 14px rgba(57,255,20,0.5)', paddingLeft: '0.45em' }}>
               BOOK YOUR PLAY
             </span>
-            <span style={{ width: 64, height: 2, background: '#18AAC0' }} />
+            <span style={{ width: 64, height: 2, background: '#39FF14' }} />
           </div>
           <h2 style={{ fontFamily: 'Bebas Neue', fontWeight: 400, fontSize: 'clamp(56px, 8vw, 128px)', textTransform: 'uppercase', lineHeight: 0.88, margin: 0, color: CHROME }}>
             CLAIM YOUR
@@ -301,7 +301,7 @@ export default function Booking() {
             </div>
 
             <div style={{ marginTop: 16, marginBottom: 18 }}>
-              <div style={{ fontFamily: 'Space Grotesk', fontSize: 10, fontWeight: 700, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#18AAC0', marginBottom: 10 }}>
+              <div style={{ fontFamily: 'Space Grotesk', fontSize: 10, fontWeight: 700, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#39FF14', marginBottom: 10 }}>
                 SELECT YOUR PLAYING HOUR
               </div>
             </div>

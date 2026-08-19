@@ -133,7 +133,7 @@ export default function Availability() {
                   <span style={{ width: 10, height: 10, background: '#121212', border: '1px solid rgba(243,243,243,0.25)', borderRadius: 2 }} /> Booked
                 </span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                  <span style={{ width: 10, height: 10, background: CYAN, borderRadius: 2, boxShadow: '0 0 8px rgba(24,170,192,0.7)' }} /> Live
+                  <span style={{ width: 10, height: 10, background: CYAN, borderRadius: 2, boxShadow: '0 0 8px rgba(57,255,20,0.7)' }} /> Live
                 </span>
               </div>
 

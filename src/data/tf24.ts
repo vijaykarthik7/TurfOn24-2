@@ -1,7 +1,7 @@
 export const GREEN = '#39F72A'
 export const LIME = '#C7F42D'
 export const DEEP = '#176B02'
-export const CYAN = '#18AAC0'
+export const CYAN = '#39FF14'
 export const CHROME = '#F3F3F3'
 export const BLACK = '#000000'
 
