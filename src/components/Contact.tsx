@@ -35,7 +35,7 @@ export default function Contact() {
       </div>
 
       <div className="tf24-container">
-        <div ref={ref} className="reveal" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'start' }}>
+        <div ref={ref} className="reveal tf24-contact-layout" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'start' }}>
           {/* Left — info */}
           <div>
             <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', gap: 16, marginBottom: 18 }}>

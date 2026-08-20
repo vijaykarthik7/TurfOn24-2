@@ -27,35 +27,6 @@ export default function Hero() {
         }}
       />
 
-      {/* Football — the only animated element */}
-      <div
-        className="tf24-hero-ball tf24-ball"
-        style={{
-          position: 'absolute',
-          left: '50%',
-          bottom: 48,
-          zIndex: 2,
-          pointerEvents: 'none',
-          opacity: 0.9,
-        }}
-      >
-        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-          <circle cx="24" cy="24" r="22" stroke={GREEN} strokeWidth="2" fill="rgba(0,0,0,0.35)" />
-          <path
-            d="M24 4 L31.5 14.5 L27 25.5 H21 L16.5 14.5 Z"
-            fill="rgba(57,247,42,0.30)"
-            stroke={GREEN}
-            strokeWidth="1.4"
-          />
-          <path
-            d="M24 44 L16.5 33.5 L21 22.5 H27 L31.5 33.5 Z"
-            fill="rgba(57,247,42,0.12)"
-            stroke={GREEN}
-            strokeWidth="1.4"
-          />
-        </svg>
-      </div>
-
       {/* Content */}
       <div
         className="tf24-container"

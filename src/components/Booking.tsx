@@ -306,7 +306,7 @@ export default function Booking() {
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 12, flex: 1, alignContent: 'start' }}>
+            <div className="tf24-slot-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 12, flex: 1, alignContent: 'start' }}>
               {Array.from({ length: 24 }, (_, index) => {
                 const h = index
                 const booked = isBooked(h)
@@ -434,6 +434,7 @@ export default function Booking() {
                       </div>
 
                       <div
+                        className="tf24-duration-circle"
                         style={{
                           width: '100%',
                           maxWidth: 250,

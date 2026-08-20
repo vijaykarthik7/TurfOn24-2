@@ -4071,17 +4071,7 @@ input[type='time'] {
 .tf24-img-zoom:hover img {
   transform: scale(1.06);
 }
-@keyframes tf24-ball {
-  0% { transform: translate(0, 0) rotate(0deg) scale(1); }
-  25% { transform: translate(-7px, 5px) rotate(90deg) scale(1.04); }
-  50% { transform: translate(5px, -7px) rotate(180deg) scale(0.96); }
-  75% { transform: translate(-4px, -3px) rotate(270deg) scale(1.02); }
-  100% { transform: translate(0, 0) rotate(360deg) scale(1); }
-}
-.tf24-ball {
-  animation: tf24-ball 6s linear infinite;
-  will-change: transform;
-}
+
 
 /* 24/7 open clock */
 .tf24-hero-clock-wrap {
@@ -4200,16 +4190,7 @@ input[type='time'] {
   box-shadow: 0 0 12px rgba(57, 247, 42, 0.85);
   z-index: 3;
 }
-@media (min-width: 641px) {
-  .tf24-hero-clock-wrap {
-    display: none;
-  }
-}
-@media (min-width: 641px) {
-  .tf24-hero-clock-wrap {
-    display: none;
-  }
-}
+
 @media (max-width: 640px) {
   .tf24-hero-h1 {
     font-size: clamp(48px, 14vw, 72px) !important;
@@ -4225,9 +4206,7 @@ input[type='time'] {
     flex: 1 1 100%;
     justify-content: center;
   }
-  .tf24-hero-ball {
-    display: none !important;
-  }
+
 }
 @keyframes bg-kenburns-mobile {
   from { transform: scale(1.02) translate(0, 0); }
@@ -4563,5 +4542,48 @@ input[type='time'] {
   background: rgba(57,247,42,0.35);
   transform: translate(-50%, -50%);
   box-shadow: 0 0 25px rgba(57,247,42,0.3);
+}
+
+/* ---- Responsive fixes (mobile + tablet) ---- */
+@media (max-width: 900px) {
+  .tf24-contact-layout {
+    grid-template-columns: 1fr !important;
+    gap: 48px !important;
+  }
+}
+@media (max-width: 640px) {
+  .tf24-slot-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+  .tf24-bflow-typewriter {
+    display: none !important;
+  }
+  .tf24-bflow-panel:first-child {
+    margin-left: 0 !important;
+  }
+  .tf24-bflow-panel:nth-child(2) {
+    margin-left: 0 !important;
+  }
+  .tf24-bflow-panel {
+    padding: 20px 16px !important;
+  }
+  .tf24-bflow-title {
+    font-size: 32px !important;
+  }
+  .booking-days {
+    gap: 4px !important;
+  }
+  .booking-days button {
+    min-width: 72px !important;
+    padding: 8px 10px 10px !important;
+  }
+  .tf24-duration-circle {
+    max-width: 200px !important;
+  }
+  .tf24-contact-layout {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
 }
 
