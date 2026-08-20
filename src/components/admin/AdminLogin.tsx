@@ -1,8 +1,8 @@
-import { useState, ChangeEvent, FormEvent } from 'react'
+import { useEffect, useState, ChangeEvent, FormEvent } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
-import bgImage from '@/assets/bg2.png'
 
 const logoTagline = '/turfon24-logo-tagline.png'
+const bgImage = '/bg2.png'
 
 type FormData = {
   username: string;
@@ -15,6 +15,14 @@ export default function AdminLogin({ onLogin }: { onLogin: () => void }) {
     password: 'admin123',
   });
   const [showPassword, setShowPassword] = useState(false)
+  const [bgImageAvailable, setBgImageAvailable] = useState(true)
+
+  useEffect(() => {
+    const image = new Image()
+    image.onload = () => setBgImageAvailable(true)
+    image.onerror = () => setBgImageAvailable(false)
+    image.src = bgImage
+  }, [])
 
   const goToForgotPassword = (
     event: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>
@@ -43,9 +51,9 @@ export default function AdminLogin({ onLogin }: { onLogin: () => void }) {
   };
 
   return (
-    <section className='tf24-admin-login' style={{ backgroundImage: `url(${bgImage})` }}>
+    <section className='tf24-admin-login' style={{ backgroundImage: bgImageAvailable ? `url(${bgImage})` : undefined }}>
       <div className='tf24-admin-shell'>
-        <div className='tf24-admin-showcase' style={{ backgroundImage: `linear-gradient(180deg, rgba(3,6,7,0.25), rgba(3,6,7,0.68)), url(${bgImage})` }}>
+        <div className='tf24-admin-showcase' style={{ backgroundImage: bgImageAvailable ? `linear-gradient(180deg, rgba(3,6,7,0.25), rgba(3,6,7,0.68)), url(${bgImage})` : undefined }}>
           <div className='tf24-admin-showcase-top'>
             <img src={logoTagline} alt='TURFON24 — Premium Turfs 24/7' />
           </div>

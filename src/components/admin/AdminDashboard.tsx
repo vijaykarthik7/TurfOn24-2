@@ -251,6 +251,7 @@ const btnStyle = (active: boolean): React.CSSProperties => ({
 
 export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [section, setSection] = useState<Section>('overview')
+  const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [showPasswordForm, setShowPasswordForm] = useState(false)
   const [darkMode, setDarkMode] = useState(true)
   const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' })
@@ -429,6 +430,20 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
             <img src={logoTagline} alt="TURFON24 — Premium Turfs 24/7" style={{ height: 44, width: 'auto', maxWidth: 'none', display: 'block' }} />
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <button
+              type="button"
+              className="admin-mobile-menu-trigger"
+              aria-label="Open navigation menu"
+              aria-expanded={mobileNavOpen}
+              aria-controls="admin-navigation"
+              onClick={() => setMobileNavOpen(open => !open)}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                <path d="M4 6h16" />
+                <path d="M4 12h16" />
+                <path d="M4 18h16" />
+              </svg>
+            </button>
             <div style={{ display: 'flex', alignItems: 'center', gap: 9, fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '0.1em', color: 'rgba(245,245,245,0.6)', padding: '9px 14px', border: '1px solid rgba(160,168,184,0.16)', borderRadius: 10, background: 'rgba(11,24,36,0.5)' }}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: ACCENT }}>
                 <rect x="3" y="4" width="18" height="17" rx="2" />
@@ -455,10 +470,10 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
       <div className="admin-layout" style={{ position: 'relative', zIndex: 10, maxWidth: 1320, margin: '0 auto', padding: '36px 28px 80px', display: 'grid', gridTemplateColumns: '248px 1fr', gap: 32, alignItems: 'start' }}>
         {/* Sidebar */}
         <aside className="admin-sidebar">
-          <div className="admin-nav">
+          <div id="admin-navigation" className={'admin-nav' + (mobileNavOpen ? ' open' : '')}>
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.35)', padding: '4px 14px 14px' }}>Navigation</div>
             {NAV_ITEMS.map(n => (
-              <button key={n.id} onClick={() => setSection(n.id)} className={'admin-nav-item' + (section === n.id ? ' active' : '')} aria-pressed={section === n.id}>
+              <button key={n.id} onClick={() => { setSection(n.id); setMobileNavOpen(false) }} className={'admin-nav-item' + (section === n.id ? ' active' : '')} aria-pressed={section === n.id}>
                 {n.icon}
                 {n.label}
               </button>
