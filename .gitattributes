@@ -21,6 +21,7 @@
 public/hero-bg.png   -filter -diff -merge -text
 public/favicon.png   -filter -diff -merge -text
 public/stadium-bg.png -filter -diff -merge -text
+public/bg2.png       -filter -diff -merge -text
 public/turfon24-logo-mark.png -filter -diff -merge -text
 public/turfon24-logo-tagline.png -filter -diff -merge -text
 src/assets/stadium-bg.png -filter -diff -merge -text

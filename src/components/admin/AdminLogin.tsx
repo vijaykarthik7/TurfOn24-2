@@ -61,8 +61,6 @@ export default function AdminLogin({ onLogin }: { onLogin: () => void }) {
 
         <div className='tf24-admin-form-panel'>
           <div className='tf24-admin-form-top'>
-            <img src={logoTagline} alt='TURFON24 — Premium Turfs 24/7' />
-            <button type='button' className='tf24-admin-language'>🇬🇧 EN⌄</button>
           </div>
           <div className='tf24-admin-form-content'>
             <h1>Hi Admin</h1>
