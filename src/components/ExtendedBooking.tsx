@@ -1,8 +1,8 @@
 import { type ReactNode, useRef, useState } from 'react'
 import { useReveal } from '../hooks/useReveal'
 
-const ACCENT = '#39F72A'
-const ACCENT_RGB = '57,247,42'
+const ACCENT = '#39FF7A'
+const ACCENT_RGB = '57,255,122'
 
 const EXTRA_OPTIONS = ['Floodlights Required', 'Tournament Setup', 'Equipment Assistance']
 
@@ -73,7 +73,7 @@ export default function ExtendedBooking({ verified, onCloseArena }: { verified: 
               })
             }}
             style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', background: 'transparent', color: '#A0A8B8', border: '1px solid rgba(160,168,184,0.4)', borderRadius: 8, padding: '10px 18px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.25s ease' }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = ACCENT; e.currentTarget.style.color = '#F5F5F5' }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = ACCENT; e.currentTarget.style.color = '#F2F4F2' }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(160,168,184,0.4)'; e.currentTarget.style.color = '#A0A8B8' }}
           >
             ← Back to Hourly Booking
@@ -82,11 +82,11 @@ export default function ExtendedBooking({ verified, onCloseArena }: { verified: 
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 44 }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: ACCENT, border: '1px solid rgba(57,247,42,0.35)', borderRadius: 999, padding: '6px 14px', marginBottom: 16, background: 'rgba(57,247,42,0.06)' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: ACCENT, border: '1px solid rgba(57,255,122,0.35)', borderRadius: 999, padding: '6px 14px', marginBottom: 16, background: 'rgba(57,255,122,0.06)' }}>
             <span className="hm-live-dot" style={{ width: 6, height: 6 }} />
             Premium Arena Reservation
           </div>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(38px, 5.5vw, 66px)', textTransform: 'uppercase', lineHeight: 0.95, margin: 0, color: '#F5F5F5' }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(38px, 5.5vw, 66px)', textTransform: 'uppercase', lineHeight: 0.95, margin: 0, color: '#F2F4F2' }}>
             Extended <span style={{ color: ACCENT }}>reservation.</span>
           </h2>
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#A0A8B8', maxWidth: 580, margin: '16px auto 0', lineHeight: 1.7 }}>
@@ -97,8 +97,8 @@ export default function ExtendedBooking({ verified, onCloseArena }: { verified: 
         <div style={{ position: 'relative' }}>
           {!verified ? (
             <div style={{ position: 'absolute', inset: 0, zIndex: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, pointerEvents: 'none' }}>
-              <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'rgba(11,24,36,0.9)', border: '1px solid rgba(57,247,42,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 24px rgba(57,247,42,0.3)' }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#39F72A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'rgba(11,24,36,0.9)', border: '1px solid rgba(57,255,122,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 24px rgba(57,255,122,0.3)' }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#39FF7A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5" />
                   <path d="M8 10.5V7.5a4 4 0 018 0v3" />
                 </svg>
@@ -118,7 +118,7 @@ export default function ExtendedBooking({ verified, onCloseArena }: { verified: 
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.2em', color: 'rgba(245,245,245,0.4)', textTransform: 'uppercase', marginBottom: 10 }}>
                     Request Received
                   </div>
-                  <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 40, textTransform: 'uppercase', lineHeight: 0.95, color: '#F5F5F5', marginBottom: 14 }}>
+                  <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 40, textTransform: 'uppercase', lineHeight: 0.95, color: '#F2F4F2', marginBottom: 14 }}>
                     Arena<br />on hold.
                   </div>
                   <p style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#A0A8B8', lineHeight: 1.7, marginBottom: 16 }}>
@@ -206,7 +206,7 @@ export default function ExtendedBooking({ verified, onCloseArena }: { verified: 
                                 transition: 'all 0.2s ease',
                                 background: active ? `rgba(${ACCENT_RGB},0.12)` : 'rgba(11,24,36,0.6)',
                                 border: active ? `1px solid rgba(${ACCENT_RGB},0.6)` : '1px solid rgba(160,168,184,0.25)',
-                                color: active ? '#F5F5F5' : '#A0A8B8',
+                                color: active ? '#F2F4F2' : '#A0A8B8',
                                 boxShadow: active ? `0 0 16px rgba(${ACCENT_RGB},0.22)` : 'none',
                               }}
                             >

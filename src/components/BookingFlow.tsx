@@ -89,6 +89,8 @@ function Panel({
 }) {
   return (
     <button className="tf24-bflow-panel" style={{ animationDelay: delay }} onClick={onClick}>
+      <span className="tf24-bflow-ghost-num" aria-hidden="true">{num}</span>
+      <span className="tf24-bflow-vertical-rule" aria-hidden="true" />
       <span className="tf24-bflow-sweep" />
       <span className="tf24-bflow-corner tf24-bflow-corner-tl" />
       <span className="tf24-bflow-corner tf24-bflow-corner-br" />
@@ -322,7 +324,7 @@ function OtpGate({ onVerified, onBack }: { onVerified: (name: string, phone: str
   return (
     <section id="booking" style={{ position: 'relative', zIndex: 2, background: 'rgba(11,24,36,0.55)', overflow: 'hidden', padding: '90px 0 120px' }}>
       <div className="pitch-lines" />
-      <div style={{ position: 'absolute', bottom: -60, right: -30, fontFamily: 'Bebas Neue', fontSize: 300, lineHeight: 1, color: 'rgba(23,107,2,0.16)', WebkitTextStroke: '1px rgba(57,247,42,0.10)', userSelect: 'none', pointerEvents: 'none', zIndex: 0 }}>
+      <div style={{ position: 'absolute', bottom: -60, right: -30, fontFamily: 'Bebas Neue', fontSize: 300, lineHeight: 1, color: 'rgba(23,107,2,0.16)', WebkitTextStroke: '1px rgba(57,255,122,0.10)', userSelect: 'none', pointerEvents: 'none', zIndex: 0 }}>
         OTP.
       </div>
 
@@ -331,10 +333,10 @@ function OtpGate({ onVerified, onBack }: { onVerified: (name: string, phone: str
           {/* Heading */}
           <div className="tf24-otp-head">
             <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginBottom: 18 }}>
-              <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#18AAC0', textShadow: '0 0 14px rgba(24,170,192,0.5)', paddingLeft: '0.45em' }}>
+              <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#39FF7A', textShadow: '0 0 14px rgba(57,255,122,0.5)', paddingLeft: '0.45em' }}>
                 Verify Your Phone
               </span>
-              <span style={{ width: 64, height: 2, background: '#18AAC0' }} />
+              <span style={{ width: 64, height: 2, background: '#39FF7A' }} />
             </div>
             <h2 style={{ fontFamily: 'Bebas Neue', fontWeight: 400, fontSize: 'clamp(48px, 5.5vw, 88px)', textTransform: 'uppercase', lineHeight: 0.9, margin: 0, color: CHROME }}>
               Unlock your
@@ -446,7 +448,7 @@ function OtpGate({ onVerified, onBack }: { onVerified: (name: string, phone: str
 
           {phase === 'verified' && (
             <div style={{ marginTop: 20, textAlign: 'center' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '14px 18px', border: '1px solid rgba(57,247,42,0.5)', background: 'rgba(57,247,42,0.08)', borderRadius: 4, boxShadow: '0 0 22px rgba(57,247,42,0.14)' }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 12, padding: '14px 18px', border: '1px solid rgba(57,255,122,0.5)', background: 'rgba(57,255,122,0.08)', borderRadius: 4, boxShadow: '0 0 22px rgba(57,255,122,0.14)' }}>
                 <span className="tf24-eq-verified-ico">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                     <path d="M5 13l4 4L19 7" />
@@ -548,7 +550,7 @@ export default function BookingFlow() {
       style={{ position: 'relative', zIndex: 2, background: 'rgba(11,24,36,0.55)', overflow: 'hidden', padding: '120px 0' }}
     >
       <div className="pitch-lines" />
-      <div style={{ position: 'absolute', top: -30, left: -24, fontFamily: 'Bebas Neue', fontSize: 300, lineHeight: 1, color: 'rgba(23,107,2,0.16)', WebkitTextStroke: '1px rgba(57,247,42,0.10)', userSelect: 'none', pointerEvents: 'none', zIndex: 0 }}>
+      <div style={{ position: 'absolute', top: -30, left: -24, fontFamily: 'Bebas Neue', fontSize: 300, lineHeight: 1, color: 'rgba(23,107,2,0.16)', WebkitTextStroke: '1px rgba(57,255,122,0.10)', userSelect: 'none', pointerEvents: 'none', zIndex: 0 }}>
         PLAY.
       </div>
 
@@ -556,10 +558,10 @@ export default function BookingFlow() {
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 56 }}>
           <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginBottom: 18 }}>
-            <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#39FF14', textShadow: '0 0 14px rgba(57,255,20,0.5)', paddingLeft: '0.45em' }}>
+            <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#39FF7A', textShadow: '0 0 14px rgba(57,255,122,0.5)', paddingLeft: '0.45em' }}>
               Book Your Play
             </span>
-            <span style={{ width: 64, height: 2, background: '#39FF14' }} />
+            <span style={{ width: 64, height: 2, background: '#39FF7A' }} />
           </div>
           <h2 style={{ fontFamily: 'Bebas Neue', fontWeight: 400, fontSize: 'clamp(52px, 8vw, 120px)', textTransform: 'uppercase', lineHeight: 0.88, margin: 0, color: CHROME }}>
             How do you want

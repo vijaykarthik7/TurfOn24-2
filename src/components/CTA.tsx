@@ -49,7 +49,7 @@ export default function CTA() {
               style={{
                 position: 'absolute',
                 inset: 0,
-                background: 'radial-gradient(ellipse at 50% 55%, rgba(57,247,42,0.22), rgba(23,107,2,0.45) 60%, transparent 75%)',
+                background: 'radial-gradient(ellipse at 50% 55%, rgba(57,255,122,0.22), rgba(23,107,2,0.45) 60%, transparent 75%)',
               }}
             />
             <img

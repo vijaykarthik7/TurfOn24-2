@@ -197,14 +197,14 @@ export default function ExtendedEnquiry({ verifiedPhone = '', verifiedToken = ''
   }
 
   const labelStyle: React.CSSProperties = { fontFamily: 'Space Grotesk', fontSize: 9, fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(243,243,243,0.45)', marginBottom: 8, display: 'block' }
-  const sectionTitle: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: 12, fontFamily: 'Space Grotesk', fontSize: 10, fontWeight: 700, letterSpacing: '0.28em', textTransform: 'uppercase', color: '#39FF14', textShadow: '0 0 14px rgba(57,255,20,0.5)', marginBottom: 20 }
+  const sectionTitle: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: 12, fontFamily: 'Space Grotesk', fontSize: 10, fontWeight: 700, letterSpacing: '0.28em', textTransform: 'uppercase', color: '#39FF7A', textShadow: '0 0 14px rgba(57,255,122,0.5)', marginBottom: 20 }
   const fieldWrap: React.CSSProperties = { marginBottom: 20 }
   const errStyle: React.CSSProperties = { fontFamily: 'Space Grotesk', fontSize: 11, color: '#FF6B6B', marginTop: 6 }
 
   return (
     <section id="extended-enquiry" style={{ position: 'relative', zIndex: 2, background: 'rgba(11,24,36,0.55)', overflow: 'hidden', padding: '96px 0 120px' }}>
       <div className="pitch-lines" />
-      <div style={{ position: 'absolute', bottom: -60, left: -30, fontFamily: 'Bebas Neue', fontSize: 300, lineHeight: 1, color: 'rgba(23,107,2,0.16)', WebkitTextStroke: '1px rgba(57,247,42,0.10)', userSelect: 'none', pointerEvents: 'none', zIndex: 0 }}>
+      <div style={{ position: 'absolute', bottom: -60, left: -30, fontFamily: 'Bebas Neue', fontSize: 300, lineHeight: 1, color: 'rgba(23,107,2,0.16)', WebkitTextStroke: '1px rgba(57,255,122,0.10)', userSelect: 'none', pointerEvents: 'none', zIndex: 0 }}>
         MORE.
       </div>
 
@@ -213,10 +213,10 @@ export default function ExtendedEnquiry({ verifiedPhone = '', verifiedToken = ''
           {/* Left — pitch / intro */}
           <div style={{ position: 'sticky', top: 110 }}>
             <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', gap: 16, marginBottom: 18 }}>
-              <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#39FF14', textShadow: '0 0 14px rgba(57,255,20,0.5)', paddingLeft: '0.45em' }}>
+              <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#39FF7A', textShadow: '0 0 14px rgba(57,255,122,0.5)', paddingLeft: '0.45em' }}>
                 Extended Booking
               </span>
-              <span style={{ width: 64, height: 2, background: '#39FF14' }} />
+              <span style={{ width: 64, height: 2, background: '#39FF7A' }} />
             </div>
             <h2 style={{ fontFamily: 'Bebas Neue', fontWeight: 400, fontSize: 'clamp(52px, 5vw, 84px)', textTransform: 'uppercase', lineHeight: 0.9, margin: '0 0 24px', color: CHROME }}>
               Need more time
@@ -228,13 +228,13 @@ export default function ExtendedEnquiry({ verifiedPhone = '', verifiedToken = ''
             </p>
 
             {/* Pitch visual */}
-            <div style={{ position: 'relative', maxWidth: 430, height: 240, border: '1px solid rgba(57,247,42,0.28)', borderRadius: 6, background: 'repeating-linear-gradient(90deg, rgba(57,247,42,0.05) 0 1px, transparent 1px 44px)', overflow: 'hidden' }}>
-              <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1, background: 'rgba(57,247,42,0.25)' }} />
-              <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', width: 90, height: 90, border: '1px solid rgba(57,247,42,0.35)', borderRadius: '50%' }} />
-              <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', width: 8, height: 8, borderRadius: '50%', background: GREEN, boxShadow: '0 0 14px rgba(57,247,42,0.8)' }} />
-              <div style={{ position: 'absolute', top: '50%', left: 0, width: 64, height: 120, transform: 'translateY(-50%)', border: '1px solid rgba(57,247,42,0.4)', borderLeft: 'none', borderRadius: '0 4px 4px 0' }} />
-              <div style={{ position: 'absolute', top: '50%', right: 0, width: 64, height: 120, transform: 'translateY(-50%)', border: '1px solid rgba(57,247,42,0.4)', borderRight: 'none', borderRadius: '4px 0 0 4px' }} />
-              <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 30% 0%, rgba(57,247,42,0.12), transparent 55%)' }} />
+            <div style={{ position: 'relative', maxWidth: 430, height: 240, border: '1px solid rgba(57,255,122,0.28)', borderRadius: 6, background: 'repeating-linear-gradient(90deg, rgba(57,255,122,0.05) 0 1px, transparent 1px 44px)', overflow: 'hidden' }}>
+              <div style={{ position: 'absolute', left: '50%', top: 0, bottom: 0, width: 1, background: 'rgba(57,255,122,0.25)' }} />
+              <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', width: 90, height: 90, border: '1px solid rgba(57,255,122,0.35)', borderRadius: '50%' }} />
+              <div style={{ position: 'absolute', left: '50%', top: '50%', transform: 'translate(-50%,-50%)', width: 8, height: 8, borderRadius: '50%', background: GREEN, boxShadow: '0 0 14px rgba(57,255,122,0.8)' }} />
+              <div style={{ position: 'absolute', top: '50%', left: 0, width: 64, height: 120, transform: 'translateY(-50%)', border: '1px solid rgba(57,255,122,0.4)', borderLeft: 'none', borderRadius: '0 4px 4px 0' }} />
+              <div style={{ position: 'absolute', top: '50%', right: 0, width: 64, height: 120, transform: 'translateY(-50%)', border: '1px solid rgba(57,255,122,0.4)', borderRight: 'none', borderRadius: '4px 0 0 4px' }} />
+              <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at 30% 0%, rgba(57,255,122,0.12), transparent 55%)' }} />
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginTop: 28, maxWidth: 430 }}>
@@ -251,9 +251,9 @@ export default function ExtendedEnquiry({ verifiedPhone = '', verifiedToken = ''
           </div>
 
           {/* Right — enquiry form */}
-          <div style={{ position: 'relative', background: 'rgba(7,13,22,0.92)', border: '1px solid rgba(57,247,42,0.22)', padding: '40px 32px' }}>
-            <div style={{ position: 'absolute', top: 0, left: 0, width: 52, height: 52, borderTop: '2px solid rgba(57,247,42,0.6)', borderLeft: '2px solid rgba(57,247,42,0.6)' }} />
-            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 52, height: 52, borderBottom: '2px solid rgba(57,247,42,0.6)', borderRight: '2px solid rgba(57,247,42,0.6)' }} />
+          <div style={{ position: 'relative', background: 'rgba(7,13,22,0.92)', border: '1px solid rgba(57,255,122,0.22)', padding: '40px 32px' }}>
+            <div style={{ position: 'absolute', top: 0, left: 0, width: 52, height: 52, borderTop: '2px solid rgba(57,255,122,0.6)', borderLeft: '2px solid rgba(57,255,122,0.6)' }} />
+            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 52, height: 52, borderBottom: '2px solid rgba(57,255,122,0.6)', borderRight: '2px solid rgba(57,255,122,0.6)' }} />
 
             {/* CUSTOMER DETAILS */}
             <div style={sectionTitle}>
@@ -353,7 +353,7 @@ export default function ExtendedEnquiry({ verifiedPhone = '', verifiedToken = ''
             )}
 
             {otpPhase === 'verified' && (
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', padding: '14px 16px', border: '1px solid rgba(57,247,42,0.5)', background: 'rgba(57,247,42,0.08)', borderRadius: 4, boxShadow: '0 0 22px rgba(57,247,42,0.14)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', padding: '14px 16px', border: '1px solid rgba(57,255,122,0.5)', background: 'rgba(57,255,122,0.08)', borderRadius: 4, boxShadow: '0 0 22px rgba(57,255,122,0.14)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <span className="tf24-eq-verified-ico">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

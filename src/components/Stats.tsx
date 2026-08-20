@@ -36,7 +36,7 @@ export default function Stats() {
                 <div style={{ fontFamily: 'Bebas Neue', fontSize: 44, lineHeight: 1, color: GREEN, letterSpacing: '0.02em' }}>
                   {s.value}
                 </div>
-                <div style={{ marginTop: 6, fontFamily: 'Space Grotesk', fontSize: 12.5, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#F3F3F3' }}>
+                <div style={{ marginTop: 6, fontFamily: 'Space Grotesk', fontSize: 12.5, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#F2F4F2' }}>
                   {s.label}
                 </div>
               </div>

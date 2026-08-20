@@ -63,7 +63,7 @@ export default function AnimatedPrice() {
           {!done && (
             <div className="tf24-price-spinner-wrap">
               <svg className="tf24-price-spinner" viewBox="0 0 120 120" aria-hidden="true">
-                <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(57,247,42,0.14)" strokeWidth="2.5" />
+                <circle cx="60" cy="60" r="54" fill="none" stroke="rgba(57,255,122,0.14)" strokeWidth="2.5" />
                 <circle cx="60" cy="60" r="54" fill="none" stroke={GREEN} strokeWidth="2.5" strokeLinecap="round" strokeDasharray="95 250" />
               </svg>
             </div>

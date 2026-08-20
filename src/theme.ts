@@ -8,20 +8,20 @@ const hexToRgb = (hex: string): [number, number, number] => {
 }
 
 export const c = {
-  navy: '#000000',
-  primary: '#0B1824',
-  emerald: '#39F72A',
-  emeraldLight: '#C7F42D',
-  ivory: '#F5F5F5',
-  white: '#F5F5F5',
-  sage: '#A0A8B8',
-  muted: '#A0A8B8',
-  glass: '#0B1824',
-  glassActive: '#101E2C',
-  glassHover: '#0D1A26',
-  stepActive: '#122230',
-  disabled: '#040A12',
-  darkText: '#000000',
+  navy: '#030607',
+  primary: '#030607',
+  emerald: '#0FA857',
+  emeraldLight: '#39FF7A',
+  ivory: '#F2F4F2',
+  white: '#F2F4F2',
+  sage: '#F2F4F2',
+  muted: '#F2F4F2',
+  glass: '#030607',
+  glassActive: '#0FA857',
+  glassHover: '#030607',
+  stepActive: '#0FA857',
+  disabled: '#030607',
+  darkText: '#030607',
 }
 
 export const alpha = (hex: string, a: number) => {

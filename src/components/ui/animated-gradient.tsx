@@ -49,7 +49,7 @@ const presets: Record<PresetName, PresetParams> = {
   Lava: {
     color1: "#FF9F21",
     color2: "#FF0303",
-    color3: "#000000",
+    color3: "#030607",
     rotation: 114,
     proportion: 100,
     scale: 0.52,
@@ -64,8 +64,8 @@ const presets: Record<PresetName, PresetParams> = {
   },
   Plasma: {
     color1: "#B566FF",
-    color2: "#000000",
-    color3: "#000000",
+    color2: "#030607",
+    color3: "#030607",
     rotation: 0,
     proportion: 63,
     scale: 0.75,
@@ -80,8 +80,8 @@ const presets: Record<PresetName, PresetParams> = {
   },
   Pulse: {
     color1: "#66FF85",
-    color2: "#000000",
-    color3: "#000000",
+    color2: "#030607",
+    color3: "#030607",
     rotation: -167,
     proportion: 92,
     scale: 0,
@@ -95,9 +95,9 @@ const presets: Record<PresetName, PresetParams> = {
     shapeSize: 79,
   },
   Vortex: {
-    color1: "#000000",
+    color1: "#030607",
     color2: "#FFFFFF",
-    color3: "#000000",
+    color3: "#030607",
     rotation: 50,
     proportion: 41,
     scale: 0.4,

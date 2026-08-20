@@ -47,7 +47,7 @@ function BookingModal({ slot, onClose, onConfirm }: { slot: { hour: number; end:
             <div className="tf24-booking-qr-code">
               <svg width="120" height="120" viewBox="0 0 120 120" className="tf24-qr-svg">
                 <rect width="120" height="120" fill="#0B0B0B" />
-                <g fill="#39F72A">
+                <g fill="#39FF7A">
                   <rect x="10" y="10" width="8" height="8" />
                   <rect x="10" y="20" width="8" height="8" />
                   <rect x="10" y="30" width="8" height="8" />

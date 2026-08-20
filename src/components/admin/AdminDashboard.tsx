@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { getExtendedEnquiries } from '../../services/enquiryStore'
+import { getContactLeads, updateContactLeadStatus } from '../../services/contactLeadStore'
+import type { ContactLead } from '../../services/contactLeadStore'
 
-const ACCENT = '#39F72A'
-const ACCENT_RGB = '57,247,42'
+const ACCENT = '#39FF7A'
+const ACCENT_RGB = '57,255,122'
 const logoTagline = '/turfon24-logo-tagline.png'
 
 type HourlyBooking = {
@@ -94,6 +96,17 @@ const STORED_EXTENDED: ExtendedBooking[] = getExtendedEnquiries().map(e => ({
 
 const ALL_EXTENDED = [...EXTENDED, ...STORED_EXTENDED]
 
+const DEMO_CONTACT_LEADS: ContactLead[] = [
+  { id: 'CL-1001', name: 'Priya Nair', phone: '+91 98555 88990', email: 'priya.nair@outlook.com', message: 'Hi, I wanted to inquire about booking the turf for a weekend corporate team-building event. We have around 30 people. Could you share the rates for a full-day slot?', submittedAt: '18 Aug 2026, 10:30 am', status: 'New' },
+  { id: 'CL-1002', name: 'Rohit Sharma', phone: '+91 98200 11223', email: 'rohit.s@gmail.com', message: 'Do you offer any membership plans for regular players? We come in every Thursday evening and the per-session cost is adding up. Would love a monthly pass option.', submittedAt: '17 Aug 2026, 3:15 pm', status: 'New' },
+  { id: 'CL-1003', name: 'Ananya Desai', phone: '+91 98765 43210', email: 'ananya.d@rediffmail.com', message: 'I am organizing a birthday celebration for my son who turns 10 next Saturday. Can I book the turf from 4 PM to 7 PM? Also, do you provide any decoration or catering support?', submittedAt: '16 Aug 2026, 6:45 pm', status: 'Contacted' },
+  { id: 'CL-1004', name: 'Vikram Singh', phone: '+91 98444 55667', email: 'vikram.s@company.in', message: 'Looking for floodlit turf availability on weekday evenings. We are a group of 22 football enthusiasts who play twice a week. Any group discount available?', submittedAt: '15 Aug 2026, 8:20 am', status: 'Contacted' },
+  { id: 'CL-1005', name: 'Meera Joshi', phone: '+91 98111 22334', email: 'meera.joshi@yahoo.com', message: 'Can you confirm if the turf is safe for children under 12? We want to enroll our daughter in the junior football training camp you mentioned on Instagram.', submittedAt: '14 Aug 2026, 11:10 am', status: 'Closed' },
+  { id: 'CL-1006', name: 'Karan Malhotra', phone: '+91 98666 11220', email: 'karan.m@techcorp.com', message: 'We need to cancel our booking for 20 August due to unforeseen circumstances. Please process the refund as per your cancellation policy. Booking ID TF24-1016.', submittedAt: '13 Aug 2026, 4:50 pm', status: 'Closed' },
+  { id: 'CL-1007', name: 'Sneha Kapoor', phone: '+91 98333 22110', email: 'sneha.k@designstudio.co', message: 'Is there parking space available near the turf? We will have around 15 cars. Also, is there a changing room facility for players?', submittedAt: '12 Aug 2026, 9:00 am', status: 'New' },
+  { id: 'CL-1008', name: 'Arjun Mehta', phone: '+91 98123 45601', email: 'arjun.m@startup.io', message: 'Great experience last time! I want to book again for next Friday. Same slot — 6 PM to 8 PM. Can you also arrange a referee for a friendly match?', submittedAt: '11 Aug 2026, 2:30 pm', status: 'Contacted' },
+]
+
 const CUSTOMERS: Customer[] = [
   { name: 'Arjun Mehta', phone: '+91 98123 45601', bookings: 4, total: 3500, lastBooking: '14 Aug 2026' },
   { name: 'Rohit Sharma', phone: '+91 98200 11223', bookings: 6, total: 7700, lastBooking: '14 Aug 2026' },
@@ -107,14 +120,16 @@ const CUSTOMERS: Customer[] = [
   { name: 'City Football Academy', phone: '+91 90002 44556', bookings: 1, total: 24000, lastBooking: '22 Aug 2026' },
 ]
 
-type Section = 'overview' | 'hourly' | 'extended' | 'customers' | 'settings'
+type Section = 'overview' | 'hourly' | 'extended' | 'contact-leads' | 'customers' | 'settings'
 
 const STATUS_COLORS: Record<string, string> = {
-  Confirmed: '#39F72A',
+  Confirmed: '#39FF7A',
   Completed: '#5EA9FF',
   Cancelled: '#FF6B6B',
   Pending: '#F5B84C',
-  New: '#39F72A',
+  New: '#39FF7A',
+  Contacted: '#5EA9FF',
+  Closed: '#A0A8B8',
 }
 
 const NAV_ITEMS: { id: Section; label: string; icon: React.ReactNode }[] = [
@@ -151,6 +166,16 @@ const NAV_ITEMS: { id: Section; label: string; icon: React.ReactNode }[] = [
     ),
   },
   {
+    id: 'contact-leads',
+    label: 'Contact Leads',
+    icon: (
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+        <circle cx="12" cy="7" r="4" />
+      </svg>
+    ),
+  },
+  {
     id: 'customers',
     label: 'Customers',
     icon: (
@@ -182,22 +207,84 @@ const initials = (name: string) =>
     .map(w => w[0]!.toUpperCase())
     .join('')
 
+const parseBookingDate = (dateStr: string): string => {
+  const months: Record<string, string> = { Jan: '01', Feb: '02', Mar: '03', Apr: '04', May: '05', Jun: '06', Jul: '07', Aug: '08', Sep: '09', Oct: '10', Nov: '11', Dec: '12' }
+  const parts = dateStr.split(' ')
+  if (parts.length !== 3) return dateStr
+  const day = parts[0]!.padStart(2, '0')
+  const month = months[parts[1]!] || '01'
+  const year = parts[2]
+  return `${year}-${month}-${day}`
+}
+
+const formatFilterDate = (isoDate: string): string => {
+  if (!isoDate) return ''
+  const [y, m, d] = isoDate.split('-').map(Number)
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+  return `${d} ${months[(m || 1) - 1]} ${y}`
+}
+
+const exportCSV = (headers: string[], rows: (string | number)[][], filename: string) => {
+  const csvContent = [
+    headers.join(','),
+    ...rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
+  ].join('\n')
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+  const link = document.createElement('a')
+  link.href = URL.createObjectURL(blob)
+  link.download = filename
+  link.click()
+  URL.revokeObjectURL(link.href)
+}
+
 const today = new Date().toLocaleDateString('en-US', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
+
+const btnStyle = (active: boolean): React.CSSProperties => ({
+  padding: '9px 18px', borderRadius: 10, border: '1px solid',
+  borderColor: active ? 'rgba(57,255,122,0.5)' : 'rgba(160,168,184,0.2)',
+  background: active ? 'rgba(57,255,122,0.12)' : 'rgba(11,24,36,0.5)',
+  color: active ? ACCENT : 'rgba(245,245,245,0.6)',
+  fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 600, letterSpacing: '0.12em',
+  textTransform: 'uppercase' as const, cursor: 'pointer', transition: 'all 0.2s ease',
+  display: 'flex', alignItems: 'center', gap: 8,
+})
 
 export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [section, setSection] = useState<Section>('overview')
   const [showPasswordForm, setShowPasswordForm] = useState(false)
+  const [darkMode, setDarkMode] = useState(true)
   const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' })
+  const [hourlyView, setHourlyView] = useState<'current' | 'history'>('current')
+  const [hourlyFilterDate, setHourlyFilterDate] = useState('')
+  const [hourlyFilterOpen, setHourlyFilterOpen] = useState(false)
+  const [extendedView, setExtendedView] = useState<'current' | 'history'>('current')
+  const [extendedFilterOpen, setExtendedFilterOpen] = useState(false)
+  const [extendedFilterDateFrom, setExtendedFilterDateFrom] = useState('')
+  const [extendedFilterDateTo, setExtendedFilterDateTo] = useState('')
+  const [extendedFilterStatus, setExtendedFilterStatus] = useState('')
+  const [extendedFilterName, setExtendedFilterName] = useState('')
+  const [extendedFilterPhone, setExtendedFilterPhone] = useState('')
+  const [contactLeads, setContactLeads] = useState<ContactLead[]>(() => {
+    const stored = getContactLeads()
+    const storedIds = new Set(stored.map(l => l.id))
+    const demoLeads = DEMO_CONTACT_LEADS.filter(l => !storedIds.has(l.id))
+    return [...demoLeads, ...stored]
+  })
+  const [contactFilter, setContactFilter] = useState('')
+  const [messageModal, setMessageModal] = useState<{ customer: string; message: string } | null>(null)
 
   const revenue = HOURLY.filter(b => b.status !== 'Cancelled').reduce((s, b) => s + b.amount, 0)
   const extendedRevenue = ALL_EXTENDED.filter(b => b.status === 'Confirmed').length * 12000
   const totalRevenue = revenue + extendedRevenue
 
+  const currentHourlyCount = HOURLY.filter(b => b.status === 'Confirmed').length
+  const currentExtendedCount = ALL_EXTENDED.filter(b => b.status === 'Pending' || b.status === 'New' || b.status === 'NEW').length
+
   const stats = [
-    { label: 'Total Bookings', value: String(HOURLY.length + ALL_EXTENDED.length), trend: '+12%', trendLabel: 'this month', up: true },
-    { label: 'Hourly Bookings', value: String(HOURLY.length), trend: '2', trendLabel: 'active', up: true },
-    { label: 'Extended Bookings', value: String(ALL_EXTENDED.length), trend: '2', trendLabel: 'pending', up: true },
-    { label: 'Customers', value: String(CUSTOMERS.length), trend: '3', trendLabel: 'new today', up: true },
+    { label: 'Current Hourly Bookings', value: String(currentHourlyCount), trend: String(HOURLY.length), trendLabel: 'total', up: true },
+    { label: 'Current Extended Bookings', value: String(currentExtendedCount), trend: String(ALL_EXTENDED.length), trendLabel: 'total', up: true },
+    { label: 'Pending Enquiries', value: String(ALL_EXTENDED.filter(b => b.status === 'Pending' || b.status === 'New' || b.status === 'NEW').length), trend: String(ALL_EXTENDED.length), trendLabel: 'total', up: true },
+    { label: 'Total Contact Leads', value: String(contactLeads.length), trend: String(contactLeads.filter(l => l.status === 'New').length), trendLabel: 'new', up: true },
   ]
 
   const Avatar = ({ name, size = 36 }: { name: string; size?: number }) => (
@@ -206,7 +293,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
         width: size, height: size, borderRadius: '50%', flexShrink: 0,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         background: `linear-gradient(135deg, rgba(${ACCENT_RGB},0.22), rgba(${ACCENT_RGB},0.08))`,
-        border: '1px solid rgba(57,247,42,0.4)',
+        border: '1px solid rgba(57,255,122,0.4)',
         color: ACCENT, fontFamily: 'var(--font-mono)', fontSize: size / 2.6, fontWeight: 600, letterSpacing: '0.02em',
       }}
     >
@@ -219,9 +306,9 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
     return (
       <span
         className="admin-chip"
-        style={{ 
-          color, 
-          background: `rgba(${ACCENT_RGB},0.06)`, 
+        style={{
+          color,
+          background: `rgba(${ACCENT_RGB},0.06)`,
           borderColor: `${color}3D`,
           borderRadius: 50,
           padding: '5px 14px',
@@ -239,7 +326,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
       <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.24em', textTransform: 'uppercase', color: ACCENT, marginBottom: 8 }}>
         {eyebrow}
       </div>
-      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(34px, 4vw, 52px)', textTransform: 'uppercase', lineHeight: 0.95, color: '#F5F5F5' }}>
+      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(34px, 4vw, 52px)', textTransform: 'uppercase', lineHeight: 0.95, color: '#F2F4F2' }}>
         {title}
       </div>
     </div>
@@ -256,7 +343,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
     borderBottom: '1px solid rgba(160,168,184,0.14)',
   }
   const tdStyle: React.CSSProperties = {
-    fontFamily: 'var(--font-body)', color: '#F5F5F5', padding: '15px 16px', whiteSpace: 'nowrap',
+    fontFamily: 'var(--font-body)', color: '#F2F4F2', padding: '15px 16px', whiteSpace: 'nowrap',
     borderBottom: '1px solid rgba(160,168,184,0.07)',
   }
   const mono = { fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.04em' } as const
@@ -266,7 +353,6 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
     sub: string,
     status: string,
     key: string,
-    right?: React.ReactNode
   ) => (
     <div
       key={key}
@@ -275,88 +361,73 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
         display: 'flex', alignItems: 'center', gap: 14, padding: '14px 16px',
         borderRadius: 12, transition: 'background 0.2s ease', cursor: 'default',
       }}
-      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(57,247,42,0.06)' }}
+      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(57,255,122,0.06)' }}
       onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}
     >
-      <Avatar name={name} />
+      <Avatar name={name} size={30} />
       <div style={{ minWidth: 0, flex: 1 }}>
-        <div style={{ fontFamily: 'var(--font-body)', fontSize: 13.5, fontWeight: 600, color: '#F5F5F5', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        <div style={{ fontFamily: 'var(--font-body)', fontSize: 13.5, fontWeight: 600, color: '#F2F4F2', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
           {name}
         </div>
         <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.04em', color: 'rgba(245,245,245,0.4)', marginTop: 4 }}>
           {sub}
         </div>
       </div>
-      {right}
       <StatusChip status={status} />
     </div>
   )
 
+  const btnHover = (active: boolean) => ({
+    onMouseEnter: (e: React.MouseEvent<HTMLButtonElement>) => { if (!active) e.currentTarget.style.borderColor = 'rgba(57,255,122,0.3)' },
+    onMouseLeave: (e: React.MouseEvent<HTMLButtonElement>) => { if (!active) e.currentTarget.style.borderColor = 'rgba(160,168,184,0.2)' },
+  })
+
+  const CSV_ICON = <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" /></svg>
+  const FILTER_ICON = <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" /></svg>
+  const HISTORY_ICON = <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>
+
   return (
-    <div className="admin-dashboard" style={{ minHeight: '100vh', color: '#F5F5F5', position: 'relative', overflow: 'hidden' }}>
+    <div className={'admin-dashboard' + (darkMode ? '' : ' admin-dashboard-light')} style={{ minHeight: '100vh', color: '#F2F4F2', position: 'relative', overflow: 'hidden' }}>
       {/* Pitch geometry overlay */}
       <div className="admin-pitch-overlay">
         <svg viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{ width: '100%', height: '100%' }}>
-          {/* Center circle */}
-          <circle cx="720" cy="450" r="120" stroke="#39F72A" strokeWidth="1.5" />
-          <circle cx="720" cy="450" r="6" fill="#39F72A" />
-          {/* Midfield line */}
-          <line x1="720" y1="0" x2="720" y2="900" stroke="#39F72A" strokeWidth="1.2" />
-          {/* Outer pitch boundary */}
-          <rect x="120" y="80" width="1200" height="740" rx="0" stroke="#39F72A" strokeWidth="1.5" />
-          {/* Left penalty box */}
-          <rect x="120" y="260" width="180" height="380" stroke="#39F72A" strokeWidth="1.2" />
-          {/* Left goal box */}
-          <rect x="120" y="350" width="80" height="200" stroke="#39F72A" strokeWidth="1" />
-          {/* Left penalty arc */}
-          <path d="M300 370 A80 80 0 0 1 300 530" stroke="#39F72A" strokeWidth="1" />
-          {/* Left penalty spot */}
-          <circle cx="240" cy="450" r="4" fill="#39F72A" />
-          {/* Right penalty box */}
-          <rect x="1140" y="260" width="180" height="380" stroke="#39F72A" strokeWidth="1.2" />
-          {/* Right goal box */}
-          <rect x="1240" y="350" width="80" height="200" stroke="#39F72A" strokeWidth="1" />
-          {/* Right penalty arc */}
-          <path d="M1140 370 A80 80 0 0 0 1140 530" stroke="#39F72A" strokeWidth="1" />
-          {/* Right penalty spot */}
-          <circle cx="1200" cy="450" r="4" fill="#39F72A" />
-          {/* Corner arcs */}
-          <path d="M120 100 A20 20 0 0 0 140 80" stroke="#39F72A" strokeWidth="1" />
-          <path d="M1300 80 A20 20 0 0 0 1320 100" stroke="#39F72A" strokeWidth="1" />
-          <path d="M120 800 A20 20 0 0 1 140 820" stroke="#39F72A" strokeWidth="1" />
-          <path d="M1300 820 A20 20 0 0 1 1320 800" stroke="#39F72A" strokeWidth="1" />
-          {/* Diagonal technical lines */}
-          <line x1="120" y1="80" x2="720" y2="450" stroke="#39F72A" strokeWidth="0.6" opacity="0.5" />
-          <line x1="1320" y1="80" x2="720" y2="450" stroke="#39F72A" strokeWidth="0.6" opacity="0.5" />
-          <line x1="120" y1="820" x2="720" y2="450" stroke="#39F72A" strokeWidth="0.6" opacity="0.5" />
-          <line x1="1320" y1="820" x2="720" y2="450" stroke="#39F72A" strokeWidth="0.6" opacity="0.5" />
-          {/* Center line horizontal accents */}
-          <line x1="600" y1="450" x2="840" y2="450" stroke="#39F72A" strokeWidth="0.8" opacity="0.4" />
-          {/* Field zone divisions */}
-          <line x1="360" y1="80" x2="360" y2="820" stroke="#39F72A" strokeWidth="0.5" opacity="0.3" />
-          <line x1="1080" y1="80" x2="1080" y2="820" stroke="#39F72A" strokeWidth="0.5" opacity="0.3" />
+          <circle cx="720" cy="450" r="120" stroke="#39FF7A" strokeWidth="1.5" />
+          <circle cx="720" cy="450" r="6" fill="#39FF7A" />
+          <line x1="720" y1="0" x2="720" y2="900" stroke="#39FF7A" strokeWidth="1.2" />
+          <rect x="120" y="80" width="1200" height="740" rx="0" stroke="#39FF7A" strokeWidth="1.5" />
+          <rect x="120" y="260" width="180" height="380" stroke="#39FF7A" strokeWidth="1.2" />
+          <rect x="120" y="350" width="80" height="200" stroke="#39FF7A" strokeWidth="1" />
+          <path d="M300 370 A80 80 0 0 1 300 530" stroke="#39FF7A" strokeWidth="1" />
+          <circle cx="240" cy="450" r="4" fill="#39FF7A" />
+          <rect x="1140" y="260" width="180" height="380" stroke="#39FF7A" strokeWidth="1.2" />
+          <rect x="1240" y="350" width="80" height="200" stroke="#39FF7A" strokeWidth="1" />
+          <path d="M1140 370 A80 80 0 0 0 1140 530" stroke="#39FF7A" strokeWidth="1" />
+          <circle cx="1200" cy="450" r="4" fill="#39FF7A" />
+          <path d="M120 100 A20 20 0 0 0 140 80" stroke="#39FF7A" strokeWidth="1" />
+          <path d="M1300 80 A20 20 0 0 0 1320 100" stroke="#39FF7A" strokeWidth="1" />
+          <path d="M120 800 A20 20 0 0 1 140 820" stroke="#39FF7A" strokeWidth="1" />
+          <path d="M1300 820 A20 20 0 0 1 1320 800" stroke="#39FF7A" strokeWidth="1" />
+          <line x1="120" y1="80" x2="720" y2="450" stroke="#39FF7A" strokeWidth="0.6" opacity="0.5" />
+          <line x1="1320" y1="80" x2="720" y2="450" stroke="#39FF7A" strokeWidth="0.6" opacity="0.5" />
+          <line x1="120" y1="820" x2="720" y2="450" stroke="#39FF7A" strokeWidth="0.6" opacity="0.5" />
+          <line x1="1320" y1="820" x2="720" y2="450" stroke="#39FF7A" strokeWidth="0.6" opacity="0.5" />
+          <line x1="600" y1="450" x2="840" y2="450" stroke="#39FF7A" strokeWidth="0.8" opacity="0.4" />
+          <line x1="360" y1="80" x2="360" y2="820" stroke="#39FF7A" strokeWidth="0.5" opacity="0.3" />
+          <line x1="1080" y1="80" x2="1080" y2="820" stroke="#39FF7A" strokeWidth="0.5" opacity="0.3" />
         </svg>
       </div>
 
-      {/* Ambient green glows */}
-      <div className="admin-glow admin-glow-pulse" style={{ top: -120, left: '20%', width: 700, height: 700, background: 'radial-gradient(circle, rgba(57,247,42,0.14), transparent 65%)' }} />
+      <div className="admin-glow admin-glow-pulse" style={{ top: -120, left: '20%', width: 700, height: 700, background: 'radial-gradient(circle, rgba(57,255,122,0.14), transparent 65%)' }} />
       <div className="admin-glow" style={{ bottom: -100, right: '-5%', width: 650, height: 650, background: 'radial-gradient(circle, rgba(23,107,2,0.12), transparent 60%)' }} />
-      <div className="admin-glow" style={{ top: '40%', left: '-8%', width: 500, height: 500, background: 'radial-gradient(circle, rgba(57,247,42,0.08), transparent 60%)' }} />
-
-      {/* Vignette */}
+      <div className="admin-glow" style={{ top: '40%', left: '-8%', width: 500, height: 500, background: 'radial-gradient(circle, rgba(57,255,122,0.08), transparent 60%)' }} />
       <div className="admin-vignette" />
 
       {/* Header */}
       <header style={{ position: 'relative', zIndex: 20, background: 'rgba(3,21,37,0.9)', borderBottom: '1px solid rgba(160,168,184,0.12)', backdropFilter: 'blur(18px)' }}>
         <div style={{ maxWidth: 1320, margin: '0 auto', padding: '0 28px', height: 78, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <img
-              src={logoTagline}
-              alt="TURFON24 — Premium Turfs 24/7"
-              style={{ height: 44, width: 'auto', maxWidth: 'none', display: 'block' }}
-            />
+            <img src={logoTagline} alt="TURFON24 — Premium Turfs 24/7" style={{ height: 44, width: 'auto', maxWidth: 'none', display: 'block' }} />
           </div>
-
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 9, fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '0.1em', color: 'rgba(245,245,245,0.6)', padding: '9px 14px', border: '1px solid rgba(160,168,184,0.16)', borderRadius: 10, background: 'rgba(11,24,36,0.5)' }}>
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: ACCENT }}>
@@ -365,40 +436,16 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
               </svg>
               {today}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '0.12em', textTransform: 'uppercase', color: ACCENT, padding: '9px 14px', border: '1px solid rgba(57,247,42,0.25)', borderRadius: 10, background: 'rgba(57,247,42,0.07)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontFamily: 'var(--font-mono)', fontSize: 10.5, letterSpacing: '0.12em', textTransform: 'uppercase', color: ACCENT, padding: '9px 14px', border: '1px solid rgba(57,255,122,0.25)', borderRadius: 10, background: 'rgba(57,255,122,0.07)' }}>
               <span className="admin-live-dot" style={{ background: ACCENT, boxShadow: `0 0 9px ${ACCENT}` }} />
               Live
             </div>
-            <a
-              href="/"
-              className="admin-card"
-              style={{
-                fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase',
-                color: 'rgba(245,245,245,0.75)', textDecoration: 'none', padding: '10px 16px', borderRadius: 10, border: '1px solid rgba(160,168,184,0.2)',
-                display: 'flex', alignItems: 'center', gap: 8,
-              }}
-            >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 12l2-2M21 12l-2-2M5 10l14 0M5 10a7 7 0 0114 0M5 10v0M19 10v0" />
-                <circle cx="12" cy="16" r="2" />
-              </svg>
+            <a href="/" className="admin-card" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.75)', textDecoration: 'none', padding: '10px 16px', borderRadius: 10, border: '1px solid rgba(160,168,184,0.2)', display: 'flex', alignItems: 'center', gap: 8 }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12l2-2M21 12l-2-2M5 10l14 0M5 10a7 7 0 0114 0M5 10v0M19 10v0" /><circle cx="12" cy="16" r="2" /></svg>
               View Site
             </a>
-            <button
-              onClick={onLogout}
-              style={{
-                fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase',
-                color: '#000000', background: 'linear-gradient(135deg, #39F72A, #C7F42D)', border: 'none', borderRadius: 10,
-                padding: '11px 18px', fontWeight: 700, cursor: 'pointer',
-                boxShadow: '0 10px 26px rgba(57,247,42,0.35)', transition: 'all 0.25s ease',
-                display: 'flex', alignItems: 'center', gap: 8,
-              }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 14px 34px rgba(57,247,42,0.5)' }}
-              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 26px rgba(57,247,42,0.35)' }}
-            >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" />
-              </svg>
+            <button onClick={onLogout} style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#030607', background: 'linear-gradient(135deg, #0FA857, #39FF7A)', border: 'none', borderRadius: 10, padding: '11px 18px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 10px 26px rgba(15,168,87,0.35)', transition: 'all 0.25s ease', display: 'flex', alignItems: 'center', gap: 8 }} onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 14px 34px rgba(57,255,122,0.5)' }} onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 26px rgba(15,168,87,0.35)' }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" /></svg>
               Logout
             </button>
           </div>
@@ -406,19 +453,12 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
       </header>
 
       <div className="admin-layout" style={{ position: 'relative', zIndex: 10, maxWidth: 1320, margin: '0 auto', padding: '36px 28px 80px', display: 'grid', gridTemplateColumns: '248px 1fr', gap: 32, alignItems: 'start' }}>
-        {/* Floating nav rail */}
+        {/* Sidebar */}
         <aside className="admin-sidebar">
           <div className="admin-nav">
-            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.35)', padding: '4px 14px 14px' }}>
-              Navigation
-            </div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.35)', padding: '4px 14px 14px' }}>Navigation</div>
             {NAV_ITEMS.map(n => (
-              <button
-                key={n.id}
-                onClick={() => setSection(n.id)}
-                className={'admin-nav-item' + (section === n.id ? ' active' : '')}
-                aria-pressed={section === n.id}
-              >
+              <button key={n.id} onClick={() => setSection(n.id)} className={'admin-nav-item' + (section === n.id ? ' active' : '')} aria-pressed={section === n.id}>
                 {n.icon}
                 {n.label}
               </button>
@@ -434,31 +474,19 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
 
         {/* Content */}
         <main style={{ minWidth: 0 }}>
-          {/* Overview */}
+          {/* ===== OVERVIEW ===== */}
           {section === 'overview' ? (
             <>
               <div style={{ marginBottom: 32 }}>
-                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.24em', textTransform: 'uppercase', color: ACCENT, marginBottom: 8 }}>
-                  Admin · Dashboard
-                </div>
-                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(34px, 4vw, 52px)', textTransform: 'uppercase', lineHeight: 0.95, color: '#F5F5F5' }}>
-                  Dashboard <span style={{ color: ACCENT }}>Overview.</span>
-                </div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'rgba(245,245,245,0.5)', margin: '12px 0 0', lineHeight: 1.6 }}>
-                  Monitor bookings, revenue, and customer activity in real time.
-                </p>
+                <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.24em', textTransform: 'uppercase', color: ACCENT, marginBottom: 8 }}>Admin · Dashboard</div>
+                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(34px, 4vw, 52px)', textTransform: 'uppercase', lineHeight: 0.95, color: '#F2F4F2' }}>Dashboard <span style={{ color: ACCENT }}>Overview.</span></div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: 'rgba(245,245,245,0.5)', margin: '12px 0 0', lineHeight: 1.6 }}>Monitor bookings, revenue, and customer activity in real time.</p>
               </div>
-
-              {/* Stat cards */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24, marginBottom: 28 }}>
                 {stats.map(s => (
                   <div key={s.label} className="admin-card admin-row-in" style={{ padding: '26px 22px', display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.45)', marginBottom: 16 }}>
-                      {s.label}
-                    </div>
-                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 44, lineHeight: 1, color: '#F5F5F5', marginBottom: 14 }}>
-                      {s.value}
-                    </div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.45)', marginBottom: 16 }}>{s.label}</div>
+                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 44, lineHeight: 1, color: '#F2F4F2', marginBottom: 14 }}>{s.value}</div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 7, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.06em', color: ACCENT, marginTop: 'auto' }}>
                       <span style={{ fontSize: 12 }}>↑</span>
                       <span style={{ fontWeight: 600 }}>{s.trend}</span>
@@ -467,39 +495,23 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                   </div>
                 ))}
               </div>
-
-              {/* Revenue highlight card */}
-              <div className="admin-card admin-row-in" style={{ marginBottom: 28, padding: '28px 26px', background: 'linear-gradient(135deg, rgba(57,247,42,0.14), rgba(11,24,36,0.7) 60%)', border: '1px solid rgba(57,247,42,0.35)', boxShadow: '0 20px 50px rgba(0,0,0,0.4), 0 0 42px rgba(57,247,42,0.14)' }}>
+              <div className="admin-card admin-row-in" style={{ marginBottom: 28, padding: '28px 26px', background: 'linear-gradient(135deg, rgba(57,255,122,0.14), rgba(11,24,36,0.7) 60%)', border: '1px solid rgba(57,255,122,0.35)', boxShadow: '0 20px 50px rgba(0,0,0,0.4), 0 0 42px rgba(57,255,122,0.14)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
                   <div style={{ minWidth: 0 }}>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)', marginBottom: 14 }}>
-                      Total Revenue · Confirmed
-                    </div>
-                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(44px, 6vw, 72px)', lineHeight: 1, color: ACCENT, textShadow: '0 0 34px rgba(57,247,42,0.4)' }}>
-                      ₹{totalRevenue.toLocaleString()}
-                    </div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)', marginBottom: 14 }}>Total Revenue · Confirmed</div>
+                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(44px, 6vw, 72px)', lineHeight: 1, color: ACCENT, textShadow: '0 0 34px rgba(57,255,122,0.4)' }}>₹{totalRevenue.toLocaleString()}</div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.08em', color: ACCENT, border: '1px solid rgba(57,247,42,0.35)', borderRadius: 999, padding: '8px 14px', background: 'rgba(57,247,42,0.08)', marginBottom: 10 }}>
-                      <span style={{ fontSize: 13 }}>↑</span> +18% this month
-                    </div>
-                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9.5, letterSpacing: '0.1em', color: 'rgba(245,245,245,0.4)' }}>
-                      Hourly ₹{revenue.toLocaleString()} · Extended ₹{extendedRevenue.toLocaleString()}
-                    </div>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.08em', color: ACCENT, border: '1px solid rgba(57,255,122,0.35)', borderRadius: 999, padding: '8px 14px', background: 'rgba(57,255,122,0.08)', marginBottom: 10 }}><span style={{ fontSize: 13 }}>↑</span> +18% this month</div>
+                    <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9.5, letterSpacing: '0.1em', color: 'rgba(245,245,245,0.4)' }}>Hourly ₹{revenue.toLocaleString()} · Extended ₹{extendedRevenue.toLocaleString()}</div>
                   </div>
                 </div>
               </div>
-
-              {/* Activity feeds */}
               <div className="resp-two-col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
                 <div className="admin-card admin-row-in" style={{ padding: '22px 16px 10px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 6px 16px' }}>
-                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#F5F5F5' }}>
-                      Recent Hourly Bookings
-                    </div>
-                    <span className="admin-chip" style={{ color: ACCENT, background: 'rgba(57,247,42,0.08)', borderColor: 'rgba(57,247,42,0.3)' }}>
-                      {HOURLY.length} total
-                    </span>
+                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#F2F4F2' }}>Recent Hourly</div>
+                    <span className="admin-chip" style={{ color: ACCENT, background: 'rgba(57,255,122,0.08)', borderColor: 'rgba(57,255,122,0.3)' }}>{HOURLY.length} total</span>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                     {HOURLY.slice(0, 4).map(b => renderFeedRow(b.customer, `${b.date} · ${b.start} – ${b.end} · ${b.duration}H`, b.status, b.id))}
@@ -507,174 +519,319 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                 </div>
                 <div className="admin-card admin-row-in" style={{ padding: '22px 16px 10px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 6px 16px' }}>
-                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#F5F5F5' }}>
-                      Recent Extended Bookings
-                    </div>
-                    <span className="admin-chip" style={{ color: ACCENT, background: 'rgba(57,247,42,0.08)', borderColor: 'rgba(57,247,42,0.3)' }}>
-                      {ALL_EXTENDED.length} total
-                    </span>
+                    <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#F2F4F2' }}>Recent Extended</div>
+                    <span className="admin-chip" style={{ color: ACCENT, background: 'rgba(57,255,122,0.08)', borderColor: 'rgba(57,255,122,0.3)' }}>{ALL_EXTENDED.length} total</span>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                    {ALL_EXTENDED.slice(0, 4).map(b => renderFeedRow(b.customer, `${b.startDate} → ${b.endDate} · ${b.startTime}`, b.status, b.id))}
+                    {ALL_EXTENDED.slice(0, 4).map(b => renderFeedRow(b.customer, `${b.startDate} → ${b.endDate} · ${b.startTime}`, b.status === 'New' || b.status === 'NEW' ? 'Pending' : b.status, b.id))}
                   </div>
                 </div>
               </div>
             </>
           ) : null}
 
-          {/* Hourly bookings */}
+          {/* ===== HOURLY BOOKINGS ===== */}
           {section === 'hourly' ? (
-            <>
-              <SectionHeader eyebrow="Bookings · Hourly" title="Hourly bookings." />
-              <div className="admin-card admin-row-in" style={{ padding: 24 }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)' }}>
-                    All Hourly Bookings
+            (() => {
+              const currentHourly = HOURLY.filter(b => b.status === 'Confirmed')
+              const historyHourly = HOURLY.filter(b => b.status === 'Completed' || b.status === 'Cancelled')
+              const baseHourly = hourlyView === 'current' ? currentHourly : historyHourly
+              const filteredHourly = hourlyFilterDate
+                ? baseHourly.filter(b => parseBookingDate(b.date) === hourlyFilterDate)
+                : baseHourly
+
+              return (
+                <>
+                  <SectionHeader eyebrow="Bookings · Hourly" title="Hourly bookings." />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
+                    <button onClick={() => setHourlyView('current')} style={btnStyle(hourlyView === 'current')} {...btnHover(hourlyView === 'current')}>Current Bookings</button>
+                    <button onClick={() => setHourlyView('history')} style={btnStyle(hourlyView === 'history')} {...btnHover(hourlyView === 'history')}>{HISTORY_ICON} Booking History</button>
+                    <button onClick={() => setHourlyFilterOpen(!hourlyFilterOpen)} style={btnStyle(!!hourlyFilterDate)} {...btnHover(!!hourlyFilterDate)}>{FILTER_ICON} Filter</button>
+                    <button onClick={() => exportCSV(['Customer Name', 'Date', 'Start Time', 'End Time', 'Duration', 'Status'], filteredHourly.map(b => [b.customer, b.date, b.start, b.end, `${b.duration}H`, b.status]), 'hourly-bookings.csv')} style={btnStyle(false)}>{CSV_ICON} Export CSV</button>
                   </div>
-                  <span className="admin-chip" style={{ color: ACCENT, background: 'rgba(57,247,42,0.08)', borderColor: 'rgba(57,247,42,0.3)' }}>
-                    {HOURLY.length} records
-                  </span>
-                </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20, justifyContent: 'center' }}>
-                  {HOURLY.map((b, i) => (
-                    <div
-                      key={b.id}
-                      style={{
-                        width: 140,
-                        height: 140,
-                        borderRadius: '50%',
-                        background: 'linear-gradient(135deg, rgba(11,24,36,0.8), rgba(11,24,36,0.5))',
-                        border: '1px solid rgba(57,247,42,0.3)',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 6,
-                        boxShadow: '0 0 20px rgba(57,247,42,0.1)',
-                        animation: `booking-orbit 12s linear infinite`,
-                        animationDelay: `${i * 0.5}s`,
-                        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                        cursor: 'pointer',
-                        flexShrink: 0,
-                      }}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.transform = 'scale(1.08)'
-                        e.currentTarget.style.boxShadow = '0 0 30px rgba(57,247,42,0.3)'
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.transform = 'scale(1)'
-                        e.currentTarget.style.boxShadow = '0 0 20px rgba(57,247,42,0.1)'
-                      }}
-                    >
-                      <Avatar name={b.customer} size={36} />
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: ACCENT, textAlign: 'center', lineHeight: 1.3 }}>
-                        {b.date}
+                  {hourlyFilterOpen && (
+                    <div className="admin-card" style={{ padding: 20, marginBottom: 20, maxWidth: 320, position: 'relative', zIndex: 15 }}>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.55)', marginBottom: 14 }}>Filter by Date</div>
+                      <input type="date" value={hourlyFilterDate} onChange={e => setHourlyFilterDate(e.target.value)} style={{ width: '100%', padding: '10px 12px', background: 'rgba(11,24,36,0.8)', border: '1px solid rgba(57,255,122,0.3)', borderRadius: 8, color: '#F2F4F2', fontFamily: 'var(--font-mono)', fontSize: 12, boxSizing: 'border-box' as const, marginBottom: 14, outline: 'none' }} />
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button onClick={() => setHourlyFilterOpen(false)} style={{ flex: 1, padding: '9px 14px', background: 'rgba(57,255,122,0.1)', border: '1px solid rgba(57,255,122,0.3)', borderRadius: 8, color: ACCENT, fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, cursor: 'pointer', transition: 'all 0.2s ease' }}>Apply Filter</button>
+                        {hourlyFilterDate && <button onClick={() => { setHourlyFilterDate(''); setHourlyFilterOpen(false) }} style={{ flex: 1, padding: '9px 14px', background: 'rgba(160,168,184,0.1)', border: '1px solid rgba(160,168,184,0.2)', borderRadius: 8, color: 'rgba(245,245,245,0.6)', fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, cursor: 'pointer', transition: 'all 0.2s ease' }}>Clear Filter</button>}
                       </div>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: 'rgba(245,245,245,0.5)', textAlign: 'center' }}>
-                        {b.start} - {b.end}
-                      </div>
-                      <StatusChip status={b.status} />
                     </div>
-                  ))}
-                </div>
-              </div>
-            </>
+                  )}
+                  {hourlyFilterDate && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: ACCENT }}>
+                      Filter: {formatFilterDate(hourlyFilterDate)}
+                      <span onClick={() => setHourlyFilterDate('')} style={{ cursor: 'pointer', color: 'rgba(245,245,245,0.5)', fontSize: 14, lineHeight: 1 }}>×</span>
+                    </div>
+                  )}
+                  <div className="admin-card admin-row-in" style={{ padding: '20px 24px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.55)' }}>{hourlyView === 'current' ? 'Current Hourly Bookings' : 'Booking History'}</div>
+                      <span className="admin-chip" style={{ color: ACCENT, background: 'rgba(57,255,122,0.08)', borderColor: 'rgba(57,255,122,0.3)' }}>{filteredHourly.length} {hourlyFilterDate ? 'results' : 'total'}</span>
+                    </div>
+                    {filteredHourly.length === 0 ? (
+                      <div style={{ padding: '48px 0', textAlign: 'center' as const }}>
+                        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.35)', marginBottom: 8 }}>No Bookings Found</div>
+                        <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.3)', marginBottom: 20 }}>No bookings are available for {hourlyFilterDate ? formatFilterDate(hourlyFilterDate) : 'this view'}.</div>
+                        {hourlyFilterDate && <button onClick={() => setHourlyFilterDate('')} style={{ padding: '9px 18px', background: 'rgba(57,255,122,0.1)', border: '1px solid rgba(57,255,122,0.3)', borderRadius: 8, color: ACCENT, fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, cursor: 'pointer', transition: 'all 0.2s ease' }}>Clear Filter</button>}
+                      </div>
+                    ) : (
+                      <div style={{ overflowX: 'auto' }}>
+                        <table style={tableStyles}>
+                          <thead><tr>
+                            <th style={thStyle}>Customer</th>
+                            <th style={thStyle}>Date</th>
+                            <th style={thStyle}>Time</th>
+                            <th style={thStyle}>Duration</th>
+                            <th style={{ ...thStyle, textAlign: 'right' }}>Status</th>
+                          </tr></thead>
+                          <tbody>
+                            {filteredHourly.map(b => (
+                              <tr key={b.id} style={{ transition: 'background 0.2s ease' }} onMouseEnter={e => { e.currentTarget.style.background = 'rgba(57,255,122,0.05)' }} onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}>
+                                <td style={tdStyle}><div style={{ display: 'flex', alignItems: 'center', gap: 10 }}><Avatar name={b.customer} size={30} />{b.customer}</div></td>
+                                <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>{b.date}</td>
+                                <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>{b.start} – {b.end}</td>
+                                <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>{b.duration}H</td>
+                                <td style={{ ...tdStyle, textAlign: 'right' }}><StatusChip status={b.status} /></td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )
+            })()
           ) : null}
 
-          {/* Extended bookings */}
+          {/* ===== EXTENDED BOOKINGS ===== */}
           {section === 'extended' ? (
-            <>
-              <SectionHeader eyebrow="Bookings · Extended" title="Extended bookings." />
-              <div className="admin-card admin-row-in" style={{ padding: 24 }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)' }}>
-                    Arena Reservation Requests
+            (() => {
+              const extStatus = (b: ExtendedBooking): string => b.status === 'New' || b.status === 'NEW' ? 'Pending' : b.status
+              const currentExtended = ALL_EXTENDED.filter(b => extStatus(b) === 'Pending')
+              const historyExtended = ALL_EXTENDED.filter(b => extStatus(b) === 'Confirmed' || extStatus(b) === 'Completed' || extStatus(b) === 'Cancelled' || extStatus(b) === 'Expired')
+              const baseExtended = extendedView === 'current' ? currentExtended : historyExtended
+              const hasActiveFilters = !!(extendedFilterDateFrom || extendedFilterDateTo || extendedFilterStatus || extendedFilterName || extendedFilterPhone)
+              const filteredExtended = baseExtended.filter(b => {
+                if (extendedFilterName && !b.customer.toLowerCase().includes(extendedFilterName.toLowerCase())) return false
+                if (extendedFilterPhone && !b.phone.includes(extendedFilterPhone)) return false
+                if (extendedFilterStatus && extStatus(b) !== extendedFilterStatus) return false
+                if (extendedFilterDateFrom || extendedFilterDateTo) {
+                  const bookingDate = parseBookingDate(b.startDate)
+                  if (extendedFilterDateFrom && bookingDate < extendedFilterDateFrom) return false
+                  if (extendedFilterDateTo && bookingDate > extendedFilterDateTo) return false
+                }
+                return true
+              })
+              const clearAllFilters = () => {
+                setExtendedFilterDateFrom('')
+                setExtendedFilterDateTo('')
+                setExtendedFilterStatus('')
+                setExtendedFilterName('')
+                setExtendedFilterPhone('')
+                setExtendedFilterOpen(false)
+              }
+
+              return (
+                <>
+                  <SectionHeader eyebrow="Bookings · Extended" title="Extended bookings." />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
+                    <button onClick={() => setExtendedView('current')} style={btnStyle(extendedView === 'current')} {...btnHover(extendedView === 'current')}>Current Bookings</button>
+                    <button onClick={() => setExtendedView('history')} style={btnStyle(extendedView === 'history')} {...btnHover(extendedView === 'history')}>{HISTORY_ICON} Booking History</button>
+                    <button onClick={() => setExtendedFilterOpen(!extendedFilterOpen)} style={btnStyle(extendedFilterOpen || hasActiveFilters)} {...btnHover(extendedFilterOpen || hasActiveFilters)}>{FILTER_ICON} Filter</button>
+                    <button onClick={() => {
+                      exportCSV(
+                        ['Customer Name', 'Phone Number', 'Start Date', 'Start Time', 'End Date', 'End Time', 'Players', 'Enquiry Message', 'Status', 'Created Date'],
+                        filteredExtended.map(b => [b.customer, b.phone, b.startDate, b.startTime, b.endDate, b.endTime, b.players, b.requirements, extStatus(b), b.submittedAt]),
+                        'extended-bookings.csv'
+                      )
+                    }} style={btnStyle(false)}>{CSV_ICON} Export CSV</button>
                   </div>
-                  <span className="admin-chip" style={{ color: ACCENT, background: 'rgba(57,247,42,0.08)', borderColor: 'rgba(57,247,42,0.3)' }}>
-                    {ALL_EXTENDED.length} records
-                  </span>
-                </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20, justifyContent: 'center' }}>
-                  {ALL_EXTENDED.map((b, i) => (
-                    <div
-                      key={b.id}
-                      style={{
-                        width: 150,
-                        height: 150,
-                        borderRadius: '50%',
-                        background: 'linear-gradient(135deg, rgba(11,24,36,0.8), rgba(11,24,36,0.5))',
-                        border: '1px solid rgba(59,130,246,0.3)',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 6,
-                        boxShadow: '0 0 20px rgba(59,130,246,0.1)',
-                        animation: `booking-orbit 14s linear infinite`,
-                        animationDelay: `${i * 0.6}s`,
-                        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                        cursor: 'pointer',
-                        flexShrink: 0,
-                      }}
-                      onMouseEnter={e => {
-                        e.currentTarget.style.transform = 'scale(1.08)'
-                        e.currentTarget.style.boxShadow = '0 0 30px rgba(59,130,246,0.3)'
-                      }}
-                      onMouseLeave={e => {
-                        e.currentTarget.style.transform = 'scale(1)'
-                        e.currentTarget.style.boxShadow = '0 0 20px rgba(59,130,246,0.1)'
-                      }}
-                    >
-                      <Avatar name={b.customer} size={36} />
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, color: '#3B82F6', textAlign: 'center', lineHeight: 1.3 }}>
-                        {b.players} Players
+                  {extendedFilterOpen && (
+                    <div className="admin-card" style={{ padding: 20, marginBottom: 20, position: 'relative', zIndex: 15 }}>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.55)', marginBottom: 16 }}>Filter Bookings</div>
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 14, marginBottom: 16 }}>
+                        <div>
+                          <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.4)', marginBottom: 6 }}>Customer Name</label>
+                          <input type="text" placeholder="Search name..." value={extendedFilterName} onChange={e => setExtendedFilterName(e.target.value)} style={{ width: '100%', padding: '9px 12px', background: 'rgba(11,24,36,0.8)', border: '1px solid rgba(57,255,122,0.25)', borderRadius: 8, color: '#F2F4F2', fontFamily: 'var(--font-mono)', fontSize: 11, boxSizing: 'border-box' as const, outline: 'none' }} />
+                        </div>
+                        <div>
+                          <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.4)', marginBottom: 6 }}>Phone Number</label>
+                          <input type="text" placeholder="Search phone..." value={extendedFilterPhone} onChange={e => setExtendedFilterPhone(e.target.value)} style={{ width: '100%', padding: '9px 12px', background: 'rgba(11,24,36,0.8)', border: '1px solid rgba(57,255,122,0.25)', borderRadius: 8, color: '#F2F4F2', fontFamily: 'var(--font-mono)', fontSize: 11, boxSizing: 'border-box' as const, outline: 'none' }} />
+                        </div>
+                        <div>
+                          <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.4)', marginBottom: 6 }}>Date From</label>
+                          <input type="date" value={extendedFilterDateFrom} onChange={e => setExtendedFilterDateFrom(e.target.value)} style={{ width: '100%', padding: '9px 12px', background: 'rgba(11,24,36,0.8)', border: '1px solid rgba(57,255,122,0.25)', borderRadius: 8, color: '#F2F4F2', fontFamily: 'var(--font-mono)', fontSize: 11, boxSizing: 'border-box' as const, outline: 'none' }} />
+                        </div>
+                        <div>
+                          <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.4)', marginBottom: 6 }}>Date To</label>
+                          <input type="date" value={extendedFilterDateTo} onChange={e => setExtendedFilterDateTo(e.target.value)} style={{ width: '100%', padding: '9px 12px', background: 'rgba(11,24,36,0.8)', border: '1px solid rgba(57,255,122,0.25)', borderRadius: 8, color: '#F2F4F2', fontFamily: 'var(--font-mono)', fontSize: 11, boxSizing: 'border-box' as const, outline: 'none' }} />
+                        </div>
+                        <div>
+                          <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.4)', marginBottom: 6 }}>Status</label>
+                          <select value={extendedFilterStatus} onChange={e => setExtendedFilterStatus(e.target.value)} style={{ width: '100%', padding: '9px 12px', background: 'rgba(11,24,36,0.8)', border: '1px solid rgba(57,255,122,0.25)', borderRadius: 8, color: '#F2F4F2', fontFamily: 'var(--font-mono)', fontSize: 11, boxSizing: 'border-box' as const, outline: 'none', cursor: 'pointer' }}>
+                            <option value="">All Status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
+                            <option value="Expired">Expired</option>
+                          </select>
+                        </div>
                       </div>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 8, color: 'rgba(245,245,245,0.5)', textAlign: 'center' }}>
-                        {b.startDate}
+                      <div style={{ display: 'flex', gap: 8 }}>
+                        <button onClick={() => setExtendedFilterOpen(false)} style={{ padding: '9px 14px', background: 'rgba(57,255,122,0.1)', border: '1px solid rgba(57,255,122,0.3)', borderRadius: 8, color: ACCENT, fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, cursor: 'pointer', transition: 'all 0.2s ease' }}>Apply Filter</button>
+                        {hasActiveFilters && <button onClick={clearAllFilters} style={{ padding: '9px 14px', background: 'rgba(160,168,184,0.1)', border: '1px solid rgba(160,168,184,0.2)', borderRadius: 8, color: 'rgba(245,245,245,0.6)', fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, cursor: 'pointer', transition: 'all 0.2s ease' }}>Clear All</button>}
                       </div>
-                      <StatusChip status={b.status} />
                     </div>
-                  ))}
-                </div>
-              </div>
-            </>
+                  )}
+                  {hasActiveFilters && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: ACCENT, flexWrap: 'wrap' }}>
+                      Active Filters:
+                      {extendedFilterName && <span className="admin-chip" style={{ padding: '4px 10px', background: 'rgba(57,255,122,0.08)', borderColor: 'rgba(57,255,122,0.3)', cursor: 'pointer', fontSize: 9 }} onClick={() => setExtendedFilterName('')}>{extendedFilterName} ×</span>}
+                      {extendedFilterPhone && <span className="admin-chip" style={{ padding: '4px 10px', background: 'rgba(57,255,122,0.08)', borderColor: 'rgba(57,255,122,0.3)', cursor: 'pointer', fontSize: 9 }} onClick={() => setExtendedFilterPhone('')}>{extendedFilterPhone} ×</span>}
+                      {extendedFilterStatus && <span className="admin-chip" style={{ padding: '4px 10px', background: 'rgba(57,255,122,0.08)', borderColor: 'rgba(57,255,122,0.3)', cursor: 'pointer', fontSize: 9 }} onClick={() => setExtendedFilterStatus('')}>{extendedFilterStatus} ×</span>}
+                      {(extendedFilterDateFrom || extendedFilterDateTo) && <span className="admin-chip" style={{ padding: '4px 10px', background: 'rgba(57,255,122,0.08)', borderColor: 'rgba(57,255,122,0.3)', cursor: 'pointer', fontSize: 9 }} onClick={() => { setExtendedFilterDateFrom(''); setExtendedFilterDateTo('') }}>{formatFilterDate(extendedFilterDateFrom) || '...'} – {formatFilterDate(extendedFilterDateTo) || '...'} ×</span>}
+                    </div>
+                  )}
+                  <div className="admin-card admin-row-in" style={{ padding: '20px 24px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.55)' }}>{extendedView === 'current' ? 'Current Extended Bookings' : 'Booking History'}</div>
+                      <span className="admin-chip" style={{ color: ACCENT, background: 'rgba(57,255,122,0.08)', borderColor: 'rgba(57,255,122,0.3)' }}>{filteredExtended.length} {hasActiveFilters ? 'results' : 'total'}</span>
+                    </div>
+                    {filteredExtended.length === 0 ? (
+                      <div style={{ padding: '48px 0', textAlign: 'center' as const }}>
+                        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.35)', marginBottom: 8 }}>No Bookings Found</div>
+                        <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.3)', marginBottom: 20 }}>{hasActiveFilters ? 'No bookings match the applied filters.' : 'No bookings are available for this view.'}</div>
+                        {hasActiveFilters && <button onClick={clearAllFilters} style={{ padding: '9px 18px', background: 'rgba(57,255,122,0.1)', border: '1px solid rgba(57,255,122,0.3)', borderRadius: 8, color: ACCENT, fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' as const, cursor: 'pointer', transition: 'all 0.2s ease' }}>Clear Filters</button>}
+                      </div>
+                    ) : (
+                      <div style={{ overflowX: 'auto' }}>
+                        <table style={tableStyles}>
+                          <thead><tr>
+                            <th style={thStyle}>Customer Name</th>
+                            <th style={thStyle}>Phone Number</th>
+                            <th style={thStyle}>Start Date & Time</th>
+                            <th style={thStyle}>End Date & Time</th>
+                            <th style={thStyle}>Players</th>
+                            <th style={thStyle}>Enquiry Message</th>
+                            <th style={{ ...thStyle, textAlign: 'right' }}>Status</th>
+                          </tr></thead>
+                          <tbody>
+                            {filteredExtended.map(b => {
+                              const truncatedMsg = b.requirements.length > 55 ? b.requirements.slice(0, 55) + '...' : b.requirements
+                              return (
+                                <tr key={b.id} style={{ transition: 'background 0.2s ease' }} onMouseEnter={e => { e.currentTarget.style.background = 'rgba(57,255,122,0.05)' }} onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}>
+                                  <td style={tdStyle}><div style={{ display: 'flex', alignItems: 'center', gap: 10 }}><Avatar name={b.customer} size={30} /><span style={{ whiteSpace: 'nowrap' }}>{b.customer}</span></div></td>
+                                  <td style={{ ...tdStyle, ...mono, color: ACCENT, fontSize: 11 }}>{b.phone}</td>
+                                  <td style={{ ...tdStyle, ...mono, fontSize: 11 }}><div>{b.startDate}</div><div style={{ color: 'rgba(245,245,245,0.5)', marginTop: 2 }}>{b.startTime}</div></td>
+                                  <td style={{ ...tdStyle, ...mono, fontSize: 11 }}><div>{b.endDate}</div><div style={{ color: 'rgba(245,245,245,0.5)', marginTop: 2 }}>{b.endTime}</div></td>
+                                  <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>{b.players} Players</td>
+                                  <td style={{ ...tdStyle, fontSize: 11, maxWidth: 220 }}>
+                                    <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, color: 'rgba(245,245,245,0.65)' }}>"{truncatedMsg}"</div>
+                                    {b.requirements.length > 55 && (
+                                      <button onClick={() => setMessageModal({ customer: b.customer, message: b.requirements })} style={{ marginTop: 4, background: 'none', border: 'none', padding: 0, fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.1em', textTransform: 'uppercase' as const, color: ACCENT, cursor: 'pointer', fontWeight: 600, transition: 'opacity 0.2s ease' }} onMouseEnter={e => { e.currentTarget.style.opacity = '0.7' }} onMouseLeave={e => { e.currentTarget.style.opacity = '1' }}>View More</button>
+                                    )}
+                                  </td>
+                                  <td style={{ ...tdStyle, textAlign: 'right' }}><StatusChip status={extStatus(b)} /></td>
+                                </tr>
+                              )
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )
+            })()
           ) : null}
 
-          {/* Customers */}
+          {/* ===== CONTACT LEADS ===== */}
+          {section === 'contact-leads' ? (
+            (() => {
+              const filteredLeads = contactFilter
+                ? contactLeads.filter(l => l.status === contactFilter)
+                : contactLeads
+              return (
+                <>
+                  <SectionHeader eyebrow="Admin · Leads" title="Contact leads." />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
+                    {['', 'New', 'Contacted', 'Closed'].map(s => (
+                      <button key={s || 'all'} onClick={() => setContactFilter(s)} style={btnStyle(contactFilter === s)} {...btnHover(contactFilter === s)}>{s || 'All Leads'}</button>
+                    ))}
+                  </div>
+                  <div className="admin-card admin-row-in" style={{ padding: '20px 24px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.55)' }}>All Contact Leads</div>
+                      <span className="admin-chip" style={{ color: ACCENT, background: 'rgba(57,255,122,0.08)', borderColor: 'rgba(57,255,122,0.3)' }}>{filteredLeads.length} total</span>
+                    </div>
+                    {filteredLeads.length === 0 ? (
+                      <div style={{ padding: '48px 0', textAlign: 'center' as const }}>
+                        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.35)', marginBottom: 8 }}>No Contact Leads</div>
+                        <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.3)' }}>No contact form submissions yet. Leads will appear here when customers submit the contact form.</div>
+                      </div>
+                    ) : (
+                      <div style={{ overflowX: 'auto' }}>
+                        <table style={tableStyles}>
+                          <thead><tr>
+                            <th style={thStyle}>Name</th>
+                            <th style={thStyle}>Phone</th>
+                            <th style={thStyle}>Email</th>
+                            <th style={thStyle}>Message</th>
+                            <th style={thStyle}>Submitted</th>
+                            <th style={thStyle}>Status</th>
+                          </tr></thead>
+                          <tbody>
+                            {filteredLeads.map(l => (
+                              <tr key={l.id} style={{ transition: 'background 0.2s ease' }} onMouseEnter={e => { e.currentTarget.style.background = 'rgba(57,255,122,0.05)' }} onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}>
+                                <td style={tdStyle}><div style={{ display: 'flex', alignItems: 'center', gap: 10 }}><Avatar name={l.name} size={30} />{l.name}</div></td>
+                                <td style={{ ...tdStyle, ...mono, color: ACCENT, fontSize: 11 }}>{l.phone}</td>
+                                <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>{l.email}</td>
+                                <td style={{ ...tdStyle, fontSize: 11, maxWidth: 200, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const }}>{l.message}</td>
+                                <td style={{ ...tdStyle, ...mono, fontSize: 11, color: 'rgba(245,245,245,0.55)' }}>{l.submittedAt}</td>
+                                <td style={tdStyle}>
+                                  <select value={l.status} onChange={e => {
+                                    const val = e.target.value as ContactLead['status']
+                                    updateContactLeadStatus(l.id, val)
+                                    setContactLeads(prev => prev.map(cl => cl.id === l.id ? { ...cl, status: val } : cl))
+                                  }} style={{ background: 'rgba(11,24,36,0.8)', border: `1px solid ${STATUS_COLORS[l.status] || '#A0A8B8'}3D`, borderRadius: 8, color: STATUS_COLORS[l.status] || '#A0A8B8', fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase' as const, padding: '6px 10px', cursor: 'pointer', outline: 'none' }}>
+                                    <option value="New">New</option>
+                                    <option value="Contacted">Contacted</option>
+                                    <option value="Closed">Closed</option>
+                                  </select>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                </>
+              )
+            })()
+          ) : null}
+
+          {/* ===== CUSTOMERS ===== */}
           {section === 'customers' ? (
             <>
               <SectionHeader eyebrow="Directory" title="Customers." />
               <div className="admin-card admin-row-in" style={{ padding: 0, overflow: 'hidden' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 22px', borderBottom: '1px solid rgba(160,168,184,0.12)' }}>
-                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)' }}>
-                    Customer Directory
-                  </div>
-                  <span className="admin-chip" style={{ color: ACCENT, background: 'rgba(57,247,42,0.08)', borderColor: 'rgba(57,247,42,0.3)' }}>
-                    {CUSTOMERS.length} customers
-                  </span>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)' }}>Customer Directory</div>
+                  <span className="admin-chip" style={{ color: ACCENT, background: 'rgba(57,255,122,0.08)', borderColor: 'rgba(57,255,122,0.3)' }}>{CUSTOMERS.length} customers</span>
                 </div>
                 <div style={{ overflowX: 'auto' }}>
                   <table style={tableStyles}>
-                    <thead>
-                      <tr>
-                        <th style={thStyle}>#</th>
-                        <th style={thStyle}>Name</th>
-                        <th style={thStyle}>Mobile Number</th>
-                        <th style={thStyle}>Bookings</th>
-                        <th style={thStyle}>Total Spent</th>
-                        <th style={thStyle}>Last Booking</th>
-                      </tr>
-                    </thead>
+                    <thead><tr><th style={thStyle}>#</th><th style={thStyle}>Name</th><th style={thStyle}>Mobile Number</th><th style={thStyle}>Bookings</th><th style={thStyle}>Total Spent</th><th style={thStyle}>Last Booking</th></tr></thead>
                     <tbody>
                       {CUSTOMERS.map((c, i) => (
-                        <tr key={c.phone} style={{ transition: 'background 0.2s ease' }} onMouseEnter={e => { e.currentTarget.style.background = 'rgba(57,247,42,0.05)' }} onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}>
+                        <tr key={c.phone} style={{ transition: 'background 0.2s ease' }} onMouseEnter={e => { e.currentTarget.style.background = 'rgba(57,255,122,0.05)' }} onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}>
                           <td style={{ ...tdStyle, ...mono, color: 'rgba(245,245,245,0.35)' }}>{String(i + 1).padStart(2, '0')}</td>
-                          <td style={tdStyle}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                              <Avatar name={c.name} size={30} />
-                              {c.name}
-                            </div>
-                          </td>
+                          <td style={tdStyle}><div style={{ display: 'flex', alignItems: 'center', gap: 10 }}><Avatar name={c.name} size={30} />{c.name}</div></td>
                           <td style={{ ...tdStyle, ...mono, color: ACCENT }}>{c.phone}</td>
                           <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>{c.bookings}</td>
                           <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>₹{c.total.toLocaleString()}</td>
@@ -688,181 +845,61 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
             </>
           ) : null}
 
-          {/* Settings */}
+          {/* ===== SETTINGS ===== */}
           {section === 'settings' ? (
             <>
               <SectionHeader eyebrow="Admin · Settings" title="Settings." />
               <div className="resp-two-col" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
-                {/* Download Customers List */}
                 <div className="admin-card admin-row-in" style={{ padding: '28px 26px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
                     <div>
-                      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#F5F5F5', marginBottom: 6 }}>
-                        Download Customers List
-                      </div>
-                      <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)' }}>
-                        Export all customer data as CSV
-                      </div>
+                      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#F2F4F2', marginBottom: 6 }}>Theme Appearance</div>
+                      <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)' }}>Switch between dark and normal mode</div>
                     </div>
                   </div>
-
-                  <div style={{ padding: '20px 16px', background: 'rgba(59,130,246,0.06)', borderRadius: 10, border: '1px solid rgba(59,130,246,0.2)', marginBottom: 20 }}>
-                    <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)', textAlign: 'center' }}>
-                      {CUSTOMERS.length} customers available for export
-                    </div>
+                  <div className="admin-theme-switcher">
+                    <button type="button" className={!darkMode ? 'active' : ''} onClick={() => setDarkMode(false)}>Normal Mode</button>
+                    <button type="button" className={darkMode ? 'active' : ''} onClick={() => setDarkMode(true)}>Dark Mode</button>
                   </div>
-
-                  <button
-                    style={{
-                      width: '100%', padding: '12px 16px', background: 'linear-gradient(135deg, #3B82F6, #60A5FA)', border: 'none',
-                      borderRadius: 10, color: '#FFFFFF', fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em',
-                      textTransform: 'uppercase', cursor: 'pointer', boxShadow: '0 10px 26px rgba(59,130,246,0.35)', transition: 'all 0.25s ease'
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 14px 34px rgba(59,130,246,0.5)' }}
-                    onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 10px 26px rgba(59,130,246,0.35)' }}
-                  >
-                    ↓ Download CSV
-                  </button>
                 </div>
-
-                {/* Block Online Bookings */}
                 <div className="admin-card admin-row-in" style={{ padding: '28px 26px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
                     <div>
-                      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#F5F5F5', marginBottom: 6 }}>
-                        Block Online Bookings
-                      </div>
-                      <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)' }}>
-                        Prevent customers from booking online
-                      </div>
+                      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#F2F4F2', marginBottom: 6 }}>Block Online Bookings</div>
+                      <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)' }}>Prevent customers from booking online</div>
                     </div>
                   </div>
-
                   <div style={{ padding: '20px 16px', background: 'rgba(255,107,107,0.06)', borderRadius: 10, border: '1px solid rgba(255,107,107,0.2)', marginBottom: 20 }}>
-                    <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)', textAlign: 'center' }}>
-                      Online bookings are currently enabled
-                    </div>
+                    <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)', textAlign: 'center' }}>Online bookings are currently enabled</div>
                   </div>
-
-                  <button
-                    style={{
-                      width: '100%', padding: '12px 16px', background: 'rgba(255,107,107,0.15)', border: '1px solid rgba(255,107,107,0.4)',
-                      borderRadius: 10, color: '#FF6B6B', fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em',
-                      textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.25s ease'
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,107,107,0.25)' }}
-                    onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,107,107,0.15)' }}
-                  >
-                    ✕ Block Bookings
-                  </button>
+                  <button style={{ width: '100%', padding: '12px 16px', background: 'rgba(255,107,107,0.15)', border: '1px solid rgba(255,107,107,0.4)', borderRadius: 10, color: '#FF6B6B', fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.25s ease' }} onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,107,107,0.25)' }} onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,107,107,0.15)' }}>✕ Block Bookings</button>
                 </div>
-
-                {/* Change ID Password */}
                 <div className="admin-card admin-row-in" style={{ padding: '28px 26px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
                     <div>
-                      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#F5F5F5', marginBottom: 6 }}>
-                        Change ID Password
-                      </div>
-                      <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)' }}>
-                        Update your admin credentials
-                      </div>
+                      <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#F2F4F2', marginBottom: 6 }}>Change ID Password</div>
+                      <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)' }}>Update your admin credentials</div>
                     </div>
                   </div>
-
                   {!showPasswordForm ? (
-                    <button
-                      onClick={() => setShowPasswordForm(true)}
-                      style={{
-                        width: '100%', padding: '12px 16px', background: 'rgba(57,247,42,0.1)', border: '1px solid rgba(57,247,42,0.3)',
-                        borderRadius: 10, color: ACCENT, fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em',
-                        textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.2s ease'
-                      }}
-                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(57,247,42,0.15)' }}
-                      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(57,247,42,0.1)' }}
-                    >
-                      Change Password
-                    </button>
+                    <button onClick={() => setShowPasswordForm(true)} style={{ width: '100%', padding: '12px 16px', background: 'rgba(57,255,122,0.1)', border: '1px solid rgba(57,255,122,0.3)', borderRadius: 10, color: ACCENT, fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.2s ease' }} onMouseEnter={e => { e.currentTarget.style.background = 'rgba(57,255,122,0.15)' }} onMouseLeave={e => { e.currentTarget.style.background = 'rgba(57,255,122,0.1)' }}>Change Password</button>
                   ) : (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                       <div>
-                        <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)', marginBottom: 6 }}>
-                          Current Password
-                        </label>
-                        <input
-                          type="password"
-                          value={passwordForm.currentPassword}
-                          onChange={e => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })}
-                          style={{
-                            width: '100%', padding: '10px 12px', background: 'rgba(11,24,36,0.8)', border: '1px solid rgba(160,168,184,0.2)',
-                            borderRadius: 8, color: '#F5F5F5', fontFamily: 'var(--font-body)', fontSize: 13, boxSizing: 'border-box'
-                          }}
-                        />
+                        <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)', marginBottom: 6 }}>Current Password</label>
+                        <input type="password" value={passwordForm.currentPassword} onChange={e => setPasswordForm({ ...passwordForm, currentPassword: e.target.value })} style={{ width: '100%', padding: '10px 12px', background: 'rgba(11,24,36,0.8)', border: '1px solid rgba(160,168,184,0.2)', borderRadius: 8, color: '#F2F4F2', fontFamily: 'var(--font-body)', fontSize: 13, boxSizing: 'border-box' }} />
                       </div>
                       <div>
-                        <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)', marginBottom: 6 }}>
-                          New Password
-                        </label>
-                        <input
-                          type="password"
-                          value={passwordForm.newPassword}
-                          onChange={e => setPasswordForm({ ...passwordForm, newPassword: e.target.value })}
-                          style={{
-                            width: '100%', padding: '10px 12px', background: 'rgba(11,24,36,0.8)', border: '1px solid rgba(160,168,184,0.2)',
-                            borderRadius: 8, color: '#F5F5F5', fontFamily: 'var(--font-body)', fontSize: 13, boxSizing: 'border-box'
-                          }}
-                        />
+                        <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)', marginBottom: 6 }}>New Password</label>
+                        <input type="password" value={passwordForm.newPassword} onChange={e => setPasswordForm({ ...passwordForm, newPassword: e.target.value })} style={{ width: '100%', padding: '10px 12px', background: 'rgba(11,24,36,0.8)', border: '1px solid rgba(160,168,184,0.2)', borderRadius: 8, color: '#F2F4F2', fontFamily: 'var(--font-body)', fontSize: 13, boxSizing: 'border-box' }} />
                       </div>
                       <div>
-                        <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)', marginBottom: 6 }}>
-                          Confirm Password
-                        </label>
-                        <input
-                          type="password"
-                          value={passwordForm.confirmPassword}
-                          onChange={e => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })}
-                          style={{
-                            width: '100%', padding: '10px 12px', background: 'rgba(11,24,36,0.8)', border: '1px solid rgba(160,168,184,0.2)',
-                            borderRadius: 8, color: '#F5F5F5', fontFamily: 'var(--font-body)', fontSize: 13, boxSizing: 'border-box'
-                          }}
-                        />
+                        <label style={{ display: 'block', fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)', marginBottom: 6 }}>Confirm Password</label>
+                        <input type="password" value={passwordForm.confirmPassword} onChange={e => setPasswordForm({ ...passwordForm, confirmPassword: e.target.value })} style={{ width: '100%', padding: '10px 12px', background: 'rgba(11,24,36,0.8)', border: '1px solid rgba(160,168,184,0.2)', borderRadius: 8, color: '#F2F4F2', fontFamily: 'var(--font-body)', fontSize: 13, boxSizing: 'border-box' }} />
                       </div>
                       <div style={{ display: 'flex', gap: 10, marginTop: 8 }}>
-                        <button
-                          onClick={() => {
-                            if (passwordForm.newPassword !== passwordForm.confirmPassword) {
-                              alert('Passwords do not match')
-                              return
-                            }
-                            alert('Password changed successfully')
-                            setShowPasswordForm(false)
-                            setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' })
-                          }}
-                          style={{
-                            flex: 1, padding: '10px 16px', background: 'linear-gradient(135deg, #39F72A, #C7F42D)', border: 'none',
-                            borderRadius: 8, color: '#000000', fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em',
-                            textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.2s ease'
-                          }}
-                          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)' }}
-                          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)' }}
-                        >
-                          Update Password
-                        </button>
-                        <button
-                          onClick={() => {
-                            setShowPasswordForm(false)
-                            setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' })
-                          }}
-                          style={{
-                            flex: 1, padding: '10px 16px', background: 'rgba(160,168,184,0.1)', border: '1px solid rgba(160,168,184,0.2)',
-                            borderRadius: 8, color: 'rgba(245,245,245,0.6)', fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em',
-                            textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.2s ease'
-                          }}
-                          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(160,168,184,0.15)' }}
-                          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(160,168,184,0.1)' }}
-                        >
-                          Cancel
-                        </button>
+                        <button onClick={() => { if (passwordForm.newPassword !== passwordForm.confirmPassword) { alert('Passwords do not match'); return } alert('Password changed successfully'); setShowPasswordForm(false); setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' }) }} style={{ flex: 1, padding: '10px 16px', background: 'linear-gradient(135deg, #0FA857, #39FF7A)', border: 'none', borderRadius: 8, color: '#030607', fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.2s ease' }}>Update Password</button>
+                        <button onClick={() => { setShowPasswordForm(false); setPasswordForm({ currentPassword: '', newPassword: '', confirmPassword: '' }) }} style={{ flex: 1, padding: '10px 16px', background: 'rgba(160,168,184,0.1)', border: '1px solid rgba(160,168,184,0.2)', borderRadius: 8, color: 'rgba(245,245,245,0.6)', fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.2s ease' }}>Cancel</button>
                       </div>
                     </div>
                   )}
@@ -872,6 +909,29 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
           ) : null}
         </main>
       </div>
+
+      {/* Enquiry Message Modal */}
+      {messageModal && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }} onClick={() => setMessageModal(null)}>
+          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(6px)' }} />
+          <div className="admin-card" onClick={e => e.stopPropagation()} style={{ position: 'relative', width: '100%', maxWidth: 520, padding: '32px 28px', border: '1px solid rgba(57,255,122,0.3)', boxShadow: '0 24px 64px rgba(0,0,0,0.6), 0 0 48px rgba(57,255,122,0.1)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: ACCENT }}>Enquiry Message</div>
+              <button onClick={() => setMessageModal(null)} style={{ background: 'none', border: 'none', color: 'rgba(245,245,245,0.5)', cursor: 'pointer', fontSize: 20, lineHeight: 1, padding: 4, transition: 'color 0.2s ease' }} onMouseEnter={e => { e.currentTarget.style.color = '#F2F4F2' }} onMouseLeave={e => { e.currentTarget.style.color = 'rgba(245,245,245,0.5)' }}>×</button>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
+              <Avatar name={messageModal.customer} size={36} />
+              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#F2F4F2' }}>{messageModal.customer}</div>
+            </div>
+            <div style={{ fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.7, color: 'rgba(245,245,245,0.75)', padding: '18px 16px', background: 'rgba(11,24,36,0.6)', borderRadius: 10, border: '1px solid rgba(160,168,184,0.1)' }}>
+              "{messageModal.message}"
+            </div>
+            <div style={{ marginTop: 20, display: 'flex', justifyContent: 'flex-end' }}>
+              <button onClick={() => setMessageModal(null)} style={{ padding: '10px 20px', background: 'rgba(57,255,122,0.1)', border: '1px solid rgba(57,255,122,0.3)', borderRadius: 8, color: ACCENT, fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.2s ease' }} onMouseEnter={e => { e.currentTarget.style.background = 'rgba(57,255,122,0.18)' }} onMouseLeave={e => { e.currentTarget.style.background = 'rgba(57,255,122,0.1)' }}>Close</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

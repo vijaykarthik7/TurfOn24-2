@@ -50,14 +50,14 @@ export default function Availability() {
             <div
               style={{
                 background: 'rgba(0,0,0,0.85)',
-                border: '1px solid rgba(57,247,42,0.45)',
-                boxShadow: '0 0 46px rgba(57,247,42,0.14), 0 24px 60px rgba(0,0,0,0.5)',
+                border: '1px solid rgba(57,255,122,0.45)',
+                boxShadow: '0 0 46px rgba(57,255,122,0.14), 0 24px 60px rgba(0,0,0,0.5)',
                 borderRadius: 10,
                 padding: 30,
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22 }}>
-                <div style={{ fontFamily: 'Bebas Neue', fontSize: 30, color: '#F3F3F3', letterSpacing: '0.03em' }}>
+                <div style={{ fontFamily: 'Bebas Neue', fontSize: 30, color: '#F2F4F2', letterSpacing: '0.03em' }}>
                   Live <span style={{ color: GREEN }}>Availability</span>
                 </div>
                 <span className="tf24-live-dot" />
@@ -71,7 +71,7 @@ export default function Availability() {
                     onChange={e => { setDateIdx(Number(e.target.value)); setSelected(null) }}
                     style={{
                       width: '100%', marginTop: 8, background: '#0a0a0a', border: '1px solid rgba(243,243,243,0.16)',
-                      color: '#F3F3F3', padding: '11px 12px', fontFamily: 'Space Grotesk', fontSize: 13, outline: 'none', cursor: 'pointer',
+                      color: '#F2F4F2', padding: '11px 12px', fontFamily: 'Space Grotesk', fontSize: 13, outline: 'none', cursor: 'pointer',
                     }}
                   >
                     {dates.map((d, i) => (
@@ -86,7 +86,7 @@ export default function Availability() {
                     onChange={e => { setTurf(e.target.value); setSelected(null) }}
                     style={{
                       width: '100%', marginTop: 8, background: '#0a0a0a', border: '1px solid rgba(243,243,243,0.16)',
-                      color: '#F3F3F3', padding: '11px 12px', fontFamily: 'Space Grotesk', fontSize: 13, outline: 'none', cursor: 'pointer',
+                      color: '#F2F4F2', padding: '11px 12px', fontFamily: 'Space Grotesk', fontSize: 13, outline: 'none', cursor: 'pointer',
                     }}
                   >
                     {TURF_NAMES.map(t => (
@@ -110,12 +110,12 @@ export default function Availability() {
                       onClick={() => setSelected(h)}
                       style={{
                         fontFamily: 'Space Grotesk', fontSize: 12.5, padding: '12px 4px', borderRadius: 6, cursor: booked ? 'not-allowed' : 'pointer',
-                        border: active ? `1px solid ${GREEN}` : booked ? '1px solid rgba(243,243,243,0.1)' : `1px solid rgba(57,247,42,0.55)`,
-                        background: active ? GREEN : booked ? '#121212' : 'rgba(57,247,42,0.08)',
-                        color: active ? '#000000' : booked ? 'rgba(243,243,243,0.25)' : GREEN,
+                        border: active ? `1px solid ${GREEN}` : booked ? '1px solid rgba(243,243,243,0.1)' : `1px solid rgba(57,255,122,0.55)`,
+                        background: active ? GREEN : booked ? '#121212' : 'rgba(57,255,122,0.08)',
+                        color: active ? '#030607' : booked ? 'rgba(243,243,243,0.25)' : GREEN,
                         fontWeight: 700,
                         textDecoration: booked ? 'line-through' : 'none',
-                        boxShadow: active ? '0 0 18px rgba(57,247,42,0.45)' : 'none',
+                        boxShadow: active ? '0 0 18px rgba(57,255,122,0.45)' : 'none',
                         transition: 'all 0.2s ease',
                       }}
                     >
@@ -133,7 +133,7 @@ export default function Availability() {
                   <span style={{ width: 10, height: 10, background: '#121212', border: '1px solid rgba(243,243,243,0.25)', borderRadius: 2 }} /> Booked
                 </span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-                  <span style={{ width: 10, height: 10, background: CYAN, borderRadius: 2, boxShadow: '0 0 8px rgba(57,255,20,0.7)' }} /> Live
+                  <span style={{ width: 10, height: 10, background: CYAN, borderRadius: 2, boxShadow: '0 0 8px rgba(57,255,122,0.7)' }} /> Live
                 </span>
               </div>
 

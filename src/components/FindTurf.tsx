@@ -89,7 +89,7 @@ export default function FindTurf() {
                   bottom: 20,
                   width: 230,
                   height: 90,
-                  background: 'radial-gradient(ellipse at center, rgba(57,247,42,0.28), transparent 70%)',
+                  background: 'radial-gradient(ellipse at center, rgba(57,255,122,0.28), transparent 70%)',
                 }}
               />
             </div>

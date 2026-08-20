@@ -2,8 +2,8 @@ import { type ReactNode } from 'react'
 import { useReveal } from '../hooks/useReveal'
 import { GREEN, CHROME } from '../data/tf24'
 
-const BLUE = '#3B82F6'
-const BLUE_LIGHT = '#60A5FA'
+const BLUE = '#00C9FF'
+const BLUE_LIGHT = '#39FF7A'
 
 const iconProps = { width: 22, height: 22, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
 
@@ -64,7 +64,7 @@ export default function Features() {
       <div className="pitch-lines" />
 
       {/* Watermark */}
-      <div style={{ position: 'absolute', top: -30, right: -18, fontFamily: 'Bebas Neue', fontSize: 320, lineHeight: 1, color: 'rgba(23,107,2,0.16)', WebkitTextStroke: '1px rgba(57,247,42,0.10)', userSelect: 'none', pointerEvents: 'none', zIndex: 0 }}>
+      <div style={{ position: 'absolute', top: -30, right: -18, fontFamily: 'Bebas Neue', fontSize: 320, lineHeight: 1, color: 'rgba(23,107,2,0.16)', WebkitTextStroke: '1px rgba(57,255,122,0.10)', userSelect: 'none', pointerEvents: 'none', zIndex: 0 }}>
         GAME.
       </div>
 
@@ -72,10 +72,10 @@ export default function Features() {
         {/* Header */}
         <div ref={headRef} className="reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
           <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginBottom: 18 }}>
-            <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#39FF14', textShadow: '0 0 14px rgba(57,255,20,0.5)', paddingLeft: '0.45em' }}>
+            <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#39FF7A', textShadow: '0 0 14px rgba(57,255,122,0.5)', paddingLeft: '0.45em' }}>
               Why Turf on 24
             </span>
-            <span style={{ width: 64, height: 2, background: '#39FF14' }} />
+            <span style={{ width: 64, height: 2, background: '#39FF7A' }} />
           </div>
           <h2 style={{ fontFamily: 'Bebas Neue', fontWeight: 400, fontSize: 'clamp(56px, 8vw, 128px)', textTransform: 'uppercase', lineHeight: 0.88, margin: 0, color: CHROME }}>
             Built for the

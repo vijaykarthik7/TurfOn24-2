@@ -1,9 +1,9 @@
-export const GREEN = '#39F72A'
-export const LIME = '#C7F42D'
-export const DEEP = '#176B02'
-export const CYAN = '#39FF14'
-export const CHROME = '#F3F3F3'
-export const BLACK = '#000000'
+export const GREEN = '#0FA857'
+export const LIME = '#39FF7A'
+export const DEEP = '#0FA857'
+export const CYAN = '#00C9FF'
+export const CHROME = '#F2F4F2'
+export const BLACK = '#030607'
 
 const U = (id: string, w = 1200, h = 1500) =>
   `https://images.unsplash.com/${id}?w=${w}&h=${h}&fit=crop&auto=format&q=80`

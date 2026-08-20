@@ -86,7 +86,7 @@ export default function Nav() {
     letterSpacing: '0.03em',
     textTransform: 'uppercase',
     textDecoration: 'none',
-    color: active === id ? GREEN : '#F3F3F3',
+    color: active === id ? GREEN : '#F2F4F2',
     padding: '6px 0',
     borderBottom: `1px solid ${active === id ? GREEN : 'transparent'}`,
     transition: 'color 0.2s ease, border-color 0.2s ease',
@@ -147,8 +147,8 @@ export default function Nav() {
               fontSize: 13,
               borderRadius: 4,
               whiteSpace: 'nowrap',
-              background: active === 'booking' ? '#C7F42D' : undefined,
-              boxShadow: active === 'booking' ? '0 0 26px rgba(57,247,42,0.5)' : undefined,
+              background: active === 'booking' ? '#39FF7A' : undefined,
+              boxShadow: active === 'booking' ? '0 0 26px rgba(57,255,122,0.5)' : undefined,
             }}
           >
             Book Now <span className="tf24-arrow">→</span>
@@ -164,7 +164,7 @@ export default function Nav() {
               justifyContent: 'center',
               background: 'none',
               border: '1px solid rgba(243,243,243,0.2)',
-              color: '#F3F3F3',
+              color: '#F2F4F2',
               cursor: 'pointer',
               width: 40,
               height: 40,
@@ -181,7 +181,7 @@ export default function Nav() {
       </div>
 
       {open && (
-        <div style={{ background: '#000000', borderTop: '1px solid rgba(243,243,243,0.08)', padding: '12px 0 24px' }}>
+        <div style={{ background: '#030607', borderTop: '1px solid rgba(243,243,243,0.08)', padding: '12px 0 24px' }}>
           <div className="tf24-container" style={{ display: 'flex', flexDirection: 'column' }}>
             {LINKS.map(l => (
               <a
@@ -195,7 +195,7 @@ export default function Nav() {
                   letterSpacing: '0.04em',
                   textTransform: 'uppercase',
                   textDecoration: 'none',
-                  color: active === l.id ? GREEN : '#F3F3F3',
+                  color: active === l.id ? GREEN : '#F2F4F2',
                   padding: '16px 0',
                   borderBottom: '1px solid rgba(243,243,243,0.08)',
                 }}
@@ -212,8 +212,8 @@ export default function Nav() {
                 justifyContent: 'center',
                 alignItems: 'center',
                 gap: 10,
-                background: active === 'booking' ? '#C7F42D' : GREEN,
-                color: '#000000',
+                background: active === 'booking' ? '#39FF7A' : GREEN,
+                color: '#030607',
                 fontFamily: 'Space Grotesk',
                 fontWeight: 700,
                 fontSize: 13,
@@ -222,7 +222,7 @@ export default function Nav() {
                 height: 50,
                 textDecoration: 'none',
                 borderRadius: 4,
-                boxShadow: active === 'booking' ? '0 0 26px rgba(57,247,42,0.5)' : 'none',
+                boxShadow: active === 'booking' ? '0 0 26px rgba(57,255,122,0.5)' : 'none',
                 transition: 'background 0.2s ease, box-shadow 0.2s ease',
               }}
             >

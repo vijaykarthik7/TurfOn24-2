@@ -18,7 +18,7 @@ export default function App() {
 
   if (window.location.pathname.startsWith('/booking')) {
     return (
-      <div style={{ background: '#000000', color: '#F5F5F5', overflowX: 'hidden' }}>
+      <div style={{ background: '#030607', color: '#F2F4F2', overflowX: 'hidden' }}>
         <div className="bg-3d">
           <div
             className="bg-3d-zoom"
@@ -57,7 +57,7 @@ export default function App() {
   }
 
   return (
-    <div id="tf24" style={{ position: 'relative', background: '#000000', color: '#F3F3F3', overflowX: 'hidden' }}>
+    <div id="tf24" style={{ position: 'relative', background: '#030607', color: '#F2F4F2', overflowX: 'hidden' }}>
       <div className="bg-3d">
         <div
           className="bg-3d-zoom"

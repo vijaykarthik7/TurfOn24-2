@@ -3,8 +3,8 @@ import { useReveal } from '../hooks/useReveal'
 import type { VerificationState } from '../hooks/useVerification'
 
 const RATE = 700
-const ACCENT = '#39F72A'
-const ACCENT_RGB = '57,247,42'
+const ACCENT = '#39FF7A'
+const ACCENT_RGB = '57,255,122'
 const DURATIONS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 const sessionType = (h: number) => {
@@ -206,7 +206,7 @@ export default function Pricing({ verification, onReserveArena }: { verification
       <span style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.4)' }}>
         {label}
       </span>
-      <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 500, color: accent ? ACCENT : '#F5F5F5', textAlign: 'right' }}>
+      <span style={{ fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 500, color: accent ? ACCENT : '#F2F4F2', textAlign: 'right' }}>
         {value}
       </span>
     </div>
@@ -222,7 +222,7 @@ export default function Pricing({ verification, onReserveArena }: { verification
       <div ref={ref} className="reveal container" style={{ margin: '0 auto' }}>
         {/* Highlight / CTA */}
         <div style={{ textAlign: 'center', marginBottom: 56 }}>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(48px, 7vw, 88px)', textTransform: 'uppercase', lineHeight: 0.95, margin: 0, color: '#F5F5F5' }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(48px, 7vw, 88px)', textTransform: 'uppercase', lineHeight: 0.95, margin: 0, color: '#F2F4F2' }}>
             Best <span style={{ color: ACCENT }}>price.</span>
           </h2>
           <p style={{ fontFamily: 'var(--font-body)', fontStyle: 'italic', fontSize: 16, color: '#A0A8B8', maxWidth: 540, margin: '18px auto 0', lineHeight: 1.7 }}>
@@ -230,7 +230,7 @@ export default function Pricing({ verification, onReserveArena }: { verification
           </p>
 
           <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 8, margin: '28px 0 32px' }}>
-            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(60px, 8vw, 104px)', color: ACCENT, lineHeight: 1, textShadow: '0 0 40px rgba(57,247,42,0.35)' }}>
+            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(60px, 8vw, 104px)', color: ACCENT, lineHeight: 1, textShadow: '0 0 40px rgba(57,255,122,0.35)' }}>
               ₹700
             </span>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: 15, letterSpacing: '0.22em', color: 'rgba(245,245,245,0.55)' }}>
@@ -242,7 +242,7 @@ export default function Pricing({ verification, onReserveArena }: { verification
             {FEATURES.map(f => (
               <div key={f.title} className="feature-card">
                 <span className="feature-icon">{f.icon}</span>
-                <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#F5F5F5' }}>
+                <span style={{ fontFamily: 'var(--font-display)', fontWeight: 600, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#F2F4F2' }}>
                   {f.title}
                 </span>
               </div>
@@ -261,11 +261,11 @@ export default function Pricing({ verification, onReserveArena }: { verification
 
         {/* Player Verification */}
         <div ref={verifyRef} style={{ maxWidth: 620, margin: '0 auto 48px', textAlign: 'center' }}>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: ACCENT, border: '1px solid rgba(57,247,42,0.35)', borderRadius: 999, padding: '6px 14px', marginBottom: 16, background: 'rgba(57,247,42,0.06)' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: ACCENT, border: '1px solid rgba(57,255,122,0.35)', borderRadius: 999, padding: '6px 14px', marginBottom: 16, background: 'rgba(57,255,122,0.06)' }}>
             <span className="hm-live-dot" style={{ width: 6, height: 6 }} />
             Quick · Secure · Reliable
           </div>
-          <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(32px, 4.5vw, 54px)', textTransform: 'uppercase', color: '#F5F5F5', margin: 0 }}>
+          <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(32px, 4.5vw, 54px)', textTransform: 'uppercase', color: '#F2F4F2', margin: 0 }}>
             Verify your <span style={{ color: ACCENT }}>access.</span>
           </h3>
           <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#A0A8B8', maxWidth: 460, margin: '14px auto 28px', lineHeight: 1.7 }}>
@@ -303,7 +303,7 @@ export default function Pricing({ verification, onReserveArena }: { verification
             ) : !verified && step === 'otp' ? (
               <>
                 <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#A0A8B8', textAlign: 'center', lineHeight: 1.7, marginBottom: 16 }}>
-                  Enter the 6-digit code sent to <span style={{ color: '#F5F5F5', fontFamily: 'var(--font-mono)' }}>+91 {mobile}</span>
+                  Enter the 6-digit code sent to <span style={{ color: '#F2F4F2', fontFamily: 'var(--font-mono)' }}>+91 {mobile}</span>
                 </div>
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.4)', textAlign: 'center', marginBottom: 12 }}>
                   Enter Verification Code
@@ -354,7 +354,7 @@ export default function Pricing({ verification, onReserveArena }: { verification
                 <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: ACCENT, marginBottom: 8 }}>
                   ✓ Mobile Verified
                 </div>
-                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 30, textTransform: 'uppercase', color: '#F5F5F5', textAlign: 'center', marginBottom: 6 }}>
+                <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 30, textTransform: 'uppercase', color: '#F2F4F2', textAlign: 'center', marginBottom: 6 }}>
                   Welcome, {name.trim() ? name.trim().split(' ')[0] : 'Player'}.
                 </div>
                 <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#A0A8B8', textAlign: 'center', lineHeight: 1.7, marginBottom: 24 }}>
@@ -378,7 +378,7 @@ export default function Pricing({ verification, onReserveArena }: { verification
         {/* Access Level */}
         <div style={{ marginBottom: 48 }}>
           <div style={{ textAlign: 'center', marginBottom: 28 }}>
-            <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(30px, 4vw, 48px)', textTransform: 'uppercase', color: '#F5F5F5', margin: 0 }}>
+            <h3 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 'clamp(30px, 4vw, 48px)', textTransform: 'uppercase', color: '#F2F4F2', margin: 0 }}>
               Select your <span style={{ color: ACCENT }}>access level.</span>
             </h3>
             <p style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#A0A8B8', margin: '12px 0 0', lineHeight: 1.7 }}>
@@ -386,12 +386,12 @@ export default function Pricing({ verification, onReserveArena }: { verification
             </p>
           </div>
           <div className="access-grid">
-            <div className="access-card">
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: ACCENT, border: '1px solid rgba(57,247,42,0.35)', borderRadius: 999, padding: '4px 12px', marginBottom: 18, background: 'rgba(57,247,42,0.06)' }}>
+            <div className="access-card access-card-hourly">
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: ACCENT, border: '1px solid rgba(57,255,122,0.35)', borderRadius: 999, padding: '4px 12px', marginBottom: 18, background: 'rgba(57,255,122,0.06)' }}>
                 Casual Play
               </div>
               <div style={{ fontSize: 34, marginBottom: 10 }}>⚽</div>
-              <div className="access-title" style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 28, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#F5F5F5', marginBottom: 6 }}>
+              <div className="access-title" style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 28, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#F2F4F2', marginBottom: 6 }}>
                 Player Access
               </div>
               <div className="access-sub" style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#A0A8B8', lineHeight: 1.7, marginBottom: 20 }}>
@@ -408,12 +408,12 @@ export default function Pricing({ verification, onReserveArena }: { verification
                 Book By Hour →
               </button>
             </div>
-            <div className="access-card">
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: ACCENT, border: '1px solid rgba(57,247,42,0.35)', borderRadius: 999, padding: '4px 12px', marginBottom: 18, background: 'rgba(57,247,42,0.06)' }}>
+            <div className="access-card access-card-extended">
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.16em', textTransform: 'uppercase', color: ACCENT, border: '1px solid rgba(57,255,122,0.35)', borderRadius: 999, padding: '4px 12px', marginBottom: 18, background: 'rgba(57,255,122,0.06)' }}>
                 Exclusive Events
               </div>
               <div style={{ fontSize: 34, marginBottom: 10 }}>🏟</div>
-              <div className="access-title" style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 28, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#F5F5F5', marginBottom: 6 }}>
+              <div className="access-title" style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 28, textTransform: 'uppercase', letterSpacing: '0.04em', color: '#F2F4F2', marginBottom: 6 }}>
                 Arena Access
               </div>
               <div className="access-sub" style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: '#A0A8B8', lineHeight: 1.7, marginBottom: 20 }}>
@@ -449,8 +449,8 @@ export default function Pricing({ verification, onReserveArena }: { verification
         <div style={{ position: 'relative' }}>
           {!verified ? (
             <div style={{ position: 'absolute', inset: 0, zIndex: 5, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12, pointerEvents: 'none' }}>
-              <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'rgba(11,24,36,0.9)', border: '1px solid rgba(57,247,42,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 24px rgba(57,247,42,0.3)' }}>
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#39F72A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <div style={{ width: 52, height: 52, borderRadius: '50%', background: 'rgba(11,24,36,0.9)', border: '1px solid rgba(57,255,122,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 24px rgba(57,255,122,0.3)' }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#39FF7A" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="4.5" y="10.5" width="15" height="9.5" rx="2.5" />
                   <path d="M8 10.5V7.5a4 4 0 018 0v3" />
                 </svg>
@@ -463,7 +463,7 @@ export default function Pricing({ verification, onReserveArena }: { verification
           <div ref={bookingRef} id="slot-booking" className={'resp-two-col booking-grid' + (verified ? '' : ' locked')} style={{ display: 'grid', gridTemplateColumns: '1.15fr 0.85fr', gap: 28, alignItems: 'start', scrollMarginTop: 84 }}>
           <div className="glass-card" style={{ padding: '28px 24px' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 14 }}>
-              <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 30, textTransform: 'uppercase', letterSpacing: '0.02em', color: '#F5F5F5', margin: 0 }}>
+              <h4 style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 30, textTransform: 'uppercase', letterSpacing: '0.02em', color: '#F2F4F2', margin: 0 }}>
                 Choose your <span style={{ color: ACCENT }}>slot.</span>
               </h4>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -522,7 +522,7 @@ export default function Pricing({ verification, onReserveArena }: { verification
                 Booked
               </div>
               <div className="hm-legend-item">
-                <span className="hm-legend-swatch" style={{ background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#000000', fontSize: 9, fontWeight: 700 }}>✓</span>
+                <span className="hm-legend-swatch" style={{ background: ACCENT, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#030607', fontSize: 9, fontWeight: 700 }}>✓</span>
                 Selected
               </div>
             </div>
@@ -551,7 +551,7 @@ export default function Pricing({ verification, onReserveArena }: { verification
               ))}
             </div>
             {hours < 6 ? (
-              <div style={{ marginTop: 14, textAlign: 'center', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.08em', color: time !== null ? '#F5F5F5' : 'rgba(245,245,245,0.35)' }}>
+              <div style={{ marginTop: 14, textAlign: 'center', fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.08em', color: time !== null ? '#F2F4F2' : 'rgba(245,245,245,0.35)' }}>
                 {time !== null && endHour !== null ? (
                   <>
                     <span style={{ color: ACCENT }}>{fmtHour(time)}</span>
@@ -601,7 +601,7 @@ export default function Pricing({ verification, onReserveArena }: { verification
             <div style={{ fontFamily: 'var(--font-mono)', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: ACCENT, marginBottom: 4 }}>
               Booking Summary
             </div>
-            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 32, textTransform: 'uppercase', letterSpacing: '0.02em', color: '#F5F5F5', marginBottom: 18 }}>
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 32, textTransform: 'uppercase', letterSpacing: '0.02em', color: '#F2F4F2', marginBottom: 18 }}>
               Review your booking.
             </div>
 
@@ -617,7 +617,7 @@ export default function Pricing({ verification, onReserveArena }: { verification
                 <div className="fade-up" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.2em', color: ACCENT, textTransform: 'uppercase', marginBottom: 10, animationDelay: '0.6s' }}>
                   Slot Booking Confirmed
                 </div>
-                <div className="fade-up" style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 40, textTransform: 'uppercase', lineHeight: 0.95, color: '#F5F5F5', marginBottom: 14, animationDelay: '0.75s' }}>
+                <div className="fade-up" style={{ fontFamily: 'var(--font-display)', fontWeight: 900, fontSize: 40, textTransform: 'uppercase', lineHeight: 0.95, color: '#F2F4F2', marginBottom: 14, animationDelay: '0.75s' }}>
                   See you<br />on the turf.
                 </div>
                 <p className="fade-up" style={{ fontFamily: 'var(--font-body)', fontSize: 14, color: '#A0A8B8', lineHeight: 1.7, marginBottom: 16, animationDelay: '0.9s' }}>
@@ -632,7 +632,7 @@ export default function Pricing({ verification, onReserveArena }: { verification
                 <button
                   onClick={() => setConfirmed(false)}
                   style={{ width: '100%', fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.15em', textTransform: 'uppercase', background: 'transparent', color: '#A0A8B8', border: '1px solid rgba(160,168,184,0.4)', borderRadius: 8, padding: '13px 24px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.25s ease' }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = ACCENT; e.currentTarget.style.color = '#F5F5F5' }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = ACCENT; e.currentTarget.style.color = '#F2F4F2' }}
                   onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(160,168,184,0.4)'; e.currentTarget.style.color = '#A0A8B8' }}
                 >
                   Adjust Booking
@@ -670,8 +670,8 @@ export default function Pricing({ verification, onReserveArena }: { verification
                 <button
                   disabled={!canBook}
                   onClick={() => setConfirmed(true)}
-                  style={{ width: '100%', fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase', padding: '15px 24px', fontWeight: 700, border: 'none', borderRadius: 8, cursor: canBook ? 'pointer' : 'not-allowed', transition: 'all 0.25s ease', background: canBook ? ACCENT : 'rgba(160,168,184,0.15)', color: canBook ? '#000000' : 'rgba(245,245,245,0.35)', boxShadow: canBook ? `0 12px 30px rgba(${ACCENT_RGB},0.35)` : 'none' }}
-                  onMouseEnter={e => { if (canBook) { e.currentTarget.style.background = '#C7F42D'; e.currentTarget.style.boxShadow = `0 14px 36px rgba(${ACCENT_RGB},0.5)`; e.currentTarget.style.transform = 'translateY(-2px)' } }}
+                  style={{ width: '100%', fontFamily: 'var(--font-mono)', fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase', padding: '15px 24px', fontWeight: 700, border: 'none', borderRadius: 8, cursor: canBook ? 'pointer' : 'not-allowed', transition: 'all 0.25s ease', background: canBook ? ACCENT : 'rgba(160,168,184,0.15)', color: canBook ? '#030607' : 'rgba(245,245,245,0.35)', boxShadow: canBook ? `0 12px 30px rgba(${ACCENT_RGB},0.35)` : 'none' }}
+                  onMouseEnter={e => { if (canBook) { e.currentTarget.style.background = '#39FF7A'; e.currentTarget.style.boxShadow = `0 14px 36px rgba(${ACCENT_RGB},0.5)`; e.currentTarget.style.transform = 'translateY(-2px)' } }}
                   onMouseLeave={e => { if (canBook) { e.currentTarget.style.background = ACCENT; e.currentTarget.style.boxShadow = `0 12px 30px rgba(${ACCENT_RGB},0.35)`; e.currentTarget.style.transform = 'translateY(0)' } }}
                 >
                   Book Now

@@ -1,6 +1,8 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
-import { AuthTabs } from '@/components/ui/modern-animated-sign-in'
-import AnimatedGradient from '@/components/ui/animated-gradient'
+import { Eye, EyeOff } from 'lucide-react'
+import bgImage from '@/assets/bg2.png'
+
+const logoTagline = '/turfon24-logo-tagline.png'
 
 type FormData = {
   username: string;
@@ -12,6 +14,7 @@ export default function AdminLogin({ onLogin }: { onLogin: () => void }) {
     username: 'admin123',
     password: 'admin123',
   });
+  const [showPassword, setShowPassword] = useState(false)
 
   const goToForgotPassword = (
     event: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>
@@ -39,75 +42,36 @@ export default function AdminLogin({ onLogin }: { onLogin: () => void }) {
     }
   };
 
-  const formFields = {
-    header: 'Welcome back',
-    subHeader: 'Sign in to your admin dashboard',
-    fields: [
-      {
-        label: 'Username',
-        required: true,
-        type: 'text' as const,
-        placeholder: 'Enter your username',
-        onChange: (event: ChangeEvent<HTMLInputElement>) =>
-          handleInputChange(event, 'username'),
-      },
-      {
-        label: 'Password',
-        required: true,
-        type: 'password' as const,
-        placeholder: 'Enter your password',
-        onChange: (event: ChangeEvent<HTMLInputElement>) =>
-          handleInputChange(event, 'password'),
-      },
-    ],
-    submitButton: 'Sign in',
-    textVariantButton: 'Forgot password?',
-  };
-
   return (
-    <section className='relative min-h-screen text-white overflow-hidden'>
-      {/* Full-page animated gradient background */}
-      <AnimatedGradient
-        config={{
-          preset: "custom",
-          color1: "#000000",
-          color2: "#176B02",
-          color3: "#39F72A",
-          rotation: 114,
-          proportion: 63,
-          scale: 0.75,
-          speed: 30,
-          distortion: 5,
-          swirl: 61,
-          swirlIterations: 5,
-          softness: 100,
-          offset: -168,
-          shape: "Checks",
-          shapeSize: 28,
-        }}
-        noise={{ opacity: 0.5, scale: 1 }}
-        style={{ zIndex: 0 }}
-      />
-
-      {/* Login Card */}
-      <div className='relative z-10 flex min-h-screen items-center justify-center px-4'>
-        <div className='w-full max-w-md rounded-2xl bg-black/60 backdrop-blur-xl border border-white/10 p-8 shadow-2xl'>
-          <AuthTabs
-            formFields={formFields}
-            goTo={goToForgotPassword}
-            handleSubmit={handleSubmit}
-          />
+    <section className='tf24-admin-login' style={{ backgroundImage: `url(${bgImage})` }}>
+      <div className='tf24-admin-shell'>
+        <div className='tf24-admin-showcase' style={{ backgroundImage: `linear-gradient(180deg, rgba(3,6,7,0.25), rgba(3,6,7,0.68)), url(${bgImage})` }}>
+          <div className='tf24-admin-showcase-top'>
+            <img src={logoTagline} alt='TURFON24 — Premium Turfs 24/7' />
+          </div>
         </div>
-      </div>
 
-      {/* Back link */}
-      <div className='fixed bottom-6 left-1/2 -translate-x-1/2 z-50'>
-        <a
-          href='/'
-          className='font-mono text-xs tracking-widest uppercase text-neutral-500 hover:text-emerald-400 transition-colors duration-250'
-        >
-          ← Back to website
-        </a>
+        <div className='tf24-admin-form-panel'>
+          <div className='tf24-admin-form-top'>
+            <img src={logoTagline} alt='TURFON24 — Premium Turfs 24/7' />
+            <button type='button' className='tf24-admin-language'>🇬🇧 EN⌄</button>
+          </div>
+          <div className='tf24-admin-form-content'>
+            <h1>Hi Admin</h1>
+            <p>Welcome to TURFON24</p>
+            <form onSubmit={handleSubmit}>
+              <label htmlFor='admin-username'>Username</label>
+              <input id='admin-username' type='text' value={formData.username} placeholder='Username' onChange={event => handleInputChange(event, 'username')} />
+              <label htmlFor='admin-password'>Password</label>
+              <div className='tf24-admin-password'>
+                <input id='admin-password' type={showPassword ? 'text' : 'password'} value={formData.password} placeholder='Password' onChange={event => handleInputChange(event, 'password')} />
+                <button type='button' aria-label={showPassword ? 'Hide password' : 'Show password'} onClick={() => setShowPassword(value => !value)}>{showPassword ? <EyeOff size={15} /> : <Eye size={15} />}</button>
+              </div>
+              <button type='button' className='tf24-admin-forgot' onClick={goToForgotPassword}>Forgot password?</button>
+              <button type='submit' className='tf24-admin-submit'>Login</button>
+            </form>
+          </div>
+        </div>
       </div>
     </section>
   );

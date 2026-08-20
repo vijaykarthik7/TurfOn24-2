@@ -37,15 +37,15 @@ export default function Gallery() {
         <div ref={headRef} className="reveal" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 40, flexWrap: 'wrap', marginBottom: 52 }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
-              <span style={{ width: 26, height: 2, background: '#39FF14' }} />
-              <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.4em', textTransform: 'uppercase', color: '#39FF14', textShadow: '0 0 14px rgba(57,255,20,0.5)' }}>
+              <span style={{ width: 26, height: 2, background: '#39FF7A' }} />
+              <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.4em', textTransform: 'uppercase', color: '#39FF7A', textShadow: '0 0 14px rgba(57,255,122,0.5)' }}>
                 The Turf
               </span>
             </div>
-            <h2 style={{ fontFamily: 'Bebas Neue', fontWeight: 400, fontSize: 'clamp(48px, 7vw, 110px)', textTransform: 'uppercase', lineHeight: 0.9, margin: 0, color: '#F3F3F3' }}>
+            <h2 style={{ fontFamily: 'Bebas Neue', fontWeight: 400, fontSize: 'clamp(48px, 7vw, 110px)', textTransform: 'uppercase', lineHeight: 0.9, margin: 0, color: '#F2F4F2' }}>
               See where the
               <br />
-              <span style={{ color: '#39F72A' }}>game happens.</span>
+              <span style={{ color: '#39FF7A' }}>game happens.</span>
             </h2>
           </div>
           <p style={{ fontFamily: 'Space Grotesk', fontSize: 16, lineHeight: 1.7, color: 'rgba(243,243,243,0.7)', maxWidth: 320, margin: 0 }}>
@@ -70,7 +70,7 @@ export default function Gallery() {
               <span className="gallery-move" style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.3em', textTransform: 'uppercase', color: LIME }}>
                 View Moment →
               </span>
-              <span style={{ fontFamily: 'Bebas Neue', fontSize: 44, letterSpacing: '0.04em', color: '#F3F3F3', lineHeight: 1 }}>
+              <span style={{ fontFamily: 'Bebas Neue', fontSize: 44, letterSpacing: '0.04em', color: '#F2F4F2', lineHeight: 1 }}>
                 Match Time
               </span>
             </div>

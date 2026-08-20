@@ -4,8 +4,8 @@ import { useReveal } from '../hooks/useReveal'
 import AnimatedPrice from './AnimatedPrice'
 import { seeded, fmtDate } from '../data/tf24'
 
-const TURF_GREEN = '#39F72A'
-const CHROME = '#F3F3F3'
+const TURF_GREEN = '#39FF7A'
+const CHROME = '#F2F4F2'
 const HOURS = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21]
 
 const HOURLY_RATE = 700
@@ -65,7 +65,7 @@ function makeQR(payload: string, size = 25) {
   return m
 }
 
-function QrCode({ payload, color = '#0B0B0B', bg = '#F3F3F3' }: { payload: string; color?: string; bg?: string }) {
+function QrCode({ payload, color = '#0B0B0B', bg = '#F2F4F2' }: { payload: string; color?: string; bg?: string }) {
   const size = 25
   const module = 8
   const quiet = 3 * module
@@ -222,15 +222,15 @@ export default function Booking() {
         {/* Header */}
         <div ref={headRef} className="reveal" style={{ textAlign: 'center', marginBottom: 56 }}>
           <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginBottom: 18 }}>
-            <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#39FF14', textShadow: '0 0 14px rgba(57,255,20,0.5)', paddingLeft: '0.45em' }}>
+            <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#39FF7A', textShadow: '0 0 14px rgba(57,255,122,0.5)', paddingLeft: '0.45em' }}>
               BOOK YOUR PLAY
             </span>
-            <span style={{ width: 64, height: 2, background: '#39FF14' }} />
+            <span style={{ width: 64, height: 2, background: '#39FF7A' }} />
           </div>
           <h2 style={{ fontFamily: 'Bebas Neue', fontWeight: 400, fontSize: 'clamp(56px, 8vw, 128px)', textTransform: 'uppercase', lineHeight: 0.88, margin: 0, color: CHROME }}>
             CLAIM YOUR
             <br />
-            <span className="tf24-grad-word" style={{ color: '#C7F42D' }}>PITCH.</span>
+            <span className="tf24-grad-word" style={{ color: '#39FF7A' }}>PITCH.</span>
           </h2>
           <p style={{ fontFamily: 'Space Grotesk', fontSize: 15, lineHeight: 1.7, color: 'rgba(243,243,243,0.75)', maxWidth: 460, margin: '22px auto 0' }}>
             Choose your day, find an open window, and claim the time you want to play.
@@ -258,7 +258,7 @@ export default function Booking() {
                     gap: 8,
                     minWidth: 92,
                     padding: '10px 16px 14px',
-                    background: active ? `rgba(57,247,42,0.08)` : 'transparent',
+                    background: active ? `rgba(57,255,122,0.08)` : 'transparent',
                     border: 'none',
                     borderBottom: active ? `2px solid ${TURF_GREEN}` : '2px solid transparent',
                     cursor: 'pointer',
@@ -285,8 +285,8 @@ export default function Booking() {
         <div className="booking-grid">
           {/* Schedule */}
           <div ref={schedRef} className="reveal" style={{ background: 'rgba(7,13,22,0.92)', border: '1px solid rgba(243,243,243,0.1)', padding: '28px 28px 18px', position: 'relative', display: 'flex', flexDirection: 'column', minHeight: 520 }}>
-            <div style={{ position: 'absolute', top: 0, left: 0, width: 56, height: 56, borderTop: '2px solid rgba(57,247,42,0.6)', borderLeft: '2px solid rgba(57,247,42,0.6)' }} />
-            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 56, height: 56, borderBottom: '2px solid rgba(57,247,42,0.6)', borderRight: '2px solid rgba(57,247,42,0.6)' }} />
+            <div style={{ position: 'absolute', top: 0, left: 0, width: 56, height: 56, borderTop: '2px solid rgba(57,255,122,0.6)', borderLeft: '2px solid rgba(57,255,122,0.6)' }} />
+            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 56, height: 56, borderBottom: '2px solid rgba(57,255,122,0.6)', borderRight: '2px solid rgba(57,255,122,0.6)' }} />
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 22 }}>
               <div style={{ fontFamily: 'Bebas Neue', fontSize: 28, letterSpacing: '0.04em', color: CHROME }}>
@@ -301,7 +301,7 @@ export default function Booking() {
             </div>
 
             <div style={{ marginTop: 16, marginBottom: 18 }}>
-              <div style={{ fontFamily: 'Space Grotesk', fontSize: 10, fontWeight: 700, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#39FF14', marginBottom: 10 }}>
+              <div style={{ fontFamily: 'Space Grotesk', fontSize: 10, fontWeight: 700, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#39FF7A', marginBottom: 10 }}>
                 SELECT YOUR PLAYING HOUR
               </div>
             </div>
@@ -325,15 +325,15 @@ export default function Booking() {
                       position: 'relative',
                       minHeight: 62,
                       borderRadius: 10,
-                      border: selected ? `1px solid ${TURF_GREEN}` : booked ? '1px solid rgba(243,243,243,0.1)' : '1px solid rgba(57,247,42,0.55)',
-                      background: selected ? TURF_GREEN : booked ? 'repeating-linear-gradient(135deg, rgba(243,243,243,0.06) 0 6px, rgba(243,243,243,0.02) 6px 12px)' : 'rgba(57,247,42,0.06)',
-                      color: selected ? '#000000' : booked ? 'rgba(243,243,243,0.22)' : '#39F72A',
+                      border: selected ? `1px solid ${TURF_GREEN}` : booked ? '1px solid rgba(243,243,243,0.1)' : '1px solid rgba(57,255,122,0.55)',
+                      background: selected ? TURF_GREEN : booked ? 'repeating-linear-gradient(135deg, rgba(243,243,243,0.06) 0 6px, rgba(243,243,243,0.02) 6px 12px)' : 'rgba(57,255,122,0.06)',
+                      color: selected ? '#030607' : booked ? 'rgba(243,243,243,0.22)' : '#39FF7A',
                       fontFamily: 'Space Grotesk',
                       fontSize: 12,
                       fontWeight: 700,
                       letterSpacing: '0.04em',
                       cursor: booked ? 'not-allowed' : 'pointer',
-                      boxShadow: selected ? '0 0 18px rgba(57,247,42,0.4)' : booked ? 'none' : 'inset 0 0 0 1px rgba(57,247,42,0.08)',
+                      boxShadow: selected ? '0 0 18px rgba(57,255,122,0.4)' : booked ? 'none' : 'inset 0 0 0 1px rgba(57,255,122,0.08)',
                       transition: 'all 0.2s ease',
                       padding: '10px 8px',
                       display: 'flex',
@@ -343,14 +343,14 @@ export default function Booking() {
                     }}
                     onMouseEnter={e => {
                       if (!booked && !selected) {
-                        e.currentTarget.style.boxShadow = '0 0 14px rgba(24,170,192,0.5)'
-                        e.currentTarget.style.borderColor = '#18AAC0'
+                        e.currentTarget.style.boxShadow = '0 0 20px rgba(0,201,255,0.35)'
+                        e.currentTarget.style.borderColor = '#00C9FF'
                       }
                     }}
                     onMouseLeave={e => {
                       if (!booked && !selected) {
-                        e.currentTarget.style.boxShadow = 'inset 0 0 0 1px rgba(57,247,42,0.08)'
-                        e.currentTarget.style.borderColor = 'rgba(57,247,42,0.55)'
+                        e.currentTarget.style.boxShadow = 'inset 0 0 0 1px rgba(57,255,122,0.08)'
+                        e.currentTarget.style.borderColor = 'rgba(57,255,122,0.55)'
                       }
                     }}
                   >
@@ -365,10 +365,10 @@ export default function Booking() {
 
             <div style={{ display: 'flex', gap: 20, marginTop: 18, fontFamily: 'Space Grotesk', fontSize: 10.5, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'rgba(243,243,243,0.45)' }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ width: 10, height: 10, borderRadius: 3, border: '1px solid rgba(57,247,42,0.55)', background: 'rgba(57,247,42,0.06)' }} /> Available
+                <span style={{ width: 10, height: 10, borderRadius: 3, border: '1px solid rgba(57,255,122,0.55)', background: 'rgba(57,255,122,0.06)' }} /> Available
               </span>
               <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ width: 10, height: 10, borderRadius: 3, background: TURF_GREEN, boxShadow: '0 0 10px rgba(57,247,42,0.35)' }} /> Selected
+                <span style={{ width: 10, height: 10, borderRadius: 3, background: TURF_GREEN, boxShadow: '0 0 10px rgba(57,255,122,0.35)' }} /> Selected
               </span>
               <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <span style={{ width: 10, height: 10, borderRadius: 3, background: 'repeating-linear-gradient(135deg, rgba(243,243,243,0.06) 0 6px, rgba(243,243,243,0.02) 6px 12px)', border: '1px solid rgba(243,243,243,0.1)' }} /> Booked
@@ -378,8 +378,8 @@ export default function Booking() {
 
           {/* Summary */}
           <div ref={sumRef} className="reveal" style={{ background: 'rgba(7,13,22,0.92)', border: '1px solid rgba(243,243,243,0.1)', padding: 32, display: 'flex', flexDirection: 'column', position: 'relative' }}>
-            <div style={{ position: 'absolute', top: 0, right: 0, width: 56, height: 56, borderTop: '2px solid rgba(57,247,42,0.6)', borderRight: '2px solid rgba(57,247,42,0.6)' }} />
-            <div style={{ position: 'absolute', bottom: 0, left: 0, width: 56, height: 56, borderBottom: '2px solid rgba(57,247,42,0.6)', borderLeft: '2px solid rgba(57,247,42,0.6)' }} />
+            <div style={{ position: 'absolute', top: 0, right: 0, width: 56, height: 56, borderTop: '2px solid rgba(57,255,122,0.6)', borderRight: '2px solid rgba(57,255,122,0.6)' }} />
+            <div style={{ position: 'absolute', bottom: 0, left: 0, width: 56, height: 56, borderBottom: '2px solid rgba(57,255,122,0.6)', borderLeft: '2px solid rgba(57,255,122,0.6)' }} />
 
             <div style={{ fontFamily: 'Space Grotesk', fontSize: 11, fontWeight: 600, letterSpacing: '0.32em', textTransform: 'uppercase', color: TURF_GREEN, marginBottom: 24 }}>
               YOUR PLAYING WINDOW
@@ -442,9 +442,9 @@ export default function Booking() {
                           aspectRatio: '1',
                           borderRadius: '50%',
                           position: 'relative',
-                          border: `1px solid rgba(57,247,42,0.24)`,
-                          background: 'radial-gradient(circle at center, rgba(57,247,42,0.08), rgba(0,0,0,0.2) 52%, rgba(0,0,0,0.74) 100%)',
-                          boxShadow: 'inset 0 0 24px rgba(57,247,42,0.08)',
+                          border: `1px solid rgba(57,255,122,0.24)`,
+                          background: 'radial-gradient(circle at center, rgba(57,255,122,0.08), rgba(0,0,0,0.2) 52%, rgba(0,0,0,0.74) 100%)',
+                          boxShadow: 'inset 0 0 24px rgba(57,255,122,0.08)',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -471,20 +471,20 @@ export default function Booking() {
                                 height: 38,
                                 borderRadius: '50%',
                                 border: selected ? `1px solid ${TURF_GREEN}` : '1px solid rgba(243,243,243,0.14)',
-                                background: selected ? 'rgba(57,247,42,0.18)' : 'rgba(10,16,24,0.7)',
+                                background: selected ? 'rgba(57,255,122,0.18)' : 'rgba(10,16,24,0.7)',
                                 color: selected ? TURF_GREEN : 'rgba(243,243,243,0.8)',
                                 fontFamily: 'Space Grotesk',
                                 fontSize: 11,
                                 fontWeight: 700,
                                 letterSpacing: '0.06em',
                                 cursor: 'pointer',
-                                boxShadow: selected ? `0 0 16px rgba(57,247,42,0.5)` : 'none',
+                                boxShadow: selected ? `0 0 16px rgba(57,255,122,0.5)` : 'none',
                                 transition: 'all 0.2s ease',
                               }}
                               onMouseEnter={e => {
                                 if (!selected) {
-                                  e.currentTarget.style.borderColor = '#18AAC0'
-                                  e.currentTarget.style.boxShadow = '0 0 12px rgba(24,170,192,0.5)'
+                                  e.currentTarget.style.borderColor = '#00C9FF'
+                                  e.currentTarget.style.boxShadow = '0 0 20px rgba(0,201,255,0.35)'
                                 }
                               }}
                               onMouseLeave={e => {
@@ -505,8 +505,8 @@ export default function Booking() {
                             inset: '26%',
                             borderRadius: '50%',
                             background: 'rgba(7,13,22,0.88)',
-                            border: '1px solid rgba(57,247,42,0.16)',
-                            boxShadow: 'inset 0 0 18px rgba(57,247,42,0.08)',
+                            border: '1px solid rgba(57,255,122,0.16)',
+                            boxShadow: 'inset 0 0 18px rgba(57,255,122,0.08)',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -681,7 +681,7 @@ export default function Booking() {
                               start !== null ? time(start) : '--'
                             }|${duration ?? 0}h|₹${totalPrice}`}
                             color="#0B0B0B"
-                            bg="#F3F3F3"
+                            bg="#F2F4F2"
                           />
                         </div>
 
@@ -751,11 +751,11 @@ export default function Booking() {
           padding: 28px;
           overflow: hidden;
           background: rgba(7, 13, 22, 0.99);
-          border: 1px solid rgba(57, 247, 42, 0.5);
+          border: 1px solid rgba(57, 255, 122, 0.5);
           border-radius: 20px;
           box-shadow:
-            0 0 100px rgba(57, 247, 42, 0.18),
-            inset 0 0 40px rgba(57, 247, 42, 0.04);
+            0 0 100px rgba(57, 255, 122, 0.18),
+            inset 0 0 40px rgba(57, 255, 122, 0.04);
         }
 
         .tf24-modal-corner {
@@ -768,16 +768,16 @@ export default function Booking() {
         .tf24-modal-corner-tl {
           top: 0;
           left: 0;
-          border-top: 2px solid rgba(57, 247, 42, 0.8);
-          border-left: 2px solid rgba(57, 247, 42, 0.8);
+          border-top: 2px solid rgba(57, 255, 122, 0.8);
+          border-left: 2px solid rgba(57, 255, 122, 0.8);
           border-radius: 5px 0 0 0;
         }
 
         .tf24-modal-corner-br {
           right: 0;
           bottom: 0;
-          border-right: 2px solid rgba(57, 247, 42, 0.8);
-          border-bottom: 2px solid rgba(57, 247, 42, 0.8);
+          border-right: 2px solid rgba(57, 255, 122, 0.8);
+          border-bottom: 2px solid rgba(57, 255, 122, 0.8);
           border-radius: 0 0 5px 0;
         }
 
@@ -826,7 +826,7 @@ export default function Booking() {
           display: grid;
           gap: 13px;
           font-family: 'Space Grotesk';
-          color: #F3F3F3;
+          color: #F2F4F2;
         }
 
         .tf24-payment-row {
@@ -843,7 +843,7 @@ export default function Booking() {
         }
 
         .tf24-payment-row > strong {
-          color: #F3F3F3;
+          color: #F2F4F2;
           font-weight: 600;
           text-align: right;
         }
@@ -879,7 +879,7 @@ export default function Booking() {
           justify-content: center;
           padding: 8px;
           overflow: hidden;
-          background: #F3F3F3;
+          background: #F2F4F2;
           border-radius: 12px;
         }
 
@@ -927,7 +927,7 @@ export default function Booking() {
         .tf24-payment-cancel {
           border: 1px solid rgba(243, 243, 243, 0.25);
           background: rgba(243, 243, 243, 0.06);
-          color: #F3F3F3;
+          color: #F2F4F2;
         }
 
         .tf24-payment-cancel:hover {
@@ -939,11 +939,11 @@ export default function Booking() {
           border: none;
           background: ${TURF_GREEN};
           color: #0B0B0B;
-          box-shadow: 0 0 20px rgba(57, 247, 42, 0.35);
+          box-shadow: 0 0 20px rgba(57, 255, 122, 0.35);
         }
 
         .tf24-payment-paid:hover {
-          box-shadow: 0 0 30px rgba(57, 247, 42, 0.5);
+          box-shadow: 0 0 30px rgba(57, 255, 122, 0.5);
         }
 
         @media (max-width: 700px) {
@@ -979,10 +979,10 @@ export default function Booking() {
 
         @keyframes tf24-text-glow {
           0%, 100% {
-            textShadow: 0 0 20px rgba(57, 247, 42, 0.4), 0 0 40px rgba(57, 247, 42, 0.2);
+            textShadow: 0 0 20px rgba(57, 255, 122, 0.4), 0 0 40px rgba(57, 255, 122, 0.2);
           }
           50% {
-            textShadow: 0 0 30px rgba(57, 247, 42, 0.6), 0 0 60px rgba(57, 247, 42, 0.3);
+            textShadow: 0 0 30px rgba(57, 255, 122, 0.6), 0 0 60px rgba(57, 255, 122, 0.3);
           }
         }
 
@@ -1003,11 +1003,11 @@ export default function Booking() {
           height: 72px;
           border-radius: 50%;
           border: 2.5px solid ${TURF_GREEN};
-          background: rgba(57, 247, 42, 0.1);
+          background: rgba(57, 255, 122, 0.1);
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 0 32px rgba(57, 247, 42, 0.35), 0 0 64px rgba(57, 247, 42, 0.15);
+          box-shadow: 0 0 32px rgba(57, 255, 122, 0.35), 0 0 64px rgba(57, 255, 122, 0.15);
           animation: tf24-success-check-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
         }
 
@@ -1029,7 +1029,7 @@ export default function Booking() {
           letter-spacing: 0.06em;
           color: ${TURF_GREEN};
           text-transform: uppercase;
-          text-shadow: 0 0 24px rgba(57, 247, 42, 0.35), 0 0 48px rgba(57, 247, 42, 0.15);
+          text-shadow: 0 0 24px rgba(57, 255, 122, 0.35), 0 0 48px rgba(57, 255, 122, 0.15);
           animation: tf24-success-text-in 0.45s ease-out 0.35s both;
         }
 
@@ -1059,7 +1059,7 @@ export default function Booking() {
           padding: 14px 28px;
           border: 1px solid rgba(243, 243, 243, 0.25);
           background: rgba(243, 243, 243, 0.06);
-          color: #F3F3F3;
+          color: #F2F4F2;
           border-radius: 8px;
           font-family: 'Space Grotesk';
           font-size: 12px;
@@ -1100,10 +1100,10 @@ export default function Booking() {
 
         .tf24-payment-modal.tf24-payment-modal--success {
           transition: border-color 0.3s ease, box-shadow 0.3s ease;
-          border-color: rgba(57, 247, 42, 0.7);
+          border-color: rgba(57, 255, 122, 0.7);
           box-shadow:
-            0 0 120px rgba(57, 247, 42, 0.28),
-            inset 0 0 50px rgba(57, 247, 42, 0.06);
+            0 0 120px rgba(57, 255, 122, 0.28),
+            inset 0 0 50px rgba(57, 255, 122, 0.06);
         }
       `}</style>
     </section>

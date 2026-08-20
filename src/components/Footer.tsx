@@ -1,4 +1,4 @@
-import { GREEN, LIME } from '../data/tf24'
+import { CYAN, LIME } from '../data/tf24'
 
 const logoTagline = '/turfon24-logo-tagline.png'
 
@@ -33,7 +33,7 @@ export default function Footer() {
           <div>
             <div style={{ fontFamily: 'Space Grotesk', fontSize: 11, letterSpacing: '0.24em', textTransform: 'uppercase', color: 'rgba(243,243,243,0.5)', marginBottom: 18 }}>Quick Links</div>
             {QUICK_LINKS.map(l => (
-              <a key={l.label} href={l.href} style={{ display: 'block', fontFamily: 'Space Grotesk', fontSize: 13.5, color: 'rgba(243,243,243,0.75)', textDecoration: 'none', marginBottom: 11, transition: 'color 0.2s ease' }} onMouseEnter={e => (e.currentTarget.style.color = LIME)} onMouseLeave={e => (e.currentTarget.style.color = 'rgba(243,243,243,0.75)')}>
+              <a key={l.label} href={l.href} style={{ display: 'block', fontFamily: 'Space Grotesk', fontSize: 13.5, color: CYAN, textDecoration: 'none', marginBottom: 11, transition: 'color 0.2s ease' }} onMouseEnter={e => (e.currentTarget.style.color = LIME)} onMouseLeave={e => (e.currentTarget.style.color = CYAN)}>
                 {l.label}
               </a>
             ))}
@@ -56,12 +56,12 @@ export default function Footer() {
                   key={s}
                   style={{
                     padding: '9px 14px', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    border: '1px solid rgba(243,243,243,0.2)', color: 'rgba(243,243,243,0.8)', fontSize: 11.5,
+                    border: `1px solid ${CYAN}`, color: CYAN, fontSize: 11.5,
                     letterSpacing: '0.06em', cursor: 'pointer',
                     transition: 'border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease',
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = LIME; e.currentTarget.style.color = LIME; e.currentTarget.style.boxShadow = '0 0 14px rgba(199,244,45,0.4)' }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(243,243,243,0.2)'; e.currentTarget.style.color = 'rgba(243,243,243,0.8)'; e.currentTarget.style.boxShadow = 'none' }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = LIME; e.currentTarget.style.color = LIME; e.currentTarget.style.boxShadow = '0 0 25px rgba(57,255,122,0.45)' }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = CYAN; e.currentTarget.style.color = CYAN; e.currentTarget.style.boxShadow = 'none' }}
                 >
                   {s}
                 </span>
@@ -74,7 +74,7 @@ export default function Footer() {
           <div style={{ fontFamily: 'Space Grotesk', fontSize: 12, color: 'rgba(243,243,243,0.45)' }}>
             © 2026 TURFON24. All rights reserved.
           </div>
-          <a href="/admin" style={{ fontFamily: 'Space Grotesk', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(243,243,243,0.3)', textDecoration: 'none', transition: 'color 0.2s ease' }} onMouseEnter={e => (e.currentTarget.style.color = LIME)} onMouseLeave={e => (e.currentTarget.style.color = 'rgba(243,243,243,0.3)')}>
+          <a href="/admin" style={{ fontFamily: 'Space Grotesk', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: CYAN, textDecoration: 'none', transition: 'color 0.2s ease' }} onMouseEnter={e => (e.currentTarget.style.color = LIME)} onMouseLeave={e => (e.currentTarget.style.color = CYAN)}>
             Admin
           </a>
         </div>
