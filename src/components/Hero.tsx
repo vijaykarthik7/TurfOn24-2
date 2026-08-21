@@ -62,8 +62,8 @@ export default function Hero() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          paddingTop: '110px',
-          paddingBottom: '70px',
+          paddingTop: '140px',
+          paddingBottom: '40px',
         }}
       >
         <div className="tf24-hero-in" style={{ maxWidth: 620, width: '100%' }}>
