@@ -62,8 +62,8 @@ export default function Hero() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          paddingTop: '200px',
-          paddingBottom: '32px',
+          paddingTop: '110px',
+          paddingBottom: '70px',
         }}
       >
         <div className="tf24-hero-in" style={{ maxWidth: 620, width: '100%' }}>
@@ -116,7 +116,7 @@ export default function Hero() {
             >
               Explore Turfs
             </a>
-            <div className="tf24-hero-clock-wrap" style={{ marginLeft: 'auto', transform: 'translate(-10px, 8px)' }}>
+            <div className="tf24-hero-clock-wrap" style={{ marginLeft: 'auto', transform: 'translate(-10px, -18px)' }}>
               <div className="tf24-hero-clock">
                 <span className="tf24-clock-hand tf24-clock-h" />
                 <span className="tf24-clock-hand tf24-clock-m" />
@@ -126,6 +126,21 @@ export default function Hero() {
                 </div>
                 <span className="tf24-clock-dot" />
               </div>
+            </div>
+          </div>
+
+          <div className="tf24-hero-stats" aria-label="Turf highlights">
+            <div>
+              <strong>7v7 &amp; 5v5</strong>
+              <span>Match Formats</span>
+            </div>
+            <div>
+              <strong>100% Secure</strong>
+              <span>Online Booking</span>
+            </div>
+            <div>
+              <strong>Every Day</strong>
+              <span>Slots Available</span>
             </div>
           </div>
         </div>

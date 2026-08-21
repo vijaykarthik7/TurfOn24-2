@@ -167,7 +167,7 @@ const NAV_ITEMS: { id: Section; label: string; icon: React.ReactNode }[] = [
   },
   {
     id: 'contact-leads',
-    label: 'Contact Leads',
+    label: 'Enquiries',
     icon: (
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
         <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
@@ -351,7 +351,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
     { label: 'Current Hourly Bookings', value: String(currentHourlyCount), trend: String(HOURLY.length), trendLabel: 'total', up: true },
     { label: 'Current Extended Bookings', value: String(currentExtendedCount), trend: String(ALL_EXTENDED.length), trendLabel: 'total', up: true },
     { label: 'Pending Enquiries', value: String(ALL_EXTENDED.filter(b => b.status === 'Pending' || b.status === 'New' || b.status === 'NEW').length), trend: String(ALL_EXTENDED.length), trendLabel: 'total', up: true },
-    { label: 'Total Contact Leads', value: String(contactLeads.length), trend: String(contactLeads.filter(l => l.status === 'New').length), trendLabel: 'new', up: true },
+    { label: 'Total Enquiries', value: String(contactLeads.length), trend: String(contactLeads.filter(l => l.status === 'New').length), trendLabel: 'new', up: true },
   ]
 
   const Avatar = ({ name, size = 36 }: { name: string; size?: number }) => (
@@ -830,7 +830,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
             })()
           ) : null}
 
-          {/* ===== CONTACT LEADS ===== */}
+          {/* ===== ENQUIRIES ===== */}
           {section === 'contact-leads' ? (
             (() => {
               const filteredLeads = contactFilter
@@ -838,7 +838,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                 : contactLeads
               return (
                 <>
-                  <SectionHeader eyebrow="Admin · Leads" title="Contact leads." />
+                  <SectionHeader eyebrow="Admin · Enquiries" title="Enquiries." />
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
                     {['', 'New', 'Contacted', 'Closed'].map(s => (
                       <button key={s || 'all'} onClick={() => setContactFilter(s)} style={btnStyle(contactFilter === s)} {...btnHover(contactFilter === s)}>{s || 'All Leads'}</button>
@@ -846,13 +846,13 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                   </div>
                   <div className="admin-card admin-row-in" style={{ padding: '20px 24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 }}>
-                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.55)' }}>All Contact Leads</div>
+                      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.55)' }}>All Enquiries</div>
                       <span className="admin-chip" style={{ color: ACCENT, background: 'rgba(57,255,122,0.08)', borderColor: 'rgba(57,255,122,0.3)' }}>{filteredLeads.length} total</span>
                     </div>
                     {filteredLeads.length === 0 ? (
                       <div style={{ padding: '48px 0', textAlign: 'center' as const }}>
-                        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.35)', marginBottom: 8 }}>No Contact Leads</div>
-                        <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.3)' }}>No contact form submissions yet. Leads will appear here when customers submit the contact form.</div>
+                        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase' as const, color: 'rgba(245,245,245,0.35)', marginBottom: 8 }}>No Enquiries</div>
+                        <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.3)' }}>No contact form submissions yet. Enquiries will appear here when customers submit the contact form.</div>
                       </div>
                     ) : (
                       <div style={{ overflowX: 'auto' }}>

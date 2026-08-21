@@ -22,7 +22,7 @@ function CollageImage({ src, alt, cls, delay, mvx, mvy }: { src: string; alt: st
         transition={{ duration: 0.75, delay, ease: EASE }}
         whileHover={{ scale: 1.02 }}
       >
-        <img src={src} alt={alt} loading="lazy" />
+        <img src={src} alt={alt} />
         <span className="tf24-cl-shade" />
       </motion.div>
     </motion.div>
