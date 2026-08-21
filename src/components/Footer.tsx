@@ -1,4 +1,5 @@
 import { CYAN, LIME } from '../data/tf24'
+import logoTagline from '../assets/Tagline.png?inline'
 
 const QUICK_LINKS = [
   { label: 'Home', href: '#home' },
@@ -43,7 +44,7 @@ export default function Footer() {
         <div style={{ display: 'grid', gridTemplateColumns: '1.6fr 1fr 1fr 1fr', gap: 32 }} className="tf24-footer-grid">
           <div>
             <img
-              src={`${import.meta.env.BASE_URL}Tagline.png`}
+              src={logoTagline}
               alt="TURFON24"
               style={{ height: 44, width: 'auto', display: 'block' }}
             />

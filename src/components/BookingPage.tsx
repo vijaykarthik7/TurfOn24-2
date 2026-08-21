@@ -4,6 +4,7 @@ import Pricing from './Pricing'
 import ExtendedBooking from './ExtendedBooking'
 import Footer from './Footer'
 import { GREEN } from '../data/tf24'
+import logoMark from '../assets/Logo.png?inline'
 
 export default function BookingPage() {
   const verification = useVerification()
@@ -24,7 +25,7 @@ export default function BookingPage() {
       >
         <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 64, padding: '0 24px' }}>
           <a href="/" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', lineHeight: 1 }}>
-            <img src={`${import.meta.env.BASE_URL}Logo.png`} alt="TURFON24" style={{ height: 38, width: 'auto', maxWidth: 'none', display: 'block' }} />
+            <img src={logoMark} alt="TURFON24" style={{ height: 38, width: 'auto', maxWidth: 'none', display: 'block' }} />
           </a>
           <a
             href="/"
