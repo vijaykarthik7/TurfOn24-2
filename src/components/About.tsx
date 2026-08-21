@@ -65,7 +65,6 @@ function AboutCollage() {
 
 export default function About() {
   const textRef = useReveal<HTMLDivElement>('in', 0.1)
-  const imgRef = useReveal<HTMLDivElement>('in', 0.15)
 
   return (
     <section id="about" style={{ position: 'relative', background: 'rgba(11,24,36,0.55)', overflow: 'hidden', padding: '120px 0' }}>
@@ -155,7 +154,7 @@ export default function About() {
         </div>
 
         {/* Collage side */}
-        <div ref={imgRef} className="reveal-right" style={{ minWidth: 0 }}>
+        <div style={{ minWidth: 0 }}>
           <AboutCollage />
         </div>
         </div>
