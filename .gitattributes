@@ -27,6 +27,13 @@ public/turfon24-logo-tagline.png -filter -diff -merge -text
 src/assets/stadium-bg.png -filter -diff -merge -text
 src/assets/turfon24-logo-mark.png -filter -diff -merge -text
 src/assets/turfon24-logo-tagline.png -filter -diff -merge -text
+src/assets/Logo.png -filter -diff -merge -text
+src/assets/Tagline.png -filter -diff -merge -text
+src/assets/about-1.jpg -filter -diff -merge -text
+src/assets/about-3.jpg -filter -diff -merge -text
+src/assets/about-4.jpg -filter -diff -merge -text
+public/Logo.png -filter -diff -merge -text
+public/Tagline.png -filter -diff -merge -text
 
 # ---------------------------------------------------------------------------
 # Video
