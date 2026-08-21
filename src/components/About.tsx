@@ -9,17 +9,11 @@ const IMG_TURF = about1
 const IMG_FOOTBALL = about4
 const IMG_CRICKET = about3
 
-const EASE = [0.16, 1, 0.3, 1] as const
-
-function CollageImage({ src, alt, cls, delay, mvx, mvy }: { src: string; alt: string; cls: string; delay: number; mvx: unknown; mvy: unknown }) {
+function CollageImage({ src, alt, cls, mvx, mvy }: { src: string; alt: string; cls: string; mvx: unknown; mvy: unknown }) {
   return (
     <motion.div className={`tf24-cl-layer ${cls}`} style={{ x: mvx as never, y: mvy as never }}>
       <motion.div
         className="tf24-cl-img"
-        initial={{ opacity: 0, scale: 0.94 }}
-        whileInView={{ opacity: 1, scale: 1 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 0.75, delay, ease: EASE }}
         whileHover={{ scale: 1.02 }}
       >
         <img src={src} alt={alt} />
@@ -58,13 +52,13 @@ function AboutCollage() {
       <motion.div style={{ x: decorX, y: decorY }} className="tf24-cl-decor tf24-cl-square" aria-hidden="true" />
 
       {/* Large turf image */}
-      <CollageImage src={IMG_TURF} alt="Floodlit turf ground at Turf on 24" cls="tf24-cl-turf" delay={0.05} mvx={turfX} mvy={turfY} />
+      <CollageImage src={IMG_TURF} alt="Floodlit turf ground at Turf on 24" cls="tf24-cl-turf" mvx={turfX} mvy={turfY} />
 
       {/* Upper card: football */}
-      <CollageImage src={IMG_FOOTBALL} alt="Football close-up" cls="tf24-cl-player" delay={0.22} mvx={playerX} mvy={playerY} />
+      <CollageImage src={IMG_FOOTBALL} alt="Football close-up" cls="tf24-cl-player" mvx={playerX} mvy={playerY} />
 
       {/* Lower card: cricket */}
-      <CollageImage src={IMG_CRICKET} alt="Cricket close-up" cls="tf24-cl-ball" delay={0.38} mvx={ballX} mvy={ballY} />
+      <CollageImage src={IMG_CRICKET} alt="Cricket close-up" cls="tf24-cl-ball" mvx={ballX} mvy={ballY} />
     </div>
   )
 }
