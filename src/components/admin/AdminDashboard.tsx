@@ -319,6 +319,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
   const [showPasswordForm, setShowPasswordForm] = useState(false)
   const [darkMode, setDarkMode] = useState(true)
+  const [blockBookings, setBlockBookings] = useState(false)
   const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' })
   const [hourlyView, setHourlyView] = useState<'current' | 'history'>('current')
   const [hourlyFilterDate, setHourlyFilterDate] = useState('')
@@ -1012,10 +1013,10 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                       <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)' }}>Prevent customers from booking online</div>
                     </div>
                   </div>
-                  <div style={{ padding: '20px 16px', background: 'rgba(255,107,107,0.06)', borderRadius: 10, border: '1px solid rgba(255,107,107,0.2)', marginBottom: 20 }}>
-                    <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)', textAlign: 'center' }}>Online bookings are currently enabled</div>
+                  <div style={{ padding: '20px 16px', background: blockBookings ? 'rgba(57,255,122,0.06)' : 'rgba(255,107,107,0.06)', borderRadius: 10, border: `1px solid ${blockBookings ? 'rgba(57,255,122,0.2)' : 'rgba(255,107,107,0.2)'}`, marginBottom: 20 }}>
+                    <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)', textAlign: 'center' }}>{blockBookings ? 'Online bookings are currently blocked' : 'Online bookings are currently enabled'}</div>
                   </div>
-                  <button style={{ width: '100%', padding: '12px 16px', background: 'rgba(255,107,107,0.15)', border: '1px solid rgba(255,107,107,0.4)', borderRadius: 10, color: '#FF6B6B', fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.25s ease' }} onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,107,107,0.25)' }} onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,107,107,0.15)' }}>✕ Block Bookings</button>
+                  <button onClick={() => setBlockBookings(value => !value)} style={{ width: '100%', padding: '12px 16px', background: blockBookings ? 'rgba(57,255,122,0.15)' : 'rgba(255,107,107,0.15)', border: `1px solid ${blockBookings ? 'rgba(57,255,122,0.4)' : 'rgba(255,107,107,0.4)'}`, borderRadius: 10, color: blockBookings ? '#39FF7A' : '#FF6B6B', fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.25s ease' }} onMouseEnter={e => { e.currentTarget.style.background = blockBookings ? 'rgba(57,255,122,0.25)' : 'rgba(255,107,107,0.25)' }} onMouseLeave={e => { e.currentTarget.style.background = blockBookings ? 'rgba(57,255,122,0.15)' : 'rgba(255,107,107,0.15)' }}>{blockBookings ? '✓ Bookings Blocked' : '✕ Block Bookings'}</button>
                 </div>
                 <div className="admin-card admin-row-in" style={{ padding: '28px 26px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
