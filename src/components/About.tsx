@@ -2,7 +2,7 @@ import { useReveal } from '../hooks/useReveal'
 import { motion, useMotionValue, useSpring, useTransform } from 'motion/react'
 
 import about1 from '../assets/about-1.jpg'
-import about4 from '../assets/about -4.jpg'
+import about4 from '../assets/about-4.jpg'
 import about3 from '../assets/about-3.jpg'
 
 const IMG_TURF = about1
