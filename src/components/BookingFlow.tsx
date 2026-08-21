@@ -490,7 +490,7 @@ function BookingControlCenter({ onSelect }: { onSelect: (mode: ModeKey) => void 
             {m.name}<br />{m.sub}
           </span>
           <span style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginTop: 22 }}>
-            <span style={{ fontFamily: 'Bebas Neue', fontSize: 'clamp(34px, 3.4vw, 52px)', lineHeight: 1, color: key === 'hourly' ? GREEN : '#00C9FF', textShadow: key === 'hourly' ? '0 0 24px rgba(57,255,122,0.45)' : '0 0 24px rgba(0,201,255,0.4)' }}>
+            <span style={{ fontFamily: 'Bebas Neue', fontSize: 'clamp(34px, 3.4vw, 52px)', lineHeight: 1, color: GREEN, textShadow: '0 0 24px rgba(57,255,122,0.45)' }}>
               {m.price}
             </span>
             <span style={{ ...bccMono, color: 'rgba(243,243,243,0.55)' }}>{m.unit}</span>
@@ -498,8 +498,8 @@ function BookingControlCenter({ onSelect }: { onSelect: (mode: ModeKey) => void 
           <span style={{ display: 'block', marginTop: 12, fontFamily: 'Space Grotesk', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(243,243,243,0.5)' }}>
             {m.line}
           </span>
-          <span className="tf24-bcc-status" style={{ marginTop: 20, color: isActive ? (key === 'hourly' ? GREEN : '#00C9FF') : 'rgba(243,243,243,0.45)' }}>
-            <span className="tf24-live-dot" style={{ background: key === 'hourly' ? '#39FF7A' : '#00C9FF', boxShadow: `0 0 12px ${key === 'hourly' ? '#39FF7A' : '#00C9FF'}` }} />
+          <span className="tf24-bcc-status" style={{ marginTop: 20, color: isActive ? GREEN : 'rgba(243,243,243,0.45)' }}>
+            <span className="tf24-live-dot" style={{ background: '#39FF7A', boxShadow: '0 0 12px #39FF7A' }} />
             {m.status}
           </span>
         </motion.span>
@@ -512,7 +512,7 @@ function BookingControlCenter({ onSelect }: { onSelect: (mode: ModeKey) => void 
         >
           <span style={{ position: 'absolute', inset: 0, background: side === 'left'
             ? 'radial-gradient(ellipse at 22% 62%, rgba(57,255,122,0.12), transparent 58%)'
-            : 'radial-gradient(ellipse at 78% 62%, rgba(0,201,255,0.12), transparent 58%)' }} />
+            : 'radial-gradient(ellipse at 78% 62%, rgba(57,255,122,0.12), transparent 58%)' }} />
         </motion.span>
       </button>
     )
@@ -551,7 +551,7 @@ function BookingControlCenter({ onSelect }: { onSelect: (mode: ModeKey) => void 
         <span className="tf24-bcc-tick" style={{ right: 0 }} />
         <motion.span
           className="tf24-bcc-node"
-          animate={{ left: hourlyFocus ? '25%' : '75%', borderColor: hourlyFocus ? 'rgba(57,255,122,0.95)' : 'rgba(0,201,255,0.95)' }}
+          animate={{ left: hourlyFocus ? '25%' : '75%', borderColor: 'rgba(57,255,122,0.95)' }}
           transition={{ type: 'spring', stiffness: 120, damping: 16 }}
         />
         <motion.span

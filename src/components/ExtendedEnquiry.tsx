@@ -196,9 +196,9 @@ export default function ExtendedEnquiry({ verifiedPhone = '', verifiedToken = ''
     }, 300)
   }
 
-  const labelStyle: React.CSSProperties = { fontFamily: 'Space Grotesk', fontSize: 9, fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(243,243,243,0.45)', marginBottom: 8, display: 'block' }
-  const sectionTitle: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: 12, fontFamily: 'Space Grotesk', fontSize: 10, fontWeight: 700, letterSpacing: '0.28em', textTransform: 'uppercase', color: '#39FF7A', textShadow: '0 0 14px rgba(57,255,122,0.5)', marginBottom: 20 }
-  const fieldWrap: React.CSSProperties = { marginBottom: 20 }
+  const labelStyle: React.CSSProperties = { fontFamily: 'Space Grotesk', fontSize: 9, fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(243,243,243,0.45)', marginBottom: 6, display: 'block' }
+  const sectionTitle: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: 12, fontFamily: 'Space Grotesk', fontSize: 10, fontWeight: 700, letterSpacing: '0.28em', textTransform: 'uppercase', color: '#39FF7A', textShadow: '0 0 14px rgba(57,255,122,0.5)', marginBottom: 14 }
+  const fieldWrap: React.CSSProperties = { marginBottom: 14 }
   const errStyle: React.CSSProperties = { fontFamily: 'Space Grotesk', fontSize: 11, color: '#FF6B6B', marginTop: 6 }
 
   return (
@@ -251,7 +251,7 @@ export default function ExtendedEnquiry({ verifiedPhone = '', verifiedToken = ''
           </div>
 
           {/* Right — enquiry form */}
-          <div style={{ position: 'relative', background: 'rgba(7,13,22,0.92)', border: '1px solid rgba(57,255,122,0.22)', padding: '40px 32px' }}>
+          <div style={{ position: 'relative', background: 'rgba(7,13,22,0.92)', border: '1px solid rgba(57,255,122,0.22)', padding: '28px 32px' }}>
             <div style={{ position: 'absolute', top: 0, left: 0, width: 52, height: 52, borderTop: '2px solid rgba(57,255,122,0.6)', borderLeft: '2px solid rgba(57,255,122,0.6)' }} />
             <div style={{ position: 'absolute', bottom: 0, right: 0, width: 52, height: 52, borderBottom: '2px solid rgba(57,255,122,0.6)', borderRight: '2px solid rgba(57,255,122,0.6)' }} />
 
@@ -285,7 +285,7 @@ export default function ExtendedEnquiry({ verifiedPhone = '', verifiedToken = ''
             </div>
 
             {/* OTP VERIFICATION */}
-            <div style={{ ...sectionTitle, marginTop: 32 }}>
+            <div style={{ ...sectionTitle, marginTop: 24 }}>
               <span style={{ color: LIME }}>02</span> OTP Verification
             </div>
 
@@ -378,7 +378,7 @@ export default function ExtendedEnquiry({ verifiedPhone = '', verifiedToken = ''
             <div style={sectionTitle}>
               <span style={{ color: LIME }}>03</span> Booking Requirements
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
               <div style={fieldWrap}>
                 <label className="tf24-eq-label" style={labelStyle}>Start Date *</label>
                 <input type="date" min={todayISO()} className={'tf24-eq-input' + (errors.startDate ? ' invalid' : '')} value={startDate} onChange={e => { setStartDate(e.target.value); if (errors.startDate) setErrors({ ...errors, startDate: '' }) }} />
@@ -416,7 +416,7 @@ export default function ExtendedEnquiry({ verifiedPhone = '', verifiedToken = ''
               <label className="tf24-eq-label" style={labelStyle}>Enquiry Message</label>
               <textarea
                 className="tf24-eq-input"
-                style={{ minHeight: 120, resize: 'vertical', lineHeight: 1.6 }}
+                style={{ minHeight: 96, resize: 'vertical', lineHeight: 1.6 }}
                 placeholder="Tell us about your tournament, number of teams, preferred requirements, or anything else you'd like us to know."
                 value={message}
                 onChange={e => setMessage(e.target.value)}
