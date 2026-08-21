@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
-import logoMark from './assets/Logo.png?inline'
+import logoMark from './assets/Logo.png'
 
 const favicon = document.querySelector<HTMLLinkElement>('link[rel="icon"]')
 if (favicon) favicon.href = logoMark

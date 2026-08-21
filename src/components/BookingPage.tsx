@@ -4,7 +4,7 @@ import Pricing from './Pricing'
 import ExtendedBooking from './ExtendedBooking'
 import Footer from './Footer'
 import { GREEN } from '../data/tf24'
-import logoMark from '../assets/Logo.png?inline'
+import logoMark from '../assets/Logo.png'
 
 export default function BookingPage() {
   const verification = useVerification()

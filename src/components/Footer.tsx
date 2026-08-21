@@ -1,5 +1,5 @@
 import { CYAN, LIME } from '../data/tf24'
-import logoTagline from '../assets/Tagline.png?inline'
+import logoTagline from '../assets/Tagline.png'
 
 const QUICK_LINKS = [
   { label: 'Home', href: '#home' },

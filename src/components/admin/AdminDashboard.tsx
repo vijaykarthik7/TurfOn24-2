@@ -2,7 +2,7 @@ import { useRef, useState, type ChangeEvent } from 'react'
 import { getExtendedEnquiries } from '../../services/enquiryStore'
 import { getContactLeads, updateContactLeadStatus } from '../../services/contactLeadStore'
 import type { ContactLead } from '../../services/contactLeadStore'
-import logoTagline from '../../assets/Tagline.png?inline'
+import logoTagline from '../../assets/Tagline.png'
 
 const ACCENT = '#39FF7A'
 const ACCENT_RGB = '57,255,122'

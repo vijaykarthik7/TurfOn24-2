@@ -1,6 +1,6 @@
 import { useEffect, useState, ChangeEvent, FormEvent } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
-import logoTagline from '../../assets/Tagline.png?inline'
+import logoTagline from '../../assets/Tagline.png'
 
 const bgImage = '/bg2.png'
 
