@@ -492,7 +492,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
       <header style={{ position: 'relative', zIndex: 20, background: 'rgba(3,21,37,0.9)', borderBottom: '1px solid rgba(160,168,184,0.12)', backdropFilter: 'blur(18px)' }}>
         <div style={{ maxWidth: 1320, margin: '0 auto', padding: '0 28px', height: 78, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-            <img src="/Tagline.png" alt="TURFON24 — Premium Turfs 24/7" style={{ height: 44, width: 'auto', maxWidth: 'none', display: 'block' }} />
+            <img src={`${import.meta.env.BASE_URL}Tagline.png`} alt="TURFON24 — Premium Turfs 24/7" style={{ height: 44, width: 'auto', maxWidth: 'none', display: 'block' }} />
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
             <button

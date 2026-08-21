@@ -54,7 +54,7 @@ export default function AdminLogin({ onLogin }: { onLogin: () => void }) {
       <div className='tf24-admin-shell'>
         <div className='tf24-admin-showcase' style={{ backgroundImage: bgImageAvailable ? `linear-gradient(180deg, rgba(3,6,7,0.25), rgba(3,6,7,0.68)), url(${bgImage})` : undefined }}>
           <div className='tf24-admin-showcase-top'>
-            <img src="/Tagline.png" alt='TURFON24 — Premium Turfs 24/7' />
+            <img src={`${import.meta.env.BASE_URL}Tagline.png`} alt='TURFON24 — Premium Turfs 24/7' />
           </div>
         </div>
 

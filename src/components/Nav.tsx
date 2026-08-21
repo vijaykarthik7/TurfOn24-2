@@ -115,7 +115,7 @@ export default function Nav() {
         <div style={{ justifySelf: 'start', display: 'flex', alignItems: 'center' }}>
           <a href="#home" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', lineHeight: 1 }}>
             <img
-              src="/Tagline.png"
+              src={`${import.meta.env.BASE_URL}Tagline.png`}
               alt="TURFON24 — Premium Turfs 24/7"
               style={{ height: 52, width: 'auto', maxWidth: 'none', display: 'block' }}
             />
