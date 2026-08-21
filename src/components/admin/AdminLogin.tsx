@@ -1,7 +1,7 @@
 import { useEffect, useState, ChangeEvent, FormEvent } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
+import logoTagline from '../../assets/Tagline.png'
 
-const logoTagline = '/turfon24-logo-tagline.png'
 const bgImage = '/bg2.png'
 
 type FormData = {

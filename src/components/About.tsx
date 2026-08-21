@@ -1,14 +1,105 @@
 import { useReveal } from '../hooks/useReveal'
+import { motion, useMotionValue, useSpring, useTransform } from 'motion/react'
 
-const IMG = 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800&h=960&fit=crop&auto=format'
+import about1 from '../assets/about-1.jpg'
+import about4 from '../assets/about -4.jpg'
+import about3 from '../assets/about-3.jpg'
+
+const IMG_TURF = about1
+const IMG_FOOTBALL = about4
+const IMG_CRICKET = about3
+
+const EASE = [0.16, 1, 0.3, 1] as const
+
+function CollageImage({ src, alt, cls, delay, mvx, mvy }: { src: string; alt: string; cls: string; delay: number; mvx: unknown; mvy: unknown }) {
+  return (
+    <motion.div className={`tf24-cl-layer ${cls}`} style={{ x: mvx as never, y: mvy as never }}>
+      <motion.div
+        className="tf24-cl-img"
+        initial={{ opacity: 0, scale: 0.94 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.75, delay, ease: EASE }}
+        whileHover={{ scale: 1.02 }}
+      >
+        <img src={src} alt={alt} loading="lazy" />
+        <span className="tf24-cl-shade" />
+      </motion.div>
+    </motion.div>
+  )
+}
+
+function AboutCollage() {
+  const mx = useMotionValue(0)
+  const my = useMotionValue(0)
+  const sx = useSpring(mx, { stiffness: 60, damping: 18 })
+  const sy = useSpring(my, { stiffness: 60, damping: 18 })
+
+  const turfX = useTransform(sx, v => v * 8)
+  const turfY = useTransform(sy, v => v * 6)
+  const playerX = useTransform(sx, v => v * -14)
+  const playerY = useTransform(sy, v => v * -10)
+  const ballX = useTransform(sx, v => v * -18)
+  const ballY = useTransform(sy, v => v * -13)
+  const decorX = useTransform(sx, v => v * -10)
+  const decorY = useTransform(sy, v => v * -8)
+
+  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect()
+    mx.set((e.clientX - r.left) / r.width - 0.5)
+    my.set((e.clientY - r.top) / r.height - 0.5)
+  }
+
+  return (
+    <div className="tf24-cl-root" onMouseMove={handleMove} onMouseLeave={() => { mx.set(0); my.set(0) }}>
+      {/* Decorative neon geometry */}
+      <motion.div style={{ x: decorX, y: decorY }} className="tf24-cl-decor tf24-cl-ring" aria-hidden="true" />
+      <motion.div style={{ x: decorX, y: decorY }} className="tf24-cl-decor tf24-cl-dots" aria-hidden="true" />
+      <motion.div style={{ x: decorX, y: decorY }} className="tf24-cl-decor tf24-cl-square" aria-hidden="true" />
+
+      {/* Large turf image */}
+      <CollageImage src={IMG_TURF} alt="Floodlit turf ground at Turf on 24" cls="tf24-cl-turf" delay={0.05} mvx={turfX} mvy={turfY} />
+
+      {/* Upper card: football */}
+      <CollageImage src={IMG_FOOTBALL} alt="Football close-up" cls="tf24-cl-player" delay={0.22} mvx={playerX} mvy={playerY} />
+
+      {/* Lower card: cricket */}
+      <CollageImage src={IMG_CRICKET} alt="Cricket close-up" cls="tf24-cl-ball" delay={0.38} mvx={ballX} mvy={ballY} />
+    </div>
+  )
+}
 
 export default function About() {
   const textRef = useReveal<HTMLDivElement>('in', 0.1)
   const imgRef = useReveal<HTMLDivElement>('in', 0.15)
 
   return (
-    <section id="about" style={{ background: 'rgba(11,24,36,0.55)', overflow: 'hidden', padding: '120px 0' }}>
-      <div className="tf24-container">
+    <section id="about" style={{ position: 'relative', background: 'rgba(11,24,36,0.55)', overflow: 'hidden', padding: '120px 0' }}>
+      {/* Atmospheric depth — subtle blue radial glow over the stadium artwork showing through */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(ellipse at 50% 28%, rgba(0,201,255,0.14), transparent 62%)',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* Blue-blue-black bottom fade — same as Hero */}
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 200,
+          pointerEvents: 'none',
+          zIndex: 1,
+          background:
+            'linear-gradient(to bottom, rgba(3,12,20,0) 0%, rgba(3,15,25,0.35) 55%, rgba(3,15,25,0.75) 100%)',
+        }}
+      />
+      <div className="tf24-container" style={{ position: 'relative', zIndex: 1 }}>
         <div className="resp-two-col" style={{ display: 'grid', gridTemplateColumns: '47fr 53fr', gap: 64, alignItems: 'center' }}>
 
         {/* Text side */}
@@ -69,42 +160,9 @@ export default function About() {
           </div>
         </div>
 
-        {/* Image side */}
-        <div ref={imgRef} className="reveal-right" style={{ minWidth: 0, position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-          {/* Background decorative cubes */}
-          <div style={{ position: 'absolute', top: -30, left: -40, width: 110, height: 110, background: 'linear-gradient(135deg, rgba(57,255,122,0.2) 0%, rgba(57,255,122,0.05) 100%)', border: '1px solid rgba(57,255,122,0.3)', borderRadius: 10, transform: 'rotate(15deg)', boxShadow: '0 0 25px rgba(57,255,122,0.2)' }} />
-          <div style={{ position: 'absolute', top: -15, left: 15, width: 85, height: 85, background: 'linear-gradient(135deg, #030607 0%, #1a1a2e 100%)', border: '1px solid rgba(243,243,243,0.1)', borderRadius: 8, transform: 'rotate(-10deg)' }} />
-          <div style={{ position: 'absolute', bottom: -20, right: -35, width: 95, height: 95, background: 'linear-gradient(135deg, rgba(57,255,122,0.15) 0%, rgba(57,255,122,0.03) 100%)', border: '1px solid rgba(57,255,122,0.25)', borderRadius: 9, transform: 'rotate(20deg)', boxShadow: '0 0 22px rgba(57,255,122,0.15)' }} />
-          <div style={{ position: 'absolute', bottom: 10, right: 20, width: 70, height: 70, background: 'linear-gradient(135deg, #030607 0%, #1a1a2e 100%)', border: '1px solid rgba(243,243,243,0.08)', borderRadius: 7, transform: 'rotate(-15deg)' }} />
-          
-          {/* Neon frame behind image */}
-          <div style={{
-            position: 'absolute',
-            zIndex: 0,
-            width: '87%',
-            height: 490,
-            borderRadius: 22,
-            border: '2px solid rgba(57,255,122,0.6)',
-            boxShadow: '0 0 20px rgba(57,255,122,0.4), 0 0 40px rgba(57,255,122,0.2), inset 0 0 20px rgba(57,255,122,0.1)',
-            top: -5,
-            left: '50%',
-            transform: 'translateX(-50%)'
-          }} />
-
-          {/* Main image with curved edges */}
-          <img
-            src={IMG}
-            alt="Players playing soccer on turf field"
-            style={{ 
-              width: '85%', 
-              height: 480, 
-              objectFit: 'cover', 
-              display: 'block',
-              borderRadius: 20,
-              position: 'relative',
-              zIndex: 1
-            }}
-          />
+        {/* Collage side */}
+        <div ref={imgRef} className="reveal-right" style={{ minWidth: 0 }}>
+          <AboutCollage />
         </div>
         </div>
       </div>

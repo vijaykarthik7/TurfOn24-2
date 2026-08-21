@@ -39,12 +39,36 @@ export default function Contact() {
 
   return (
     <section id="contact" style={{ position: 'relative', zIndex: 2, background: 'rgba(11,24,36,0.55)', overflow: 'hidden', padding: '120px 0' }}>
+      {/* Blue atmospheric shade */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(ellipse at 50% 28%, rgba(0,201,255,0.14), transparent 62%)',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* Blue-blue-black bottom fade — same as Hero */}
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 200,
+          pointerEvents: 'none',
+          zIndex: 1,
+          background:
+            'linear-gradient(to bottom, rgba(3,12,20,0) 0%, rgba(3,15,25,0.35) 55%, rgba(3,15,25,0.75) 100%)',
+        }}
+      />
       <div className="pitch-lines" />
       <div style={{ position: 'absolute', top: -30, left: -24, fontFamily: 'Bebas Neue', fontSize: 260, lineHeight: 1, color: 'rgba(23,107,2,0.16)', WebkitTextStroke: '1px rgba(57,255,122,0.10)', userSelect: 'none', pointerEvents: 'none', zIndex: 0 }}>
         TOUCH.
       </div>
 
-      <div className="tf24-container">
+      <div className="tf24-container" style={{ position: 'relative', zIndex: 1 }}>
         <div ref={ref} className="reveal tf24-contact-layout" style={{ display: 'grid', gridTemplateColumns: '0.55fr 1fr', gap: 48, alignItems: 'start' }}>
           {/* Left — info */}
           <div>

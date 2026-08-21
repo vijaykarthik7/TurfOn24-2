@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Grotesk:wght@400;500;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
@@ -907,7 +907,7 @@ body {
   color: rgba(245,245,245,0.8);
 }
 .access-bullets li::before {
-  content: '✓';
+  content: 'âœ“';
   color: #00C9FF;
   font-weight: 700;
   flex-shrink: 0;
@@ -1257,7 +1257,7 @@ select:focus-visible {
   transition: opacity 8s ease-in-out;
 }
 
-/* Pitch overlay — abstract blueprint lines */
+/* Pitch overlay â€” abstract blueprint lines */
 .admin-pitch-overlay {
   position: fixed;
   inset: 0;
@@ -3728,17 +3728,15 @@ select:focus-visible {
   font-size: 62px;
   line-height: 1;
   letter-spacing: 0.02em;
-  background: linear-gradient(180deg, #F2F4F2 0%, #00C9FF 50%, #39FF7A 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  opacity: 0.85;
-  text-shadow: 0 0 20px rgba(24,170,192,0.15);
-  transition: opacity 0.3s ease, text-shadow 0.3s ease;
+  color: #39FF7A;
+  opacity: 0.95;
+  text-shadow: 0 0 20px rgba(57, 255, 122, 0.22);
+  transition: opacity 0.3s ease, text-shadow 0.3s ease, color 0.3s ease;
 }
 .tf24-feat-item:hover .tf24-feat-num {
   opacity: 1;
   text-shadow: 0 0 30px rgba(57, 255, 122, 0.6);
+  color: #39FF7A;
 }
 .tf24-feat-icon {
   width: 52px;
@@ -3746,21 +3744,21 @@ select:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(24,170,192,0.35);
+  border: 1px solid rgba(57, 255, 122, 0.45);
   border-radius: 50%;
-  color: #00C9FF;
+  color: #39FF7A;
   transition: transform 0.35s ease, box-shadow 0.35s ease, background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
 }
 .tf24-feat-item.alt .tf24-feat-icon {
-  border-color: rgba(24, 170, 192, 0.4);
-  color: #00C9FF;
+  border-color: rgba(57, 255, 122, 0.5);
+  color: #39FF7A;
 }
 .tf24-feat-item:hover .tf24-feat-icon {
   transform: rotate(-8deg) scale(1.06);
-  box-shadow: 0 0 22px rgba(24,170,192,0.3);
-  background: rgba(24,170,192,0.08);
-  color: #39FF7A;
-  border-color: rgba(24,170,192,0.65);
+  box-shadow: 0 0 22px rgba(57, 255, 122, 0.22);
+  background: rgba(57, 255, 122, 0.06);
+  color: #FFFFFF;
+  border-color: rgba(255, 255, 255, 0.8);
 }
 .tf24-feat-body {
   min-width: 0;
@@ -4827,7 +4825,7 @@ select:focus-visible {
   );
   animation: admin-illusion-spinA 40s linear infinite;
 }
-/* Moire pattern B — counter-rotates to create interference */
+/* Moire pattern B â€” counter-rotates to create interference */
 .admin-illusion-moire-b {
   position: absolute;
   inset: -50%;
@@ -5053,3 +5051,347 @@ select:focus-visible {
   color: rgba(3, 6, 7, 0.58) !important;
 }
 
+
+/* ===== Booking Control Center ===== */
+.tf24-bcc-frame {
+  position: relative;
+  border: 1px solid rgba(57, 255, 122, 0.16);
+  background:
+    linear-gradient(180deg, rgba(3, 12, 20, 0.42), rgba(3, 12, 20, 0.18)),
+    radial-gradient(ellipse at 50% 0%, rgba(0, 201, 255, 0.06), transparent 60%);
+  backdrop-filter: blur(2px);
+  overflow: hidden;
+}
+.tf24-bcc-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(57, 255, 122, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(57, 255, 122, 0.05) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: radial-gradient(ellipse at 50% 40%, black 30%, transparent 78%);
+  mask-image: radial-gradient(ellipse at 50% 40%, black 30%, transparent 78%);
+}
+.tf24-bcc-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 22px;
+  border-bottom: 1px solid rgba(57, 255, 122, 0.12);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(243, 243, 243, 0.42);
+}
+.tf24-bcc-strip-b {
+  border-bottom: none;
+  border-top: 1px solid rgba(57, 255, 122, 0.12);
+}
+.tf24-bcc-modes {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.tf24-bcc-mode {
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+  padding: 46px 48px 42px;
+  min-height: 320px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+}
+.tf24-bcc-mode + .tf24-bcc-mode {
+  border-left: 1px solid rgba(243, 243, 243, 0.08);
+}
+.tf24-bcc-ghost {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(150px, 17vw, 250px);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(57, 255, 122, 0.14);
+  user-select: none;
+  pointer-events: none;
+}
+.tf24-bcc-timeline {
+  position: relative;
+  height: 44px;
+  margin: 0 48px;
+}
+.tf24-bcc-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(57, 255, 122, 0.05), rgba(57, 255, 122, 0.45), rgba(0, 201, 255, 0.45), rgba(0, 201, 255, 0.05));
+}
+.tf24-bcc-tick {
+  position: absolute;
+  top: 50%;
+  width: 1px;
+  height: 12px;
+  transform: translateY(-50%);
+  background: rgba(243, 243, 243, 0.35);
+}
+.tf24-bcc-node {
+  position: absolute;
+  top: 50%;
+  left: 25%;
+  width: 18px;
+  height: 18px;
+  margin: -9px 0 0 -9px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(57, 255, 122, 0.9);
+  background: radial-gradient(circle, rgba(57, 255, 122, 0.95), rgba(23, 107, 2, 0.65));
+  box-shadow: 0 0 18px rgba(57, 255, 122, 0.65), 0 0 44px rgba(57, 255, 122, 0.28);
+}
+.tf24-bcc-scan {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 90px;
+  top: -90px;
+  background: linear-gradient(to bottom, transparent, rgba(0, 201, 255, 0.07), transparent);
+  animation: tf24-bcc-scan 7s linear infinite;
+  pointer-events: none;
+}
+@keyframes tf24-bcc-scan {
+  0% { top: -90px; }
+  100% { top: 100%; }
+}
+.tf24-bcc-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+@media (max-width: 900px) {
+  .tf24-bcc-modes {
+    grid-template-columns: 1fr;
+  }
+  .tf24-bcc-mode + .tf24-bcc-mode {
+    border-left: none;
+    border-top: 1px solid rgba(243, 243, 243, 0.08);
+  }
+  .tf24-bcc-mode {
+    padding: 34px 26px;
+    min-height: 0;
+  }
+  .tf24-bcc-ghost {
+    font-size: 130px;
+    opacity: 0.8;
+  }
+  .tf24-bcc-timeline {
+    display: none;
+  }
+  .tf24-bcc-strip {
+    padding: 10px 16px;
+    letter-spacing: 0.2em;
+  }
+  .tf24-bcc-hide-sm {
+    display: none !important;
+  }
+}
+
+/* ===== About — Football Story Collage ===== */
+.tf24-cl-root {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.tf24-cl-layer {
+  position: relative;
+  min-width: 0;
+}
+.tf24-cl-turf {
+  grid-column: 1 / -1;
+}
+.tf24-cl-img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(243, 243, 243, 0.09);
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.55);
+  background: #04121c;
+}
+.tf24-cl-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.tf24-cl-player .tf24-cl-img img,
+.tf24-cl-ball .tf24-cl-img img {
+  object-fit: cover;
+  object-position: center;
+  background: rgba(4, 18, 28, 0.9);
+}
+.tf24-cl-player .tf24-cl-img img {
+  object-fit: cover;
+  object-position: 50% 62%;
+  transform: scale(1.5);
+  filter: brightness(1.18) contrast(1.12) saturate(1.08);
+}
+.tf24-cl-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, rgba(3, 12, 20, 0.45), transparent 42%);
+}
+.tf24-cl-turf .tf24-cl-img {
+  height: min(60vw, 400px);
+  border-radius: 22px;
+}
+.tf24-cl-player .tf24-cl-img,
+.tf24-cl-ball .tf24-cl-img {
+  height: 118px;
+}
+.tf24-cl-badge-wrap-a {
+  position: absolute;
+  left: 12px;
+  top: calc(min(60vw, 400px) - 58px);
+  z-index: 5;
+}
+.tf24-cl-badge-wrap-b {
+  position: absolute;
+  right: 12px;
+  top: 14px;
+  z-index: 5;
+}
+.tf24-cl-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  background: rgba(3, 12, 20, 0.85);
+  border: 1px solid rgba(57, 255, 122, 0.4);
+  border-radius: 14px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5), 0 0 22px rgba(57, 255, 122, 0.16);
+  animation: tf24-cl-pulse 4s ease-in-out infinite;
+}
+@keyframes tf24-cl-pulse {
+  0%, 100% { box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5), 0 0 18px rgba(57, 255, 122, 0.12); }
+  50% { box-shadow: 0 14px 40px rgba(0, 0, 0, 0.5), 0 0 34px rgba(57, 255, 122, 0.32); }
+}
+.tf24-cl-badge-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  line-height: 1;
+  color: #39FF7A;
+  text-shadow: 0 0 16px rgba(57, 255, 122, 0.5);
+}
+.tf24-cl-badge-sep {
+  width: 1px;
+  height: 22px;
+  background: rgba(243, 243, 243, 0.2);
+}
+.tf24-cl-badge-label {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: rgba(243, 243, 243, 0.75);
+}
+.tf24-cl-decor {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+}
+.tf24-cl-ring {
+  top: -26px;
+  left: -26px;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  border: 2px solid rgba(57, 255, 122, 0.35);
+  box-shadow: 0 0 26px rgba(57, 255, 122, 0.15), inset 0 0 18px rgba(57, 255, 122, 0.08);
+}
+.tf24-cl-dots {
+  left: -34px;
+  bottom: -28px;
+  width: 132px;
+  height: 132px;
+  background-image: radial-gradient(rgba(57, 255, 122, 0.35) 1.5px, transparent 1.5px);
+  background-size: 18px 18px;
+  opacity: 0.7;
+}
+.tf24-cl-square {
+  display: none;
+  top: -22px;
+  right: 38%;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  transform: rotate(18deg);
+  background: linear-gradient(135deg, rgba(57, 255, 122, 0.2), rgba(57, 255, 122, 0.04));
+  border: 1px solid rgba(57, 255, 122, 0.3);
+  box-shadow: 0 0 22px rgba(57, 255, 122, 0.18);
+}
+@media (min-width: 901px) {
+  .tf24-cl-root {
+    display: block;
+    max-width: none;
+    height: 620px;
+  }
+  .tf24-cl-layer {
+    position: absolute;
+  }
+  .tf24-cl-turf {
+    left: 0;
+    top: 40px;
+    width: 62%;
+    height: 520px;
+    z-index: 2;
+  }
+  .tf24-cl-turf .tf24-cl-img {
+    height: 100%;
+  }
+  .tf24-cl-player {
+    right: 0;
+    top: 0;
+    width: 52%;
+    height: 356px;
+    z-index: 3;
+  }
+  .tf24-cl-ball {
+    right: 18px;
+    bottom: 4px;
+    width: 46%;
+    height: 252px;
+    z-index: 1;
+  }
+  .tf24-cl-badge-wrap-a {
+    left: -18px;
+    top: auto;
+    bottom: 128px;
+  }
+  .tf24-cl-badge-wrap-b {
+    right: -16px;
+    top: 306px;
+  }
+  .tf24-cl-square {
+    display: block;
+  }
+}

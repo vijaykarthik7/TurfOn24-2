@@ -6,13 +6,12 @@ export default function Hero() {
       id="home"
       style={{
         position: 'relative',
-        minHeight: '100svh',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
+        height: 'auto',
         overflow: 'hidden',
         background: 'transparent',
-        borderBottom: '1px solid rgba(243,243,243,0.08)',
       }}
     >
       {/* Readability overlay only — never touches the locked background image */}
@@ -27,6 +26,33 @@ export default function Hero() {
         }}
       />
 
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(ellipse at 50% 28%, rgba(0,201,255,0.14), transparent 62%)',
+          pointerEvents: 'none',
+          zIndex: 1,
+        }}
+      />
+
+      {/* Single fixed global background (App-level .bg-3d) shows through — no local image copy */}
+
+      {/* Hero bottom subtle transition fade */}
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 120,
+          pointerEvents: 'none',
+          zIndex: 2,
+          background:
+            'linear-gradient(to bottom, rgba(3,12,20,0) 0%, rgba(3,15,25,0.12) 60%, rgba(3,15,25,0.28) 100%)',
+        }}
+      />
+
       {/* Content */}
       <div
         className="tf24-container"
@@ -36,12 +62,11 @@ export default function Hero() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          minHeight: '100svh',
-          paddingTop: 36,
-          paddingBottom: 36,
+          paddingTop: '200px',
+          paddingBottom: '32px',
         }}
       >
-        <div className="tf24-hero-in" style={{ maxWidth: 820, width: '100%' }}>
+        <div className="tf24-hero-in" style={{ maxWidth: 620, width: '100%' }}>
           <h1
             className="tf24-hero-h1 tf24-display"
             style={{
@@ -61,8 +86,8 @@ export default function Hero() {
           <p
             className="tf24-hero-sub"
             style={{
-              margin: '26px 0 0',
-              maxWidth: 480,
+              margin: '18px 0 0',
+              maxWidth: 560,
               fontFamily: 'Space Grotesk',
               fontSize: 16.5,
               lineHeight: 1.6,
@@ -76,7 +101,7 @@ export default function Hero() {
             book your game in seconds.
           </p>
 
-          <div className="tf24-hero-actions" style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 28, flexWrap: 'wrap' }}>
+          <div className="tf24-hero-actions" style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 16, flexWrap: 'wrap' }}>
             <a
               href="/booking"
               className="tf24-btn-primary"
@@ -91,7 +116,7 @@ export default function Hero() {
             >
               Explore Turfs
             </a>
-            <div className="tf24-hero-clock-wrap" style={{ marginLeft: 'auto' }}>
+            <div className="tf24-hero-clock-wrap" style={{ marginLeft: 'auto', transform: 'translate(-10px, 8px)' }}>
               <div className="tf24-hero-clock">
                 <span className="tf24-clock-hand tf24-clock-h" />
                 <span className="tf24-clock-hand tf24-clock-m" />

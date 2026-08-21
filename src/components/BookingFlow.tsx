@@ -1,60 +1,9 @@
-import { useEffect, useRef, useState, useCallback, type ReactNode, type KeyboardEvent, type ClipboardEvent } from 'react'
+import { useEffect, useRef, useState, useCallback, type KeyboardEvent, type ClipboardEvent, type MouseEvent as ReactMouseEvent } from 'react'
+import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'motion/react'
 import { GREEN, LIME, CHROME } from '../data/tf24'
 import { requestOtp, verifyOtp } from '../services/otpService'
 import Booking from './Booking'
 import ExtendedEnquiry from './ExtendedEnquiry'
-
-const iconProps = { width: 26, height: 26, viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor', strokeWidth: 1.6, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const }
-
-function TypewriterText({ words, className }: { words: string[]; className?: string }) {
-  const [activeIdx, setActiveIdx] = useState(0)
-  const [charIdx, setCharIdx] = useState(0)
-  const [done, setDone] = useState(false)
-
-  useEffect(() => {
-    if (done) {
-      const t = setTimeout(() => {
-        setDone(false)
-        setActiveIdx(0)
-        setCharIdx(0)
-      }, 2000)
-      return () => clearTimeout(t)
-    }
-
-    const word = words[activeIdx]
-
-    if (charIdx <= word.length) {
-      const t = setTimeout(() => setCharIdx(c => c + 1), 80)
-      return () => clearTimeout(t)
-    }
-
-    if (activeIdx < words.length - 1) {
-      const t = setTimeout(() => {
-        setActiveIdx(i => i + 1)
-        setCharIdx(0)
-      }, 400)
-      return () => clearTimeout(t)
-    }
-
-    const t = setTimeout(() => setDone(true), 600)
-    return () => clearTimeout(t)
-  }, [charIdx, activeIdx, words, done])
-
-  return (
-    <span className={className}>
-      {words.map((word, i) => {
-        if (i > activeIdx) return null
-        const visible = i === activeIdx ? word.slice(0, charIdx) : word
-        const showCursor = i === activeIdx && !done
-        return (
-          <span key={i} className="tf24-type-line">
-            {visible}{showCursor && <span className="tf24-type-cursor">|</span>}
-          </span>
-        )
-      })}
-    </span>
-  )
-}
 
 type View = 'select' | 'verify' | 'hourly' | 'extended'
 
@@ -65,45 +14,6 @@ function BackBar({ onBack }: { onBack: () => void }) {
         <span className="tf24-bflow-back-arrow">←</span> Change Booking Type
       </button>
     </div>
-  )
-}
-
-function Panel({
-  num,
-  title,
-  desc,
-  meta,
-  icon,
-  onClick,
-  delay,
-  typewriter,
-}: {
-  num: string
-  title: ReactNode
-  desc: string
-  meta: string
-  icon: ReactNode
-  onClick: () => void
-  delay: string
-  typewriter?: string[]
-}) {
-  return (
-    <button className="tf24-bflow-panel" style={{ animationDelay: delay }} onClick={onClick}>
-      <span className="tf24-bflow-ghost-num" aria-hidden="true">{num}</span>
-      <span className="tf24-bflow-vertical-rule" aria-hidden="true" />
-      <span className="tf24-bflow-sweep" />
-      <span className="tf24-bflow-corner tf24-bflow-corner-tl" />
-      <span className="tf24-bflow-corner tf24-bflow-corner-br" />
-      <span className="tf24-bflow-head">
-        <span className="tf24-bflow-icon">{icon}</span>
-        <span className="tf24-bflow-num">{num}</span>
-      </span>
-      <span className="tf24-bflow-title">{title}</span>
-      <span className="tf24-bflow-desc">{desc}</span>
-      <span className="tf24-bflow-meta">{meta}</span>
-      {typewriter && <span className="tf24-bflow-typewriter"><TypewriterText words={typewriter} /></span>}
-      <span className="tf24-bflow-arrow">→</span>
-    </button>
   )
 }
 
@@ -323,12 +233,36 @@ function OtpGate({ onVerified, onBack }: { onVerified: (name: string, phone: str
 
   return (
     <section id="booking" style={{ position: 'relative', zIndex: 2, background: 'rgba(11,24,36,0.55)', overflow: 'hidden', padding: '90px 0 120px' }}>
+      {/* Blue atmospheric shade */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(ellipse at 50% 28%, rgba(0,201,255,0.14), transparent 62%)',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* Blue-blue-black bottom fade — same as Hero */}
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 200,
+          pointerEvents: 'none',
+          zIndex: 1,
+          background:
+            'linear-gradient(to bottom, rgba(3,12,20,0) 0%, rgba(3,15,25,0.35) 55%, rgba(3,15,25,0.75) 100%)',
+        }}
+      />
       <div className="pitch-lines" />
       <div style={{ position: 'absolute', bottom: -60, right: -30, fontFamily: 'Bebas Neue', fontSize: 300, lineHeight: 1, color: 'rgba(23,107,2,0.16)', WebkitTextStroke: '1px rgba(57,255,122,0.10)', userSelect: 'none', pointerEvents: 'none', zIndex: 0 }}>
         OTP.
       </div>
 
-      <div className="tf24-container">
+      <div className="tf24-container" style={{ position: 'relative', zIndex: 1 }}>
         <div className="tf24-otp-wrap">
           {/* Heading */}
           <div className="tf24-otp-head">
@@ -490,6 +424,174 @@ function OtpGate({ onVerified, onBack }: { onVerified: (name: string, phone: str
   )
 }
 
+type ModeKey = 'hourly' | 'extended'
+
+const BCC_MODES: Record<ModeKey, { num: string; name: string; sub: string; price: string; unit: string; line: string; status: string; cta: string }> = {
+  hourly: { num: '01', name: 'HOURLY', sub: 'BOOKING', price: '₹700', unit: '/ HOUR', line: 'SINGLE PLAYING SLOT', status: 'AVAILABLE', cta: 'BOOK NOW' },
+  extended: { num: '02', name: 'EXTENDED', sub: 'SESSION', price: 'CUSTOM', unit: 'SESSION', line: 'DATE + TIME · LONGER PLAY', status: 'ENQUIRY', cta: 'SEND ENQUIRY' },
+}
+
+const bccMono = { fontFamily: 'Space Grotesk', fontSize: 9.5, fontWeight: 600, letterSpacing: '0.26em', textTransform: 'uppercase' } as const
+
+function BookingControlCenter({ onSelect }: { onSelect: (mode: ModeKey) => void }) {
+  const [active, setActive] = useState<ModeKey>('hourly')
+  const [hovered, setHovered] = useState<ModeKey | null>(null)
+  const focus: ModeKey = hovered ?? active
+  const hourlyFocus = focus === 'hourly'
+
+  const mx = useMotionValue(0)
+  const my = useMotionValue(0)
+  const sx = useSpring(mx, { stiffness: 55, damping: 16 })
+  const sy = useSpring(my, { stiffness: 55, damping: 16 })
+  const ghostAx = useTransform(sx, v => v * 18)
+  const ghostAy = useTransform(sy, v => v * 12)
+  const ghostBx = useTransform(sx, v => v * -18)
+  const ghostBy = useTransform(sy, v => v * -12)
+
+  const handleMove = (e: ReactMouseEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect()
+    mx.set((e.clientX - r.left) / r.width - 0.5)
+    my.set((e.clientY - r.top) / r.height - 0.5)
+  }
+
+  const renderMode = (key: ModeKey, side: 'left' | 'right') => {
+    const m = BCC_MODES[key]
+    const isActive = focus === key
+    return (
+      <button
+        key={key}
+        className="tf24-bcc-mode"
+        onMouseEnter={() => setHovered(key)}
+        onMouseLeave={() => setHovered(null)}
+        onFocus={() => setHovered(key)}
+        onBlur={() => setHovered(null)}
+        onClick={() => { setActive(key); onSelect(key) }}
+        aria-pressed={isActive}
+      >
+        <motion.span
+          className="tf24-bcc-ghost"
+          aria-hidden="true"
+          style={{ left: side === 'left' ? 14 : undefined, right: side === 'right' ? 14 : undefined, x: side === 'left' ? ghostAx : ghostBx, y: side === 'left' ? ghostAy : ghostBy }}
+          animate={{ opacity: isActive ? 0.9 : 0.32 }}
+          transition={{ duration: 0.4 }}
+        >
+          {m.num}
+        </motion.span>
+
+        <motion.span
+          style={{ position: 'relative', zIndex: 1, display: 'block' }}
+          animate={{ opacity: isActive ? 1 : 0.42, scale: isActive ? 1 : 0.985 }}
+          transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <span style={{ ...bccMono, color: 'rgba(243,243,243,0.4)', display: 'block', marginBottom: 14 }}>
+            {m.num} · MODE SELECT
+          </span>
+          <span style={{ display: 'block', fontFamily: 'Bebas Neue', fontWeight: 400, fontSize: 'clamp(38px, 4.2vw, 62px)', lineHeight: 0.92, textTransform: 'uppercase', color: CHROME }}>
+            {m.name}<br />{m.sub}
+          </span>
+          <span style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginTop: 22 }}>
+            <span style={{ fontFamily: 'Bebas Neue', fontSize: 'clamp(34px, 3.4vw, 52px)', lineHeight: 1, color: key === 'hourly' ? GREEN : '#00C9FF', textShadow: key === 'hourly' ? '0 0 24px rgba(57,255,122,0.45)' : '0 0 24px rgba(0,201,255,0.4)' }}>
+              {m.price}
+            </span>
+            <span style={{ ...bccMono, color: 'rgba(243,243,243,0.55)' }}>{m.unit}</span>
+          </span>
+          <span style={{ display: 'block', marginTop: 12, fontFamily: 'Space Grotesk', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(243,243,243,0.5)' }}>
+            {m.line}
+          </span>
+          <span className="tf24-bcc-status" style={{ marginTop: 20, color: isActive ? (key === 'hourly' ? GREEN : '#00C9FF') : 'rgba(243,243,243,0.45)' }}>
+            <span className="tf24-live-dot" style={{ background: key === 'hourly' ? '#39FF7A' : '#00C9FF', boxShadow: `0 0 12px ${key === 'hourly' ? '#39FF7A' : '#00C9FF'}` }} />
+            {m.status}
+          </span>
+        </motion.span>
+
+        <motion.span
+          aria-hidden="true"
+          style={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}
+          animate={{ opacity: isActive ? 1 : 0 }}
+          transition={{ duration: 0.45 }}
+        >
+          <span style={{ position: 'absolute', inset: 0, background: side === 'left'
+            ? 'radial-gradient(ellipse at 22% 62%, rgba(57,255,122,0.12), transparent 58%)'
+            : 'radial-gradient(ellipse at 78% 62%, rgba(0,201,255,0.12), transparent 58%)' }} />
+        </motion.span>
+      </button>
+    )
+  }
+
+  return (
+    <motion.div
+      className="tf24-bcc-frame"
+      onMouseMove={handleMove}
+      initial={{ opacity: 0, y: 34 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <span className="tf24-bcc-grid" />
+      <span className="tf24-bcc-scan" />
+      <span className="tf24-bflow-corner tf24-bflow-corner-tl" />
+      <span className="tf24-bflow-corner tf24-bflow-corner-br" />
+
+      <div className="tf24-bcc-strip">
+        <span>TURFON24 · BOOKING CONTROL CENTER</span>
+        <span className="tf24-bcc-hide-sm" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+          <span className="tf24-live-dot" /> SYSTEM ONLINE · LIVE
+        </span>
+        <span>PITCH 01 · {hourlyFocus ? 'HOURLY MODE' : 'EXTENDED MODE'}</span>
+      </div>
+
+      <div className="tf24-bcc-modes">
+        {renderMode('hourly', 'left')}
+        {renderMode('extended', 'right')}
+      </div>
+
+      <div className="tf24-bcc-timeline" aria-hidden="true">
+        <span className="tf24-bcc-track" />
+        <span className="tf24-bcc-tick" style={{ left: 0 }} />
+        <span className="tf24-bcc-tick" style={{ right: 0 }} />
+        <motion.span
+          className="tf24-bcc-node"
+          animate={{ left: hourlyFocus ? '25%' : '75%', borderColor: hourlyFocus ? 'rgba(57,255,122,0.95)' : 'rgba(0,201,255,0.95)' }}
+          transition={{ type: 'spring', stiffness: 120, damping: 16 }}
+        />
+        <motion.span
+          style={{ position: 'absolute', top: '50%', marginTop: 14, transform: 'translateX(-50%)', whiteSpace: 'nowrap', ...bccMono, color: 'rgba(243,243,243,0.45)' }}
+          animate={{ left: hourlyFocus ? '25%' : '75%' }}
+          transition={{ type: 'spring', stiffness: 120, damping: 16 }}
+        >
+          ↑ ACTIVE SELECTION
+        </motion.span>
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 18, flexWrap: 'wrap', padding: '20px 48px 26px', borderTop: '1px solid rgba(243,243,243,0.08)' }}>
+        <span className="tf24-bcc-hide-sm" style={{ ...bccMono, color: 'rgba(243,243,243,0.4)' }}>
+          SECURE OTP VERIFICATION · INSTANT SLOT CONFIRMATION
+        </span>
+        <button className="tf24-btn-primary" style={{ height: 54, padding: '0 36px', fontSize: 13, borderRadius: 4, minWidth: 230, justifyContent: 'center' }} onClick={() => onSelect(focus)}>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.span
+              key={focus}
+              initial={{ y: 14, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -14, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 10 }}
+            >
+              {BCC_MODES[focus].cta} <span>→</span>
+            </motion.span>
+          </AnimatePresence>
+        </button>
+      </div>
+
+      <div className="tf24-bcc-strip tf24-bcc-strip-b">
+        <span className="tf24-bcc-hide-sm">18.5204° N · 73.8567° E</span>
+        <span>SECTOR GRID · A-04</span>
+        <span>SYS.OK</span>
+      </div>
+    </motion.div>
+  )
+}
+
 export default function BookingFlow() {
   const [view, setView] = useState<View>('select')
   const [leaving, setLeaving] = useState(false)
@@ -549,6 +651,30 @@ export default function BookingFlow() {
       className={leaving ? 'tf24-bflow-leaving' : 'tf24-bflow-entering'}
       style={{ position: 'relative', zIndex: 2, background: 'rgba(11,24,36,0.55)', overflow: 'hidden', padding: '120px 0' }}
     >
+      {/* Blue atmospheric shade */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(ellipse at 50% 28%, rgba(0,201,255,0.14), transparent 62%)',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* Blue-blue-black bottom fade — same as Hero */}
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 200,
+          pointerEvents: 'none',
+          zIndex: 1,
+          background:
+            'linear-gradient(to bottom, rgba(3,12,20,0) 0%, rgba(3,15,25,0.35) 55%, rgba(3,15,25,0.75) 100%)',
+        }}
+      />
       <div className="pitch-lines" />
       <div style={{ position: 'absolute', top: -30, left: -24, fontFamily: 'Bebas Neue', fontSize: 300, lineHeight: 1, color: 'rgba(23,107,2,0.16)', WebkitTextStroke: '1px rgba(57,255,122,0.10)', userSelect: 'none', pointerEvents: 'none', zIndex: 0 }}>
         PLAY.
@@ -556,58 +682,26 @@ export default function BookingFlow() {
 
       <div className="tf24-container tf24-bflow-select">
         {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: 56 }}>
+        <motion.div
+          initial={{ opacity: 0, y: 26 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+          style={{ textAlign: 'center', marginBottom: 46 }}
+        >
           <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginBottom: 18 }}>
             <span style={{ fontFamily: 'Space Grotesk', fontSize: 12, fontWeight: 600, letterSpacing: '0.45em', textTransform: 'uppercase', color: '#39FF7A', textShadow: '0 0 14px rgba(57,255,122,0.5)', paddingLeft: '0.45em' }}>
-              Book Your Play
+              Choose How You Want To Play
             </span>
             <span style={{ width: 64, height: 2, background: '#39FF7A' }} />
           </div>
           <h2 style={{ fontFamily: 'Bebas Neue', fontWeight: 400, fontSize: 'clamp(52px, 8vw, 120px)', textTransform: 'uppercase', lineHeight: 0.88, margin: 0, color: CHROME }}>
-            How do you want
-            <br />
-            to <span className="tf24-grad-word" style={{ color: LIME }}>play?</span>
+            Book Your <span className="tf24-grad-word" style={{ color: LIME }}>Pitch</span>
           </h2>
-          <p style={{ fontFamily: 'Space Grotesk', fontSize: 15, lineHeight: 1.7, color: 'rgba(243,243,243,0.75)', maxWidth: 440, margin: '22px auto 0' }}>
-            Choose your booking type to continue.
-          </p>
-        </div>
+        </motion.div>
 
-        {/* Booking type options */}
-        <div className="tf24-bflow-grid">
-          <Panel
-            num="01"
-            title={<>Hourly<br />Booking</>}
-            desc="Book a single playing slot"
-            meta="₹700 / HOUR"
-            delay="0.1s"
-            typewriter={['Book Now,', 'Play Now,', 'Score Big.']}
-            icon={
-              <svg {...iconProps} aria-hidden="true">
-                <circle cx="12" cy="12" r="9" />
-                <path d="M12 7v5l3 2" />
-                <path d="M12 2v3M12 19v3" />
-              </svg>
-            }
-            onClick={() => choose('hourly')}
-          />
-          <Panel
-            num="02"
-            title={<>Extended<br />Booking</>}
-            desc="Plan a longer session"
-            meta="Send an enquiry"
-            delay="0.22s"
-            typewriter={['Team Up,', 'Fix Date,', 'Reserve Slot.']}
-            icon={
-              <svg {...iconProps} aria-hidden="true">
-                <rect x="3" y="5" width="18" height="16" rx="2" />
-                <path d="M8 3v4M16 3v4M3 10h18" />
-                <path d="M12 13v6M9 16h6" />
-              </svg>
-            }
-            onClick={() => choose('extended')}
-          />
-        </div>
+        {/* Booking Control Center */}
+        <BookingControlCenter onSelect={choose} />
       </div>
     </section>
   )

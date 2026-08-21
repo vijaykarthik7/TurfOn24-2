@@ -31,8 +31,32 @@ export default function Gallery() {
   const gridRef = useReveal<HTMLDivElement>('in', 0.1)
 
   return (
-    <section id="gallery" style={{ background: 'rgba(11,24,36,0.55)', padding: '120px 0', overflow: 'hidden' }}>
-      <div className="tf24-container" style={{ position: 'relative' }}>
+    <section id="gallery" style={{ position: 'relative', background: 'rgba(11,24,36,0.55)', padding: '120px 0', overflow: 'hidden' }}>
+      {/* Blue atmospheric shade */}
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(ellipse at 50% 28%, rgba(0,201,255,0.14), transparent 62%)',
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* Blue-blue-black bottom fade — same as Hero */}
+      <div
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: 200,
+          pointerEvents: 'none',
+          zIndex: 1,
+          background:
+            'linear-gradient(to bottom, rgba(3,12,20,0) 0%, rgba(3,15,25,0.35) 55%, rgba(3,15,25,0.75) 100%)',
+        }}
+      />
+      <div className="tf24-container" style={{ position: 'relative', zIndex: 1 }}>
         {/* Header */}
         <div ref={headRef} className="reveal" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 40, flexWrap: 'wrap', marginBottom: 52 }}>
           <div>

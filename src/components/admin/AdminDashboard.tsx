@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useRef, useState, type ChangeEvent } from 'react'
 import { getExtendedEnquiries } from '../../services/enquiryStore'
 import { getContactLeads, updateContactLeadStatus } from '../../services/contactLeadStore'
 import type { ContactLead } from '../../services/contactLeadStore'
+import logoTagline from '../../assets/Tagline.png'
 
 const ACCENT = '#39FF7A'
 const ACCENT_RGB = '57,255,122'
-const logoTagline = '/turfon24-logo-tagline.png'
 
 type HourlyBooking = {
   id: string
@@ -249,6 +249,71 @@ const btnStyle = (active: boolean): React.CSSProperties => ({
   display: 'flex', alignItems: 'center', gap: 8,
 })
 
+function GallerySettingsCard() {
+  const [images, setImages] = useState([
+    { id: 1, name: 'hero-bg.png', url: '/hero-bg.png' },
+    { id: 2, name: 'stadium-bg.png', url: '/stadium-bg.png' },
+    { id: 3, name: 'bg2.png', url: '/bg2.png' },
+  ])
+  const [featuredId, setFeaturedId] = useState<number | null>(1)
+  const [heroUrl, setHeroUrl] = useState('/hero-bg.png')
+  const [heroDraft, setHeroDraft] = useState('')
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files || !files.length) return
+    const added = Array.from(files).map((f, i) => ({ id: Date.now() + i, name: f.name, url: URL.createObjectURL(f) }))
+    setImages(prev => [...prev, ...added])
+    if (fileRef.current) fileRef.current.value = ''
+  }
+
+  const removeImage = (id: number) => {
+    setImages(prev => prev.filter(img => img.id !== id))
+    setFeaturedId(prev => (prev === id ? null : prev))
+  }
+
+  return (
+    <div className="admin-card admin-row-in" style={{ padding: '28px 26px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+        <div>
+          <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, textTransform: 'uppercase', letterSpacing: '0.06em', color: '#F2F4F2', marginBottom: 6 }}>Gallery Settings</div>
+          <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, color: 'rgba(245,245,245,0.5)' }}>Upload, delete and feature gallery images · change hero image</div>
+        </div>
+      </div>
+
+      {/* Upload images */}
+      <input ref={fileRef} type="file" accept="image/*" multiple style={{ display: 'none' }} onChange={handleUpload} />
+      <button onClick={() => fileRef.current?.click()} style={{ width: '100%', padding: '14px 16px', marginBottom: 16, background: `rgba(${ACCENT_RGB},0.06)`, border: `1px dashed rgba(${ACCENT_RGB},0.35)`, borderRadius: 10, color: ACCENT, fontFamily: 'var(--font-mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.25s ease' }} onMouseEnter={e => { e.currentTarget.style.background = `rgba(${ACCENT_RGB},0.12)` }} onMouseLeave={e => { e.currentTarget.style.background = `rgba(${ACCENT_RGB},0.06)` }}>＋ Upload Images</button>
+
+      {/* Image list */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20, maxHeight: 220, overflowY: 'auto' }}>
+        {images.map(img => (
+          <div key={img.id} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '8px 10px', background: 'rgba(11,24,36,0.6)', border: featuredId === img.id ? `1px solid rgba(${ACCENT_RGB},0.4)` : '1px solid rgba(160,168,184,0.12)', borderRadius: 10 }}>
+            <img src={img.url} alt={img.name} style={{ width: 44, height: 44, objectFit: 'cover', borderRadius: 8, flexShrink: 0 }} />
+            <span style={{ flex: 1, minWidth: 0, fontFamily: 'var(--font-body)', fontSize: 12.5, color: 'rgba(245,245,245,0.75)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{img.name}</span>
+            <button title="Set as featured image" onClick={() => setFeaturedId(prev => (prev === img.id ? null : img.id))} style={{ padding: '6px 10px', background: featuredId === img.id ? `rgba(${ACCENT_RGB},0.15)` : 'transparent', border: `1px solid ${featuredId === img.id ? `rgba(${ACCENT_RGB},0.45)` : 'rgba(160,168,184,0.2)'}`, borderRadius: 8, color: featuredId === img.id ? ACCENT : 'rgba(245,245,245,0.5)', fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.2s ease', flexShrink: 0 }}>{featuredId === img.id ? '★ Featured' : '☆ Feature'}</button>
+            <button title="Delete image" onClick={() => removeImage(img.id)} style={{ width: 30, height: 30, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,107,107,0.08)', border: '1px solid rgba(255,107,107,0.3)', borderRadius: 8, color: '#FF6B6B', fontSize: 13, lineHeight: 1, cursor: 'pointer', transition: 'all 0.2s ease', flexShrink: 0 }} onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,107,107,0.18)' }} onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,107,107,0.08)' }}>×</button>
+          </div>
+        ))}
+        {!images.length && (
+          <div style={{ padding: '16px', textAlign: 'center', fontFamily: 'var(--font-body)', fontSize: 12.5, color: 'rgba(245,245,245,0.45)' }}>No images yet — upload some above.</div>
+        )}
+      </div>
+
+      {/* Change hero image */}
+      <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)', marginBottom: 8 }}>Change Hero Image</div>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'stretch' }}>
+        <img src={heroUrl} alt="Current hero" style={{ width: 96, height: 64, objectFit: 'cover', borderRadius: 8, border: '1px solid rgba(160,168,184,0.15)', flexShrink: 0 }} />
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8, minWidth: 0 }}>
+          <input value={heroDraft} onChange={e => setHeroDraft(e.target.value)} placeholder="/hero-bg.png or https://…" style={{ width: '100%', padding: '9px 12px', background: 'rgba(11,24,36,0.8)', border: '1px solid rgba(160,168,184,0.2)', borderRadius: 8, color: '#F2F4F2', fontFamily: 'var(--font-body)', fontSize: 12.5, boxSizing: 'border-box' }} />
+          <button disabled={!heroDraft.trim()} onClick={() => { setHeroUrl(heroDraft.trim()); setHeroDraft('') }} style={{ alignSelf: 'flex-start', padding: '8px 16px', background: heroDraft.trim() ? 'linear-gradient(135deg, #0FA857, #39FF7A)' : 'rgba(160,168,184,0.08)', border: 'none', borderRadius: 8, color: heroDraft.trim() ? '#030607' : 'rgba(245,245,245,0.4)', fontFamily: 'var(--font-mono)', fontSize: 9, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', cursor: heroDraft.trim() ? 'pointer' : 'default', transition: 'all 0.2s ease' }}>Apply Hero Image</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   const [section, setSection] = useState<Section>('overview')
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
@@ -273,6 +338,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
   })
   const [contactFilter, setContactFilter] = useState('')
   const [messageModal, setMessageModal] = useState<{ customer: string; message: string } | null>(null)
+  const [customerView, setCustomerView] = useState<'hourly' | 'extended'>('hourly')
 
   const revenue = HOURLY.filter(b => b.status !== 'Cancelled').reduce((s, b) => s + b.amount, 0)
   const extendedRevenue = ALL_EXTENDED.filter(b => b.status === 'Confirmed').length * 12000
@@ -834,20 +900,82 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
           {section === 'customers' ? (
             <>
               <SectionHeader eyebrow="Directory" title="Customers." />
+              
+              {/* Toggle & Totals */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 28 }}>
+                <div className="admin-card admin-row-in" style={{ padding: '20px 22px' }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)', marginBottom: 12 }}>Hourly Bookings Total</div>
+                  <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'clamp(28px, 4vw, 42px)', color: '#39FF7A', lineHeight: 1 }}>₹{revenue.toLocaleString()}</div>
+                </div>
+                <div className="admin-card admin-row-in" style={{ padding: '20px 22px' }}>
+                  <div style={{ fontFamily: 'var(--font-mono)', fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)', marginBottom: 12 }}>Extended Bookings Total</div>
+                  <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'clamp(28px, 4vw, 42px)', color: '#00C9FF', lineHeight: 1 }}>₹{extendedRevenue.toLocaleString()}</div>
+                </div>
+              </div>
+
+              {/* View Toggle */}
+              <div style={{ marginBottom: 28, display: 'flex', gap: 12 }}>
+                <button
+                  onClick={() => setCustomerView('hourly')}
+                  style={{
+                    padding: '10px 20px',
+                    borderRadius: 10,
+                    border: '1px solid',
+                    borderColor: customerView === 'hourly' ? '#39FF7A' : 'rgba(160,168,184,0.2)',
+                    background: customerView === 'hourly' ? 'rgba(57,255,122,0.1)' : 'transparent',
+                    color: customerView === 'hourly' ? '#39FF7A' : 'rgba(245,245,245,0.6)',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 10,
+                    fontWeight: 700,
+                    letterSpacing: '0.12em',
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(57,255,122,0.1)' }}
+                  onMouseLeave={e => { if (customerView !== 'hourly') e.currentTarget.style.background = 'transparent' }}
+                >
+                  Hourly Booking Customers
+                </button>
+                <button
+                  onClick={() => setCustomerView('extended')}
+                  style={{
+                    padding: '10px 20px',
+                    borderRadius: 10,
+                    border: '1px solid',
+                    borderColor: customerView === 'extended' ? '#00C9FF' : 'rgba(160,168,184,0.2)',
+                    background: customerView === 'extended' ? 'rgba(0,201,255,0.1)' : 'transparent',
+                    color: customerView === 'extended' ? '#00C9FF' : 'rgba(245,245,245,0.6)',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: 10,
+                    fontWeight: 700,
+                    letterSpacing: '0.12em',
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease'
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,201,255,0.1)' }}
+                  onMouseLeave={e => { if (customerView !== 'extended') e.currentTarget.style.background = 'transparent' }}
+                >
+                  Extended Booking Customers
+                </button>
+              </div>
+
+              {/* Customers Table */}
               <div className="admin-card admin-row-in" style={{ padding: 0, overflow: 'hidden' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 22px', borderBottom: '1px solid rgba(160,168,184,0.12)' }}>
                   <div style={{ fontFamily: 'var(--font-mono)', fontSize: 10, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'rgba(245,245,245,0.55)' }}>Customer Directory</div>
-                  <span className="admin-chip" style={{ color: ACCENT, background: 'rgba(57,255,122,0.08)', borderColor: 'rgba(57,255,122,0.3)' }}>{CUSTOMERS.length} customers</span>
+                  <span className="admin-chip" style={{ color: customerView === 'hourly' ? '#39FF7A' : '#00C9FF', background: customerView === 'hourly' ? 'rgba(57,255,122,0.08)' : 'rgba(0,201,255,0.08)', borderColor: customerView === 'hourly' ? 'rgba(57,255,122,0.3)' : 'rgba(0,201,255,0.3)' }}>{(customerView === 'hourly' ? CUSTOMERS.slice(0, 8) : CUSTOMERS.slice(8)).length} customers</span>
                 </div>
                 <div style={{ overflowX: 'auto' }}>
                   <table style={tableStyles}>
-                    <thead><tr><th style={thStyle}>#</th><th style={thStyle}>Name</th><th style={thStyle}>Mobile Number</th><th style={thStyle}>Bookings</th><th style={thStyle}>Total Spent</th><th style={thStyle}>Last Booking</th></tr></thead>
+                    <thead><tr><th style={thStyle}>#</th><th style={thStyle}>Name</th><th style={thStyle}>Mobile Number</th><th style={thStyle}>Bookings</th><th style={thStyle}>Amount Spent</th><th style={thStyle}>Last Booking</th></tr></thead>
                     <tbody>
-                      {CUSTOMERS.map((c, i) => (
+                      {(customerView === 'hourly' ? CUSTOMERS.slice(0, 8) : CUSTOMERS.slice(8)).map((c, i) => (
                         <tr key={c.phone} style={{ transition: 'background 0.2s ease' }} onMouseEnter={e => { e.currentTarget.style.background = 'rgba(57,255,122,0.05)' }} onMouseLeave={e => { e.currentTarget.style.background = 'transparent' }}>
                           <td style={{ ...tdStyle, ...mono, color: 'rgba(245,245,245,0.35)' }}>{String(i + 1).padStart(2, '0')}</td>
                           <td style={tdStyle}><div style={{ display: 'flex', alignItems: 'center', gap: 10 }}><Avatar name={c.name} size={30} />{c.name}</div></td>
-                          <td style={{ ...tdStyle, ...mono, color: ACCENT }}>{c.phone}</td>
+                          <td style={{ ...tdStyle, ...mono, color: customerView === 'hourly' ? '#39FF7A' : '#00C9FF' }}>{c.phone}</td>
                           <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>{c.bookings}</td>
                           <td style={{ ...tdStyle, ...mono, fontSize: 11 }}>₹{c.total.toLocaleString()}</td>
                           <td style={{ ...tdStyle, ...mono, fontSize: 11, color: 'rgba(245,245,245,0.55)' }}>{c.lastBooking}</td>
@@ -919,6 +1047,7 @@ export default function AdminDashboard({ onLogout }: { onLogout: () => void }) {
                     </div>
                   )}
                 </div>
+                <GallerySettingsCard />
               </div>
             </>
           ) : null}
