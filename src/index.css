@@ -4496,6 +4496,10 @@ select:focus-visible {
 }
 
 @media (max-width: 640px) {
+  #tf24 section#home {
+    min-height: 100svh;
+  }
+
   .tf24-hero-h1 {
     font-size: clamp(48px, 14vw, 72px) !important;
     line-height: 0.92 !important;
@@ -4511,6 +4515,54 @@ select:focus-visible {
     justify-content: center;
   }
 
+}
+@media (max-width: 640px) and (max-height: 650px) {
+  #tf24 section#home > .tf24-container {
+    padding-top: 96px !important;
+    padding-bottom: 0 !important;
+  }
+
+  #tf24 .tf24-hero-h1 {
+    font-size: 46px !important;
+    line-height: 0.9 !important;
+  }
+
+  #tf24 .tf24-hero-sub {
+    margin-top: 12px !important;
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+  }
+
+  #tf24 .tf24-hero-actions {
+    gap: 7px !important;
+    margin-top: 12px !important;
+  }
+
+  #tf24 .tf24-hero-actions a {
+    height: 44px !important;
+  }
+
+  #tf24 .tf24-hero-clock-wrap {
+    transform: translate(-10px, -8px) scale(0.62) !important;
+  }
+
+  #tf24 .tf24-hero-stats {
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 12px;
+  }
+
+  #tf24 .tf24-hero-stats > div {
+    min-width: 0;
+  }
+
+  #tf24 .tf24-hero-stats strong {
+    font-size: 16px;
+  }
+
+  #tf24 .tf24-hero-stats span {
+    font-size: 7px;
+  }
 }
 @keyframes bg-kenburns-mobile {
   from { transform: scale(1.02) translate(0, 0); }
