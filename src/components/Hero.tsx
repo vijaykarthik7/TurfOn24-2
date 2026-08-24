@@ -53,6 +53,20 @@ export default function Hero() {
         }}
       />
 
+      <div className="tf24-hero-mobile-decor" aria-hidden="true">
+        <div className="tf24-hero-field-markings" />
+        <div className="tf24-hero-light-sweep" />
+        <div className="tf24-hero-scan-line" />
+        <div className="tf24-hero-particles">
+          <span /><span /><span /><span /><span /><span /><span /><span /><span /><span />
+        </div>
+        <div className="tf24-hero-live-badge">
+          <span className="tf24-hero-live-dot" />
+          <span>Live availability</span>
+          <small>Turfs ready today</small>
+        </div>
+      </div>
+
       {/* Content */}
       <div
         className="tf24-container"
